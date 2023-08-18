@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oval_results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns="http://oval.mitre.org/XMLSchema/oval-results-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-results-5 oval-results-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd">
+  <generator>
+    <oval:product_name>cpe:/a:open-scap:oscap</oval:product_name>
+    <oval:product_version>1.2.16</oval:product_version>
+    <oval:schema_version>5.11.2</oval:schema_version>
+    <oval:timestamp>2023-08-07T09:58:08</oval:timestamp>
+  </generator>
+  <directives>
+    <definition_true reported="true" content="full"/>
+    <definition_false reported="true" content="full"/>
+    <definition_unknown reported="true" content="full"/>
+    <definition_error reported="true" content="full"/>
+    <definition_not_evaluated reported="true" content="full"/>
+    <definition_not_applicable reported="true" content="full"/>
+  </directives>
+  <oval_definitions xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:unix-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix" xmlns:ind-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#independent" xmlns:lin-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux" xmlns:win-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#windows" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix unix-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#independent independent-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#linux linux-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5 oval-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd">
+    <generator>
+      <oval:product_name>CIS OVAL Repository</oval:product_name>
+      <oval:product_version>0.1</oval:product_version>
+      <oval:schema_version>5.11.2</oval:schema_version>
+      <oval:timestamp>2023-08-02T04:03:12</oval:timestamp>
+    </generator>
+    <definitions>
+      <definitionInspector id="oval:org.mitre.oval:def:16651" version="27" class="inventory">
+        <metadata>
+          <title>CentOS Linux 3.x</title>
+          <affected family="unix">
+            <platform>CentOS Linux 3</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:centos:centos:3"/>
+          <description>The operating system installed on the system is CentOS Linux 3.x</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.mitre.oval:tst:4424" comment="the installed operating system is part of the Unix family"/>
+          <criterion test_ref="oval:org.mitre.oval:tst:80206" comment="CentOS Linux 3.x is installed"/>
+        </criteria>
+      </definitionInspector>
+      <definitionInspector id="oval:org.mitre.oval:def:16636" version="27" class="inventory">
+        <metadata>
+          <title>CentOS Linux 4.x</title>
+          <affected family="unix">
+            <platform>CentOS Linux 4</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:centos:centos:4"/>
+          <description>The operating system installed on the system is CentOS Linux 4.x</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.mitre.oval:tst:4424" comment="the installed operating system is part of the Unix family"/>
+          <criterion test_ref="oval:org.mitre.oval:tst:80582" comment="CentOS Linux 4.x is installed"/>
+        </criteria>
+      </definitionInspector>
+      <definitionInspector id="oval:org.mitre.oval:def:15990" version="29" class="inventory">
+        <metadata>
+          <title>Oracle Linux 4.x</title>
+          <affected family="unix">
+            <platform>Oracle Linux 4</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:oracle:linux:4"/>
+          <description>The operating system installed on the system is Oracle Linux 4.x</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.mitre.oval:tst:4424" comment="the installed operating system is part of the Unix family"/>
+          <criterion test_ref="oval:org.mitre.oval:tst:80147" comment="Oracle Linux 4.x is installed"/>
+        </criteria>
+      </definitionInspector>
+      <definitionInspector id="oval:org.mitre.oval:def:1242" version="4" class="vulnerability">
+        <metadata>
+          <title>sudo Symlink Vulnerability</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux 3</platform>
+            <product>sudo</product>
+          </affected>
+          <reference source="CVE" ref_id="CVE-2005-1993" ref_url="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-1993"/>
+          <description>Race condition in sudo 1.3.1 up to 1.6.8p8, when the ALL pseudo-command is used after a user entry in the sudoers file, allows local users to gain privileges via a symlink attack.</description>
+        </metadata>
+        <criteria>
+          <criteria comment="Software section">
+            <criterion test_ref="oval:org.mitre.oval:tst:2861" comment="Red Hat Enterprise 3 is installed"/>
+            <criterion test_ref="oval:org.mitre.oval:tst:1046" comment="sudo RPM earlier than 0:1.6.7p5-1.1"/>
+          </criteria>
+          <criteria comment="Configuration section">
+            <criterion test_ref="oval:org.mitre.oval:tst:1045" comment="/etc/sudoers exists"/>
+            <criterion test_ref="oval:org.mitre.oval:tst:1044" comment="/usr/bin/sudo is executable by everyone"/>
+          </criteria>
+        </criteria>
+      </definitionInspector>
+      <definitionInspector id="oval:org.mitre.oval:def:11831" version="8" class="inventory">
+        <metadata>
+          <title>The operating system installed on the system is Red Hat Enterprise Linux 4</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux 4</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:redhat:enterprise_linux:4"/>
+          <description>The operating system installed on the system is Red Hat Enterprise Linux 4.</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.mitre.oval:tst:2652" comment="Red Hat Enterprise 4 is installed"/>
+        </criteria>
+      </definitionInspector>
+      <definitionInspector id="oval:org.mitre.oval:def:11782" version="8" class="inventory">
+        <metadata>
+          <title>The operating system installed on the system is Red Hat Enterprise Linux 3</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux 3</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:redhat:enterprise_linux:3"/>
+          <description>The operating system installed on the system is Red Hat Enterprise Linux 3.</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.mitre.oval:tst:7836" comment="Red Hat Enterprise 3 is installed"/>
+        </criteria>
+      </definitionInspector>
+      <definitionInspector id="oval:org.mitre.oval:def:11341" version="30" class="vulnerability">
+        <metadata>
+          <title>Race condition in sudo 1.3.1 up to 1.6.8p8, when the ALL pseudo-command is used after a user entry in the sudoers file, allows local users to gain privileges via a symlink attack.</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux 3</platform>
+            <platform>CentOS Linux 3</platform>
+            <platform>Red Hat Enterprise Linux 4</platform>
+            <platform>CentOS Linux 4</platform>
+            <platform>Oracle Linux 4</platform>
+          </affected>
+          <reference source="CVE" ref_id="CVE-2005-1993" ref_url="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-1993"/>
+          <description>Race condition in sudo 1.3.1 up to 1.6.8p8, when the ALL pseudo-command is used after a user entry in the sudoers file, allows local users to gain privileges via a symlink attack.</description>
+        </metadata>
+        <criteria operator="OR">
+          <criteria comment="OS Section: RHEL3, CentOS3">
+            <criteria operator="OR" comment="RHEL3 or CentOS3">
+              <extend_definition definition_ref="oval:org.mitre.oval:def:11782" comment="The operating system installed on the system is Red Hat Enterprise Linux 3"/>
+              <extend_definition definition_ref="oval:org.mitre.oval:def:16651" comment="CentOS Linux 3.x"/>
+            </criteria>
+            <criterion test_ref="oval:org.mitre.oval:tst:31628" comment="sudo is earlier than 0:1.6.7p5-1.1"/>
+          </criteria>
+          <criteria comment="OS Section: RHEL4, CentOS4, Oracle Linux 4">
+            <criteria operator="OR" comment="RHEL4, CentOS4 or Oracle Linux 4">
+              <extend_definition definition_ref="oval:org.mitre.oval:def:11831" comment="The operating system installed on the system is Red Hat Enterprise Linux 4"/>
+              <extend_definition definition_ref="oval:org.mitre.oval:def:16636" comment="CentOS Linux 4.x"/>
+              <extend_definition definition_ref="oval:org.mitre.oval:def:15990" comment="Oracle Linux 4.x"/>
+            </criteria>
+            <criterion test_ref="oval:org.mitre.oval:tst:31653" comment="sudo is earlier than 0:1.6.7p5-30.1.1"/>
+          </criteria>
+        </criteria>
+      </definitionInspector>
+    </definitions>
+    <tests>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:80582" version="1" check="at least one" comment="CentOS Linux 4.x is installed">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:24078"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:20410"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:80206" version="1" check="at least one" comment="CentOS Linux 3.x is installed">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:24078"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:19938"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:80147" version="2" check="at least one" comment="Oracle Linux 4.x is installed">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:30416"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:20410"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:7836" version="3" check="at least one" comment="Red Hat Enterprise 3 is installed">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:1414"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:11298"/>
+      </lin-def:rpminfo_test>
+      <ind-def:family_test id="oval:org.mitre.oval:tst:4424" version="24" check="only one" comment="the installed operating system is part of the Unix family">
+        <ind-def:object object_ref="oval:org.mitre.oval:obj:99"/>
+        <ind-def:state state_ref="oval:org.mitre.oval:ste:3907"/>
+      </ind-def:family_test>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:31653" version="2" check="at least one" comment="sudo is earlier than 0:1.6.7p5-30.1.1">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:14246"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:9949"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:31628" version="2" check="at least one" comment="sudo is earlier than 0:1.6.7p5-1.1">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:14246"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:9265"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:2861" version="1" check="at least one" comment="Red Hat Enterprise 3 is installed">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:1414"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:2679"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:2652" version="3" check="at least one" comment="Red Hat Enterprise 4 is installed">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:1414"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:11366"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.mitre.oval:tst:1046" version="3" check="all" comment="sudo RPM earlier than 0:1.6.7p5-1.1">
+        <lin-def:object object_ref="oval:org.mitre.oval:obj:14246"/>
+        <lin-def:state state_ref="oval:org.mitre.oval:ste:932"/>
+      </lin-def:rpminfo_test>
+      <unix-def:file_test id="oval:org.mitre.oval:tst:1045" version="1" check="at least one" comment="/etc/sudoers exists">
+        <unix-def:object object_ref="oval:org.mitre.oval:obj:763"/>
+      </unix-def:file_test>
+      <unix-def:file_test id="oval:org.mitre.oval:tst:1044" version="1" check="all" comment="/usr/bin/sudo is executable by everyone">
+        <unix-def:object object_ref="oval:org.mitre.oval:obj:762"/>
+        <unix-def:state state_ref="oval:org.mitre.oval:ste:931"/>
+      </unix-def:file_test>
+    </tests>
+    <objects>
+      <ind-def:family_object id="oval:org.mitre.oval:obj:99" version="1" comment="This is the default family object. Only one family object should exist."/>
+      <unix-def:file_object id="oval:org.mitre.oval:obj:763" version="1">
+        <unix-def:path>/etc</unix-def:path>
+        <unix-def:filename>sudoers</unix-def:filename>
+      </unix-def:file_object>
+      <unix-def:file_object id="oval:org.mitre.oval:obj:762" version="1">
+        <unix-def:path>/usr/bin</unix-def:path>
+        <unix-def:filename>sudo</unix-def:filename>
+      </unix-def:file_object>
+      <lin-def:rpminfo_object id="oval:org.mitre.oval:obj:30416" version="1">
+        <lin-def:name>enterprise-release</lin-def:name>
+      </lin-def:rpminfo_object>
+      <lin-def:rpminfo_object id="oval:org.mitre.oval:obj:24078" version="1">
+        <lin-def:name>centos-release</lin-def:name>
+      </lin-def:rpminfo_object>
+      <lin-def:rpminfo_object id="oval:org.mitre.oval:obj:14246" version="2" comment="sudo package information">
+        <lin-def:name>sudo</lin-def:name>
+      </lin-def:rpminfo_object>
+      <lin-def:rpminfo_object id="oval:org.mitre.oval:obj:1414" version="1" comment="the redhat-release rpm">
+        <lin-def:name>redhat-release</lin-def:name>
+      </lin-def:rpminfo_object>
+    </objects>
+    <states>
+      <lin-def:rpminfo_state id="oval:org.mitre.oval:ste:9949" version="1">
+        <lin-def:evr operation="less than" datatype="evr_string">0:1.6.7p5-30.1.1</lin-def:evr>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.mitre.oval:ste:932" version="1">
+        <lin-def:evr operation="less than" datatype="evr_string">0:1.6.7p5-1.1</lin-def:evr>
+      </lin-def:rpminfo_state>
+      <unix-def:file_state id="oval:org.mitre.oval:ste:931" version="1">
+        <unix-def:oexec datatype="boolean">true</unix-def:oexec>
+      </unix-def:file_state>
+      <lin-def:rpminfo_state id="oval:org.mitre.oval:ste:9265" version="1">
+        <lin-def:evr operation="less than" datatype="evr_string">0:1.6.7p5-1.1</lin-def:evr>
+      </lin-def:rpminfo_state>
+      <ind-def:family_state id="oval:org.mitre.oval:ste:3907" version="1" comment="Unix family">
+        <ind-def:family>unix</ind-def:family>
+      </ind-def:family_state>
+      <lin-def:rpminfo_state id="oval:org.mitre.oval:ste:2679" version="1">
+        <lin-def:version operation="pattern match">^3.S</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.mitre.oval:ste:20410" version="1" comment="version matches regex ^4.*$">
+        <lin-def:version operation="pattern match">^4.*$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.mitre.oval:ste:19938" version="1" comment="version matches regex ^3.*$">
+        <lin-def:version operation="pattern match">^3.*$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.mitre.oval:ste:11366" version="3" comment="version matches ^4\D.+$">
+        <lin-def:version operation="pattern match">^4\D.+$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.mitre.oval:ste:11298" version="3" comment="version matches ^3\D.+$">
+        <lin-def:version operation="pattern match">^3\D.+$</lin-def:version>
+      </lin-def:rpminfo_state>
+    </states>
+  </oval_definitions>
+  <results>
+    <system>
+      <definitions>
+        <definitionInspector definition_id="oval:org.mitre.oval:def:16651" result="unknown" version="27">
+          <criteria operator="AND" result="unknown">
+            <criterion test_ref="oval:org.mitre.oval:tst:4424" version="24" result="true"/>
+            <criterion test_ref="oval:org.mitre.oval:tst:80206" version="1" result="unknown"/>
+          </criteria>
+        </definitionInspector>
+        <definitionInspector definition_id="oval:org.mitre.oval:def:16636" result="unknown" version="27">
+          <criteria operator="AND" result="unknown">
+            <criterion test_ref="oval:org.mitre.oval:tst:4424" version="24" result="true"/>
+            <criterion test_ref="oval:org.mitre.oval:tst:80582" version="1" result="unknown"/>
+          </criteria>
+        </definitionInspector>
+        <definitionInspector definition_id="oval:org.mitre.oval:def:15990" result="unknown" version="29">
+          <criteria operator="AND" result="unknown">
+            <criterion test_ref="oval:org.mitre.oval:tst:4424" version="24" result="true"/>
+            <criterion test_ref="oval:org.mitre.oval:tst:80147" version="2" result="unknown"/>
+          </criteria>
+        </definitionInspector>
+        <definitionInspector definition_id="oval:org.mitre.oval:def:1242" result="unknown" version="4">
+          <criteria operator="AND" result="unknown">
+            <criteria operator="AND" result="unknown">
+              <criterion test_ref="oval:org.mitre.oval:tst:2861" version="1" result="unknown"/>
+              <criterion test_ref="oval:org.mitre.oval:tst:1046" version="3" result="unknown"/>
+            </criteria>
+            <criteria operator="AND" result="true">
+              <criterion test_ref="oval:org.mitre.oval:tst:1045" version="1" result="true"/>
+              <criterion test_ref="oval:org.mitre.oval:tst:1044" version="1" result="true"/>
+            </criteria>
+          </criteria>
+        </definitionInspector>
+        <definitionInspector definition_id="oval:org.mitre.oval:def:11831" result="unknown" version="8">
+          <criteria operator="AND" result="unknown">
+            <criterion test_ref="oval:org.mitre.oval:tst:2652" version="3" result="unknown"/>
+          </criteria>
+        </definitionInspector>
+        <definitionInspector definition_id="oval:org.mitre.oval:def:11782" result="unknown" version="8">
+          <criteria operator="AND" result="unknown">
+            <criterion test_ref="oval:org.mitre.oval:tst:7836" version="3" result="unknown"/>
+          </criteria>
+        </definitionInspector>
+        <definitionInspector definition_id="oval:org.mitre.oval:def:11341" result="unknown" version="30">
+          <criteria operator="OR" result="unknown">
+            <criteria operator="AND" result="unknown">
+              <criteria operator="OR" result="unknown">
+                <extend_definition definition_ref="oval:org.mitre.oval:def:11782" version="8" result="unknown"/>
+                <extend_definition definition_ref="oval:org.mitre.oval:def:16651" version="27" result="unknown"/>
+              </criteria>
+              <criterion test_ref="oval:org.mitre.oval:tst:31628" version="2" result="unknown"/>
+            </criteria>
+            <criteria operator="AND" result="unknown">
+              <criteria operator="OR" result="unknown">
+                <extend_definition definition_ref="oval:org.mitre.oval:def:11831" version="8" result="unknown"/>
+                <extend_definition definition_ref="oval:org.mitre.oval:def:16636" version="27" result="unknown"/>
+                <extend_definition definition_ref="oval:org.mitre.oval:def:15990" version="29" result="unknown"/>
+              </criteria>
+              <criterion test_ref="oval:org.mitre.oval:tst:31653" version="2" result="unknown"/>
+            </criteria>
+          </criteria>
+        </definitionInspector>
+      </definitions>
+      <tests>
+        <test test_id="oval:org.mitre.oval:tst:1044" version="1" check="all" result="true">
+          <tested_item item_id="129496122" result="true"/>
+        </test>
+        <test test_id="oval:org.mitre.oval:tst:1045" version="1" check="at least one" result="true">
+          <tested_item item_id="129496121" result="not evaluated"/>
+        </test>
+        <test test_id="oval:org.mitre.oval:tst:1046" version="3" check="all" result="unknown"/>
+        <test test_id="oval:org.mitre.oval:tst:2652" version="3" check="at least one" result="unknown"/>
+        <test test_id="oval:org.mitre.oval:tst:2861" version="1" check="at least one" result="unknown"/>
+        <test test_id="oval:org.mitre.oval:tst:31628" version="2" check="at least one" result="unknown"/>
+        <test test_id="oval:org.mitre.oval:tst:31653" version="2" check="at least one" result="unknown"/>
+        <test test_id="oval:org.mitre.oval:tst:4424" version="24" check="only one" result="true">
+          <tested_item item_id="129496071" result="true"/>
+        </test>
+        <test test_id="oval:org.mitre.oval:tst:7836" version="3" check="at least one" result="unknown"/>
+        <test test_id="oval:org.mitre.oval:tst:80147" version="2" check="at least one" result="unknown"/>
+        <test test_id="oval:org.mitre.oval:tst:80206" version="1" check="at least one" result="unknown"/>
+        <test test_id="oval:org.mitre.oval:tst:80582" version="1" check="at least one" result="unknown"/>
+      </tests>
+      <oval_system_characteristics xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:unix-sys="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#unix" xmlns:ind-sys="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent" xmlns:lin-sys="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux" xmlns:win-sys="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows" xmlns="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent independent-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#unix unix-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux linux-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd">
+        <generator>
+          <oval:product_name>cpe:/a:open-scap:oscap</oval:product_name>
+          <oval:product_version>0.1</oval:product_version>
+          <oval:schema_version>5.11.2</oval:schema_version>
+          <oval:timestamp>2023-08-07T09:58:08</oval:timestamp>
+        </generator>
+        <system_info>
+          <os_name>Linux</os_name>
+          <os_version>#170-Ubuntu SMP Fri Jun 16 13:43:31 UTC 2023</os_version>
+          <architecture>x86_64</architecture>
+          <primary_host_name>xconadm</primary_host_name>
+          <interfaces>
+            <interface>
+              <interface_name>lo</interface_name>
+              <ip_address>127.0.0.1</ip_address>
+              <mac_address>00:00:00:00:00:00</mac_address>
+            </interface>
+            <interface>
+              <interface_name>ens33</interface_name>
+              <ip_address>192.168.1.50</ip_address>
+              <mac_address>00:50:56:3D:9F:26</mac_address>
+            </interface>
+            <interface>
+              <interface_name>lo</interface_name>
+              <ip_address>::1</ip_address>
+              <mac_address>00:00:00:00:00:00</mac_address>
+            </interface>
+            <interface>
+              <interface_name>ens33</interface_name>
+              <ip_address>fe80::250:56ff:fe3d:9f26</ip_address>
+              <mac_address>00:50:56:3D:9F:26</mac_address>
+            </interface>
+          </interfaces>
+        </system_info>
+        <collected_objects>
+          <object id="oval:org.mitre.oval:obj:1414" version="1" flag="not collected">
+            <message level="warning">OVAL object not supported</message>
+          </object>
+          <object id="oval:org.mitre.oval:obj:14246" version="2" flag="not collected">
+            <message level="warning">OVAL object not supported</message>
+          </object>
+          <object id="oval:org.mitre.oval:obj:24078" version="1" flag="not collected">
+            <message level="warning">OVAL object not supported</message>
+          </object>
+          <object id="oval:org.mitre.oval:obj:30416" version="1" flag="not collected">
+            <message level="warning">OVAL object not supported</message>
+          </object>
+          <object id="oval:org.mitre.oval:obj:762" version="1" flag="complete">
+            <reference item_ref="129496122"/>
+          </object>
+          <object id="oval:org.mitre.oval:obj:763" version="1" flag="complete">
+            <reference item_ref="129496121"/>
+          </object>
+          <object id="oval:org.mitre.oval:obj:99" version="1" flag="complete">
+            <reference item_ref="129496071"/>
+          </object>
+        </collected_objects>
+        <system_data>
+          <unix-sys:file_item id="129496122" status="exists">
+            <unix-sys:filepath>/usr/bin/sudo</unix-sys:filepath>
+            <unix-sys:path>/usr/bin</unix-sys:path>
+            <unix-sys:filename>sudo</unix-sys:filename>
+            <unix-sys:type>regular</unix-sys:type>
+            <unix-sys:group_id datatype="int">0</unix-sys:group_id>
+            <unix-sys:user_id datatype="int">0</unix-sys:user_id>
+            <unix-sys:a_time datatype="int">1688507869</unix-sys:a_time>
+            <unix-sys:c_time datatype="int">1688507869</unix-sys:c_time>
+            <unix-sys:m_time datatype="int">1680609388</unix-sys:m_time>
+            <unix-sys:size datatype="int">166056</unix-sys:size>
+            <unix-sys:suid datatype="boolean">true</unix-sys:suid>
+            <unix-sys:sgid datatype="boolean">false</unix-sys:sgid>
+            <unix-sys:sticky datatype="boolean">false</unix-sys:sticky>
+            <unix-sys:uread datatype="boolean">true</unix-sys:uread>
+            <unix-sys:uwrite datatype="boolean">true</unix-sys:uwrite>
+            <unix-sys:uexec datatype="boolean">true</unix-sys:uexec>
+            <unix-sys:gread datatype="boolean">true</unix-sys:gread>
+            <unix-sys:gwrite datatype="boolean">false</unix-sys:gwrite>
+            <unix-sys:gexec datatype="boolean">true</unix-sys:gexec>
+            <unix-sys:oread datatype="boolean">true</unix-sys:oread>
+            <unix-sys:owrite datatype="boolean">false</unix-sys:owrite>
+            <unix-sys:oexec datatype="boolean">true</unix-sys:oexec>
+            <unix-sys:has_extended_acl datatype="boolean" status="does not exist"/>
+          </unix-sys:file_item>
+          <unix-sys:file_item id="129496121" status="exists">
+            <unix-sys:filepath>/etc/sudoers</unix-sys:filepath>
+            <unix-sys:path>/etc</unix-sys:path>
+            <unix-sys:filename>sudoers</unix-sys:filename>
+            <unix-sys:type>regular</unix-sys:type>
+            <unix-sys:group_id datatype="int">0</unix-sys:group_id>
+            <unix-sys:user_id datatype="int">0</unix-sys:user_id>
+            <unix-sys:a_time datatype="int">1688506182</unix-sys:a_time>
+            <unix-sys:c_time datatype="int">1688507869</unix-sys:c_time>
+            <unix-sys:m_time datatype="int">1673939159</unix-sys:m_time>
+            <unix-sys:size datatype="int">784</unix-sys:size>
+            <unix-sys:suid datatype="boolean">false</unix-sys:suid>
+            <unix-sys:sgid datatype="boolean">false</unix-sys:sgid>
+            <unix-sys:sticky datatype="boolean">false</unix-sys:sticky>
+            <unix-sys:uread datatype="boolean">true</unix-sys:uread>
+            <unix-sys:uwrite datatype="boolean">false</unix-sys:uwrite>
+            <unix-sys:uexec datatype="boolean">false</unix-sys:uexec>
+            <unix-sys:gread datatype="boolean">true</unix-sys:gread>
+            <unix-sys:gwrite datatype="boolean">false</unix-sys:gwrite>
+            <unix-sys:gexec datatype="boolean">false</unix-sys:gexec>
+            <unix-sys:oread datatype="boolean">false</unix-sys:oread>
+            <unix-sys:owrite datatype="boolean">false</unix-sys:owrite>
+            <unix-sys:oexec datatype="boolean">false</unix-sys:oexec>
+            <unix-sys:has_extended_acl datatype="boolean" status="does not exist"/>
+          </unix-sys:file_item>
+          <ind-sys:family_item id="129496071" status="exists">
+            <ind-sys:family>unix</ind-sys:family>
+          </ind-sys:family_item>
+        </system_data>
+      </oval_system_characteristics>
+    </system>
+  </results>
+</oval_results>
