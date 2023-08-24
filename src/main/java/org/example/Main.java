@@ -2,15 +2,12 @@ package org.example;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import org.mitre.oval.xmlschema.oval_definitions_5.*;
+import org.example.oval.OvalDefinitionsInspector;
+import org.example.oval.OvalDefinitionsLoader;
+import org.example.oval.OvalInspectResult;
+import org.mitre.oval.xmlschema.oval_definitions_5.OvalDefinitions;
 
-import javax.xml.bind.JAXBException;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Main {
 
@@ -57,36 +54,11 @@ public class Main {
         }
     }
 
-    public static void execute(File ovalDefFile, File resultsFile) throws JAXBException, IOException {
+    public static void execute(File ovalDefFile, File resultsFile) throws Exception {
         OvalDefinitionsLoader ovalDefinitionsLoader = new OvalDefinitionsLoader();
         OvalDefinitions ovalDefinitions = ovalDefinitionsLoader.load(ovalDefFile);
-        DefinitionsType definitions = ovalDefinitions.getDefinitions();
-        List<DefinitionType> definitionTypes = definitions.getDefinition();
-
-        // extract test id list for executing only one. 
-        // 실행할 테스트 아이디만 먼저 추출 -> 테스트를 한 번씩만 추출하기 위함
-        List<String> testIds = new ArrayList<>();
-        for (DefinitionType definitionType : definitionTypes) {
-            CriteriaType criteriaType = definitionType.getCriteria();
-            for (Object object : criteriaType.getCriteriaOrCriterionOrExtendDefinition()) {
-                if (object instanceof CriterionType == false)
-                    continue;
-                String testRefId = ((CriterionType) object).getTestRef();
-                testIds.add(testRefId);
-            }
-        }
-
-        // execute tests
-        // 테스트 실시해서 결과를 담기
-        Map<String, Boolean> testResultMap = new HashMap<>();
-        for (String testId : testIds) {
-
-        }
-
-        // by using "testResultMap" make result of criteria
-        // testResultMap을 사용해서 각 definition에 정의된 criteria가 충족되는지 체크 실시
-        for (DefinitionType definitionType : definitionTypes) {
-
-        }
+        OvalDefinitionsInspector ovalDefinitionsInspector = new OvalDefinitionsInspector();
+        OvalInspectResult inspectResult = ovalDefinitionsInspector.inspect(ovalDefinitions);
+        System.out.println(inspectResult);
     }
 }

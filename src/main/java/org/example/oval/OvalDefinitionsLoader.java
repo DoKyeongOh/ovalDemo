@@ -1,4 +1,4 @@
-package org.example;
+package org.example.oval;
 
 import org.mitre.oval.xmlschema.oval_definitions_5.OvalDefinitions;
 
