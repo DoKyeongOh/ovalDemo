@@ -9,6 +9,6 @@ public abstract class OvalTestExecutor {
     public OvalTestExecutor(TestType testType) {
         this.testType = testType;
     }
-    public abstract void init(Map<String, StateType> stateTypeMap, Map<String, ObjectType> objectTypeMap);
-    public abstract OvalTestResultType execute();
+    public abstract void init(Map<String, StateType> stateTypeMap, Map<String, ObjectType> objectTypeMap) throws Exception;
+    public abstract OvalTestResultType execute() throws Exception;
 }
