@@ -56,9 +56,8 @@ public class OvalDefinitionsInspector {
                 testResultMap.put(testType.getId(), executor.execute());
             } catch (Exception e) {
                 testResultMap.put(testType.getId(), OvalTestResultType.ERROR);
-                System.out.println("test error occurred - " + testId);
+                System.out.println(e.getMessage());
             }
-
         }
 
         OvalInspectResult result = new OvalInspectResult();
