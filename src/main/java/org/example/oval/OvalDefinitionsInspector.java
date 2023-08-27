@@ -46,6 +46,11 @@ public class OvalDefinitionsInspector {
         for (JAXBElement<? extends ObjectType> objectType : objectsType.getObject())
             objectTypeMap.put(objectType.getValue().getId(), objectType.getValue());
 
+        VariablesType variables = ovalDefinitions.getVariables();
+        Map<String, VariableType> variableTypeMap = new HashMap<>();
+        for (JAXBElement<? extends VariableType> variable : variables.getVariable())
+            variableTypeMap.put(variable.getValue().getId(), variable.getValue());
+
         for (String testId : testIds) {
             TestType testType = testTypeMap.get(testId);
             if (testType == null)

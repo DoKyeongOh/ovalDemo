@@ -38,6 +38,7 @@ public class WinFileTestExecutor extends OvalTestExecutor {
 
     @Override
     public OvalTestResultType execute() throws Exception {
+        // 1. collect files from FileObject
         boolean setExist = objectType.getSet() != null;
         boolean filepathExist = objectType.getFilepath() != null;
         boolean pathExist = objectType.getFilename() != null || objectType.getPath() != null;
@@ -49,8 +50,7 @@ public class WinFileTestExecutor extends OvalTestExecutor {
 
         if (filepathExist && pathExist)
             throw new Exception("filepath and (path + filepath) cannot be used at the same time");
-
-        List<File> files = null;
+        List<File> files = new ArrayList<>();
         if (setExist)
             files = findFilesBySet(objectType.getSet());
         else if (filepathExist)
@@ -58,17 +58,22 @@ public class WinFileTestExecutor extends OvalTestExecutor {
         else if (pathExist)
             files = findFilesByPath(objectType.getPath(), objectType.getFilename());
 
+        // 2. compare with FileState
 
-        FileBehaviors behaviors = objectType.getBehaviors();
         return OvalTestResultType.UNKNOWN;
     }
 
     private List<File> findFilesByPath(EntityObjectStringType path, JAXBElement<EntityObjectStringType> filename) {
+        // 일단 변수 참조가 없다고 가정
         List<File> files = new ArrayList<>();
+        // 이건 후보가 될 각각의 개채마다 달라진다? -> operation에 pattern match가 있는 경우, 전체 파일을 검색해야함
         switch (path.getOperation()) {
             case EQUALS: // new File().exist()
+                File pathDir = new File((String) path.getValue());
+                if (pathDir.exists() && pathDir.isDirectory())
+                    files.add(pathDir);
                 break;
-            case NOT_EQUAL: // new File().exist()
+            case NOT_EQUAL: // path 에서 not equals는 말이 안됨
                 break;
             case CASE_INSENSITIVE_EQUALS: // 대소문자 구분 없어야함 -> 전체파일 검색
                 break;
@@ -92,6 +97,11 @@ public class WinFileTestExecutor extends OvalTestExecutor {
     }
 
     private List<File> findFilesBySet(Set set) {
+        List<File> files = new ArrayList<>();
+        return files;
+    }
+
+    private static List<File> extractFileUsingRegex() {
         List<File> files = new ArrayList<>();
         return files;
     }

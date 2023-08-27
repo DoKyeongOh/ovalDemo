@@ -10,7 +10,7 @@ import java.io.IOException;
 public class DefinitionsLoaderTest {
     @Test
     public void testLoadDefinitionsFile() throws JAXBException, IOException {
-        File ovalDefFile = new File("src/main/resources/unix.test.vulnerability.xml");
+        File ovalDefFile = new File("src/main/resources/microsoft.windows11.vulnerability.xml");
         OvalDefinitionsLoader ovalDefinitionsLoader = new OvalDefinitionsLoader();
         OvalDefinitions ovalDefinitions = ovalDefinitionsLoader.load(ovalDefFile);
         System.out.println(ovalDefinitions);
