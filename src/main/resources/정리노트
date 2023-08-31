@@ -1,0 +1,2 @@
+1. variable 중 local_variable의 object_component는 리터럴한 값을 다른 object로부터 추출하게됨
+2. object_component에서 item_field는 해당 추출한 item에서 하나의 필드를, record_field는 추출한 Item이 내부에 항목을 갖고있을때 그중 하나를 선택하는듯

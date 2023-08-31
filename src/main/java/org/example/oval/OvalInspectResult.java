@@ -3,9 +3,9 @@ package org.example.oval;
 public class OvalInspectResult {
 
     int totalDefCount;
-    int successCount;
-    int unknownCount;
-    int errorCount;
+    int successDefCount;
+    int unknownDefCount;
+    int errorDefCount;
 
     public int getTotalDefCount() {
         return totalDefCount;
@@ -15,37 +15,37 @@ public class OvalInspectResult {
         this.totalDefCount = totalDefCount;
     }
 
-    public int getSuccessCount() {
-        return successCount;
+    public int getSuccessDefCount() {
+        return successDefCount;
     }
 
-    public void setSuccessCount(int successCount) {
-        this.successCount = successCount;
+    public void setSuccessDefCount(int successDefCount) {
+        this.successDefCount = successDefCount;
     }
 
-    public int getUnknownCount() {
-        return unknownCount;
+    public int getUnknownDefCount() {
+        return unknownDefCount;
     }
 
-    public void setUnknownCount(int unknownCount) {
-        this.unknownCount = unknownCount;
+    public void setUnknownDefCount(int unknownDefCount) {
+        this.unknownDefCount = unknownDefCount;
     }
 
-    public int getErrorCount() {
-        return errorCount;
+    public int getErrorDefCount() {
+        return errorDefCount;
     }
 
-    public void setErrorCount(int errorCount) {
-        this.errorCount = errorCount;
+    public void setErrorDefCount(int errorDefCount) {
+        this.errorDefCount = errorDefCount;
     }
 
     @Override
     public String toString() {
         return "OvalInspectResult{" +
                 "totalDefCount=" + totalDefCount +
-                ", successCount=" + successCount +
-                ", unknownCount=" + unknownCount +
-                ", errorCount=" + errorCount +
+                ", successCount=" + successDefCount +
+                ", unknownCount=" + unknownDefCount +
+                ", errorCount=" + errorDefCount +
                 '}';
     }
 }

@@ -7,13 +7,9 @@
     <list default="true" id="ec513e70-630f-417d-bc96-071b03599711" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalDefinitionsInspector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalDefinitionsInspector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/OvalObjectExtractable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/OvalStateExtractable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/OvalTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/test/OvalTestExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/FamilyTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/FamilyTestExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalInspectResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalInspectResult.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/WinFileTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/WinFileTestExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/org/example/oval/DefinitionsLoaderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/oval/DefinitionsLoaderTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/oval/test/impl/FamilyTestExecutorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/oval/test/impl/FamilyTestExecutorTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +21,8 @@
       <list>
         <option value="Enum" />
         <option value="JUnit3 Test Class" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -35,13 +31,6 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="workspaceImportEnabled" value="true" />
-      </MavenImportingSettings>
-    </option>
   </component>
   <component name="ProjectId" id="2U60CHNFnec6tmPTtF9mbiiQung" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -58,7 +47,7 @@
     "WebServerToolWindowFactoryState": "false",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit3",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3": "junit.framework.TestCase",
-    "last_opened_file_path": "C:/work/oval",
+    "last_opened_file_path": "/Users/dokyeongoh/IdeaProjects/ovalDemo",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -67,7 +56,7 @@
     "project.structure.last.edited": "Problems",
     "project.structure.proportion": "0.15527344",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "File.Encoding",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -100,7 +89,7 @@
       <recent name="org.example.oval.test.impl" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.DefinitionsLoaderTest.test">
+  <component name="RunManager" selected="JUnit.DefinitionsLoaderTest.testLoadDefinitionsFile (1)">
     <configuration name="DefinitionsLoaderTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="OvalDemo" />
       <extension name="coverage">
@@ -112,6 +101,22 @@
       <option name="PACKAGE_NAME" value="org.example.oval" />
       <option name="MAIN_CLASS_NAME" value="org.example.oval.DefinitionsLoaderTest" />
       <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DefinitionsLoaderTest.testLoadDefinitionsFile (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ovalDemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.oval.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.oval" />
+      <option name="MAIN_CLASS_NAME" value="org.example.oval.DefinitionsLoaderTest" />
+      <option name="METHOD_NAME" value="testLoadDefinitionsFile" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -148,22 +153,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="FamilyTestExecutorTest.testFamilyNull" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="OvalDemo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.oval.test.impl.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.example.oval.test.impl" />
-      <option name="MAIN_CLASS_NAME" value="org.example.oval.test.impl.FamilyTestExecutorTest" />
-      <option name="METHOD_NAME" value="testFamilyNull" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="FamilyTestExecutorTest.testOtherStateType" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="OvalDemo" />
       <extension name="coverage">
@@ -182,11 +171,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.DefinitionsLoaderTest.testLoadDefinitionsFile (1)" />
         <item itemvalue="JUnit.DefinitionsLoaderTest.test" />
         <item itemvalue="JUnit.DefinitionsLoaderTest.testLoadDefinitionsFile" />
         <item itemvalue="JUnit.FamilyTestExecutorTest" />
         <item itemvalue="JUnit.FamilyTestExecutorTest.testOtherStateType" />
-        <item itemvalue="JUnit.FamilyTestExecutorTest.testFamilyNull" />
       </list>
     </recent_temporary>
   </component>
@@ -201,6 +190,7 @@
       <workItem from="1692244597173" duration="1514000" />
       <workItem from="1692246489663" duration="33008000" />
       <workItem from="1692748915834" duration="77068000" />
+      <workItem from="1693116002877" duration="16051000" />
     </task>
     <servers />
   </component>
