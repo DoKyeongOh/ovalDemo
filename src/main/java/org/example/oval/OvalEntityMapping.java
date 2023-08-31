@@ -3,6 +3,7 @@ package org.example.oval;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 
 import javax.xml.bind.JAXBElement;
+import java.util.HashMap;
 import java.util.Map;
 
 public class OvalEntityMapping {
@@ -10,18 +11,27 @@ public class OvalEntityMapping {
     private Map<String, StateType> stateTypeMap;
     private Map<String, VariableType> variableTypeMap;
 
+    public OvalEntityMapping() {
+        objectTypeMap = new HashMap<>();
+        stateTypeMap = new HashMap<>();
+        variableTypeMap = new HashMap<>();
+    }
+
     public void init(OvalDefinitions ovalDefinitions) {
         StatesType statesType = ovalDefinitions.getStates();
-        for (JAXBElement<? extends StateType> stateType : statesType.getState())
-            stateTypeMap.put(stateType.getValue().getId(), stateType.getValue());
+        if (statesType != null)
+            for (JAXBElement<? extends StateType> stateType : statesType.getState())
+                stateTypeMap.put(stateType.getValue().getId(), stateType.getValue());
 
         ObjectsType objectsType = ovalDefinitions.getObjects();
-        for (JAXBElement<? extends ObjectType> objectType : objectsType.getObject())
-            objectTypeMap.put(objectType.getValue().getId(), objectType.getValue());
+        if (objectsType != null)
+            for (JAXBElement<? extends ObjectType> objectType : objectsType.getObject())
+                objectTypeMap.put(objectType.getValue().getId(), objectType.getValue());
 
         VariablesType variables = ovalDefinitions.getVariables();
-        for (JAXBElement<? extends VariableType> variable : variables.getVariable())
-            variableTypeMap.put(variable.getValue().getId(), variable.getValue());
+        if (variables != null)
+            for (JAXBElement<? extends VariableType> variable : variables.getVariable())
+                variableTypeMap.put(variable.getValue().getId(), variable.getValue());
     }
 
     public void addObjectType(String objectId, ObjectType objectType) {
@@ -42,7 +52,6 @@ public class OvalEntityMapping {
     public void addVariableType(String variableId, VariableType variableType) {
         this.variableTypeMap.put(variableId, variableType);
     }
-
     public VariableType getVariableType(String variableId) {
         return this.variableTypeMap.get(variableId);
     }

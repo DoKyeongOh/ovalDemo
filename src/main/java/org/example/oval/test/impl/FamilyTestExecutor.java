@@ -1,5 +1,7 @@
 package org.example.oval.test.impl;
 
+import org.example.oval.OvalEntityMapping;
+import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestResultType;
 import org.mitre.oval.xmlschema.oval_definitions_5.StateRefType;
 import org.mitre.oval.xmlschema.oval_definitions_5.StateType;
@@ -13,7 +15,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Map;
 
 public class FamilyTestExecutor implements OvalTestExecutor {
     private FamilyTest familyTest;
@@ -33,14 +34,14 @@ public class FamilyTestExecutor implements OvalTestExecutor {
     }
 
     @Override
-    public OvalTestResultType execute(Map<String, StateType> stateTypeMap, List<ItemType> itemTypes) throws Exception {
+    public OvalTestResultType execute(OvalEntityMapping ovalEntityMapping, List<ItemType> itemTypes) throws Exception {
         boolean success = true;
         if (!validateItem(itemTypes))
             return OvalTestResultType.UNKNOWN;
         FamilyItem familyItem = (FamilyItem) itemTypes.get(0);
         String familyItemValue = (String) familyItem.getFamily().getValue();
         for (StateRefType stateRefType : familyTest.getState()) {
-            StateType inputState = stateTypeMap.get(stateRefType.getStateRef());
+            StateType inputState = ovalEntityMapping.getStateType(stateRefType.getStateRef());
             if (inputState == null)
                 throw new Exception("input state not found. test id : " + familyTest.getId());
             FamilyState familyState = (FamilyState) inputState;

@@ -1,6 +1,6 @@
 package org.example.oval.test.item;
 
-import org.example.oval.item.FamilyItemExtractor;
+import org.example.oval.item.impl.FamilyItemExtractor;
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_independent.FamilyItem;

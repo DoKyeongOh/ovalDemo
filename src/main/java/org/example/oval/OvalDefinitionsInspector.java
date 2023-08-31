@@ -1,7 +1,7 @@
 package org.example.oval;
 
-import org.example.oval.test.OvalItemExtractorFactory;
-import org.example.oval.test.impl.OvalTestExecutor;
+import org.example.oval.item.OvalItemExtractorFactory;
+import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestExecutorFactory;
 import org.example.oval.test.OvalTestResultType;
 import org.example.oval.item.OvalItemExtractor;
@@ -39,20 +39,8 @@ public class OvalDefinitionsInspector {
         for (JAXBElement<? extends TestType> testType : testsType.getTest())
             testTypeMap.put(testType.getValue().getId(), testType.getValue());
 
-        StatesType statesType = ovalDefinitions.getStates();
-        Map<String, StateType> stateTypeMap = new HashMap<>();
-        for (JAXBElement<? extends StateType> stateType : statesType.getState())
-            stateTypeMap.put(stateType.getValue().getId(), stateType.getValue());
-
-        ObjectsType objectsType = ovalDefinitions.getObjects();
-        Map<String, ObjectType> objectTypeMap = new HashMap<>();
-        for (JAXBElement<? extends ObjectType> objectType : objectsType.getObject())
-            objectTypeMap.put(objectType.getValue().getId(), objectType.getValue());
-
-        VariablesType variablesType = ovalDefinitions.getVariables();
-        Map<String, VariableType> variableTypeMap = new HashMap<>();
-        for (JAXBElement<? extends VariableType> variableType : variablesType.getVariable())
-            variableTypeMap.put(variableType.getValue().getId(), variableType.getValue());
+        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
+        ovalEntityMapping.init(ovalDefinitions);
 
         for (String testId : testIds) {
             TestType testType = testTypeMap.get(testId);
@@ -62,18 +50,11 @@ public class OvalDefinitionsInspector {
                 // system char 정보를 얻어오는 부분, variable을 참조해서 넘겨주는 부분이 선행되어야 한다.
                 // 시스템에 대한 정보를 얻어오는 부분 == charactoristic
 
-                // test의 리스트가 있고, item 정보들에 대한 정보가 있음
-                // 해당 item 정보가 다음 테스트에 인자로 들어가서 참조할 수 있도록
-
-                // local variable 안에 object_ref 를 사용하는 곳이 있을 때
-                // item을 만들기 위한 test에서 참조되는 대상 item(var 형태)을 만드는 test를 참조하는지
-                OvalItemExtractor extractor =
-                        OvalItemExtractorFactory.getInstance(testType, objectTypeMap, variableTypeMap);
+                OvalItemExtractor extractor = OvalItemExtractorFactory.getExtractor(testType, ovalEntityMapping);
                 List<ItemType> itemTypes = extractor.extract();
 
-                // test executor 가 수행할 테스트와 오브젝트를 이미 갖고있어야함
                 OvalTestExecutor executor = OvalTestExecutorFactory.getInstance(testType);
-                testResultMap.put(testType.getId(), executor.execute(stateTypeMap, itemTypes));
+                testResultMap.put(testType.getId(), executor.execute(ovalEntityMapping, itemTypes));
             } catch (Exception e) {
                 testResultMap.put(testType.getId(), OvalTestResultType.ERROR);
                 System.out.println(e.getMessage());

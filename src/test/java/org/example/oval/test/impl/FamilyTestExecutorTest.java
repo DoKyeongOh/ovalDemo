@@ -1,5 +1,6 @@
 package org.example.oval.test.impl;
 
+import org.example.oval.OvalEntityMapping;
 import org.example.oval.test.OvalTestResultType;
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_common_5.ExistenceEnumeration;
@@ -38,6 +39,9 @@ public class FamilyTestExecutorTest {
         Map<String, StateType> stateTypeMap = new HashMap<>();
         stateTypeMap.put("state-1", familyState);
 
+        FakeOvalEntityMapping ovalEntityMapping = new FakeOvalEntityMapping();
+        ovalEntityMapping.setStateTypeMap(stateTypeMap);
+
         // prepare family object
         List<ItemType> itemTypes = new ArrayList<>();
         FamilyItem familyItem = new FamilyItem();
@@ -50,32 +54,32 @@ public class FamilyTestExecutorTest {
         {
             entityStateFamilyType.setValue("WINDOWS");
             entityItemFamilyType.setValue("windows");
-            OvalTestResultType execute = executor.execute(stateTypeMap, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
             assert execute.equals(OvalTestResultType.TRUE);
         }
         {
             entityStateFamilyType.setValue("WINDOWS");
             entityItemFamilyType.setValue("unix");
-            OvalTestResultType execute = executor.execute(stateTypeMap, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
             assert execute.equals(OvalTestResultType.FALSE);
         }
         {
             entityStateFamilyType.setValue("UNIX");
             entityItemFamilyType.setValue("linux");
-            OvalTestResultType execute = executor.execute(stateTypeMap, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
             assert execute.equals(OvalTestResultType.TRUE);
         }
         {
             entityStateFamilyType.setValue("UNIX");
             entityItemFamilyType.setValue("windows");
-            OvalTestResultType execute = executor.execute(stateTypeMap, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
             assert execute.equals(OvalTestResultType.FALSE);
         }
         {
             familyTest.setCheckExistence(ExistenceEnumeration.NONE_EXIST);
             entityStateFamilyType.setValue("WINDOWS");
             entityItemFamilyType.setValue("windows");
-            OvalTestResultType execute = executor.execute(stateTypeMap, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
             assert execute.equals(OvalTestResultType.FALSE);
         }
     }
@@ -86,9 +90,9 @@ public class FamilyTestExecutorTest {
             FakeFamilyTest familyTest = new FakeFamilyTest();
             FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
             OvalTestResultType result = null;
-            result = familyTestExecutor.execute(new HashMap<>(), new ArrayList<>());
+            result = familyTestExecutor.execute(null, new ArrayList<>());
             assert result.equals(OvalTestResultType.UNKNOWN);
-            result = familyTestExecutor.execute(new HashMap<>(), null);
+            result = familyTestExecutor.execute(null, null);
             assert result.equals(OvalTestResultType.UNKNOWN);
         }
         { // item null
@@ -96,14 +100,14 @@ public class FamilyTestExecutorTest {
             FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
             List<ItemType> itemTypes = new ArrayList<>();
             itemTypes.add(null);
-            assert familyTestExecutor.execute(new HashMap<>(), itemTypes).equals(OvalTestResultType.UNKNOWN);
+            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.UNKNOWN);
         }
         { // not familyItem
             FakeFamilyTest familyTest = new FakeFamilyTest();
             FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
             List<ItemType> itemTypes = new ArrayList<>();
             itemTypes.add(new FileItem());
-            assert familyTestExecutor.execute(new HashMap<>(), itemTypes).equals(OvalTestResultType.UNKNOWN);
+            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.UNKNOWN);
         }
         { // empty familyItem
             FakeFamilyTest familyTest = new FakeFamilyTest();
@@ -111,7 +115,7 @@ public class FamilyTestExecutorTest {
             FamilyItem familyItem = new FamilyItem();
             List<ItemType> itemTypes = new ArrayList<>();
             itemTypes.add(familyItem);
-            assert familyTestExecutor.execute(new HashMap<>(), itemTypes).equals(OvalTestResultType.UNKNOWN);
+            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.UNKNOWN);
         }
         { // real family value is null
             FakeFamilyTest familyTest = new FakeFamilyTest();
@@ -121,7 +125,7 @@ public class FamilyTestExecutorTest {
             familyItem.setFamily(entityItemFamilyType);
             List<ItemType> itemTypes = new ArrayList<>();
             itemTypes.add(familyItem);
-            assert familyTestExecutor.execute(new HashMap<>(), itemTypes).equals(OvalTestResultType.UNKNOWN);
+            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.UNKNOWN);
         }
         { // normal but state is empty
             FakeFamilyTest familyTest = new FakeFamilyTest();
@@ -132,7 +136,7 @@ public class FamilyTestExecutorTest {
             familyItem.setFamily(entityItemFamilyType);
             List<ItemType> itemTypes = new ArrayList<>();
             itemTypes.add(familyItem);
-            assert familyTestExecutor.execute(new HashMap<>(), itemTypes).equals(OvalTestResultType.TRUE);
+            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.TRUE);
         }
         { // state map is empty
             List<StateRefType> stateRefTypes = new ArrayList<>();
@@ -147,7 +151,7 @@ public class FamilyTestExecutorTest {
             itemTypes.add(familyItem);
             try {
                 FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-                familyTestExecutor.execute(new HashMap<>(), itemTypes);
+                familyTestExecutor.execute(null, itemTypes);
                 assert false;
             } catch (Exception e) {
                 assert true;
@@ -167,7 +171,7 @@ public class FamilyTestExecutorTest {
             itemTypes.add(familyItem);
             try {
                 FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-                familyTestExecutor.execute(new HashMap<>(), itemTypes);
+                familyTestExecutor.execute(null, itemTypes);
                 assert false;
             } catch (Exception e) {
                 assert true;
@@ -189,8 +193,10 @@ public class FamilyTestExecutorTest {
             try {
                 Map<String, StateType> stateTypeMap = new HashMap<>();
                 stateTypeMap.put("state-1", new FamilyState());
+                FakeOvalEntityMapping ovalEntityMapping = new FakeOvalEntityMapping();
+                ovalEntityMapping.setStateTypeMap(stateTypeMap);
                 FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-                familyTestExecutor.execute(stateTypeMap, itemTypes);
+                familyTestExecutor.execute(ovalEntityMapping, itemTypes);
                 assert false;
             } catch (Exception e) {
                 assert true;
@@ -214,8 +220,10 @@ public class FamilyTestExecutorTest {
                 familyState.setFamily(new EntityStateFamilyType());
                 Map<String, StateType> stateTypeMap = new HashMap<>();
                 stateTypeMap.put("state-1", familyState);
+                FakeOvalEntityMapping ovalEntityMapping = new FakeOvalEntityMapping();
+                ovalEntityMapping.setStateTypeMap(stateTypeMap);
                 FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-                familyTestExecutor.execute(stateTypeMap, itemTypes);
+                familyTestExecutor.execute(ovalEntityMapping, itemTypes);
                 assert false;
             } catch (Exception e) {
                 assert true;
@@ -226,6 +234,14 @@ public class FamilyTestExecutorTest {
     private static class FakeFamilyTest extends FamilyTest {
         public void setState(List<StateRefType> states) {
             this.state = states;
+        }
+    }
+
+    private static class FakeOvalEntityMapping extends OvalEntityMapping {
+        public void setStateTypeMap(Map<String, StateType> stateTypeMap) {
+            for (String stateTypeId : stateTypeMap.keySet()) {
+                addStateType(stateTypeId, stateTypeMap.get(stateTypeId));
+            }
         }
     }
 
