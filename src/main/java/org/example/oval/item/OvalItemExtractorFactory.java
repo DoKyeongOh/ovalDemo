@@ -9,7 +9,7 @@ import org.example.oval.item.impl.RegistryItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.TestType;
 
 public class OvalItemExtractorFactory {
-    public static OvalItemExtractor getExtractor(TestType testType, OvalEntityMapping ovalEntityMapping) {
+    public static OvalItemExtractor getExtractor(TestType testType, OvalEntityMapping ovalEntityMapping) throws Exception {
         Class<? extends TestType> testTypeClass = testType.getClass();
         if (testTypeClass.equals(org.mitre.oval.xmlschema.oval_definitions_5_unix.FileTest.class))
             return new UnixFileItemExtractor(testType, ovalEntityMapping);

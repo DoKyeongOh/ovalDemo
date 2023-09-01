@@ -3,10 +3,9 @@ package org.example.oval.item.impl;
 import org.example.oval.OvalEntityMapping;
 import org.example.oval.OvalSimpleBaseTypeConverter;
 import org.example.oval.item.OvalItemExtractor;
-import org.mitre.oval.xmlschema.oval_definitions_5.EntityObjectStringType;
-import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
-import org.mitre.oval.xmlschema.oval_definitions_5.Set;
-import org.mitre.oval.xmlschema.oval_definitions_5.TestType;
+import org.example.oval.variable.OvalVariableExtractorFactory;
+import org.mitre.oval.xmlschema.oval_definitions_5.*;
+import org.mitre.oval.xmlschema.oval_definitions_5_windows.FileBehaviors;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.FileObject;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.FileTest;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemIntType;
@@ -31,55 +30,49 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class WinFileItemExtractor implements OvalItemExtractor {
-    private String objectId;
+    private static final String basePath = "C:\\Users\\82105\\IdeaProjects\\ovalDemo";
+    private FileObject fileObject;
     private OvalEntityMapping ovalEntityMapping;
     private OvalSimpleBaseTypeConverter baseTypeConverter;
 
-    public WinFileItemExtractor(TestType testType, OvalEntityMapping ovalEntityMapping) {
+    public WinFileItemExtractor(TestType testType, OvalEntityMapping ovalEntityMapping) throws Exception { // todo: behavior 필요
         FileTest fileTest = (FileTest) testType;
-        objectId = fileTest.getObject().getObjectRef();
+        String objectRef = fileTest.getObject().getObjectRef();
+        ObjectType inputObject = ovalEntityMapping.getObjectType(objectRef);
+        if (inputObject == null)
+            throw new Exception("input file object is not null. object id : " + fileObject.getId());
+        if (!inputObject.getClass().equals(FileObject.class))
+            throw new Exception("input file object is notc file_object. object id : " + fileObject.getId());
+        fileObject = (FileObject) ovalEntityMapping.getObjectType(objectRef);
         baseTypeConverter = new OvalSimpleBaseTypeConverter(ovalEntityMapping);
         this.ovalEntityMapping = ovalEntityMapping;
     }
 
     @Override
     public List<ItemType> extract() throws Exception {
-        ObjectType inputObject = ovalEntityMapping.getObjectType(objectId);
-        if (inputObject == null)
-            throw new Exception("input file object is not null. object id : " + objectId);
-        if (!inputObject.getClass().equals(FileObject.class))
-            throw new Exception("input file object is notc file_object. object id : " + objectId);
-
-        FileObject fileObject = (FileObject) inputObject;
         boolean setExist = fileObject.getSet() != null;
         boolean filepathExist = fileObject.getFilepath() != null;
         boolean pathExist = fileObject.getFilename() != null || fileObject.getPath() != null;
         if (setExist && (filepathExist || pathExist))
-            throw new Exception("set type and other type cannot be used at the same time");
-
+            throw new Exception("fileObject has set and path. object id : " + fileObject.getId());
         if (!setExist && !filepathExist && !pathExist)
-            throw new Exception("file data in file_object is not exist");
-
+            throw new Exception("fileObject has set and path. object id : " + fileObject.getId());
         if (filepathExist && pathExist)
-            throw new Exception("filepath and (path + filepath) cannot be used at the same time");
-
-        List<ItemType> fileItems = null;
+            throw new Exception("fileObject has filepath and path. object id. object id : " + fileObject.getId());
         if (setExist)
-            fileItems = findFilesBySet(fileObject.getSet());
+            return findFilesBySet(fileObject.getSet());
         else if (filepathExist)
-            fileItems = findFilesByFilepath(fileObject.getFilepath());
-        else if (pathExist) {
-            fileItems = findFilesByPath(fileObject.getPath(), fileObject.getFilename());
-        }
-        return fileItems;
+            return findFilesByFilepath(fileObject.getFilepath());
+        else
+            return findFilesByPath(fileObject.getPath(), fileObject.getFilename());
     }
 
-    private List<ItemType> findFilesByPath(EntityObjectStringType path, JAXBElement<EntityObjectStringType> filename)
-            throws Exception {
+    private List<ItemType> findFilesByPath(EntityObjectStringType pathEntity,
+                                           JAXBElement<EntityObjectStringType> filenameEntity) throws Exception {
         List<File> dirs = new ArrayList<>();
-        List<String> paths = baseTypeConverter.convert(path).stream()
+        List<String> paths = baseTypeConverter.convert(pathEntity).stream()
                 .map(item -> item.toString()).collect(Collectors.toList());
-        switch (path.getOperation()) {
+        switch (pathEntity.getOperation()) {
             case EQUALS:
                 paths.forEach(dirPath -> {
                     File dir = new File(dirPath);
@@ -88,30 +81,28 @@ public class WinFileItemExtractor implements OvalItemExtractor {
                 });
                 break;
             case CASE_INSENSITIVE_EQUALS:
-                Files.find(Paths.get("c:\\"), Integer.MAX_VALUE, (dirPath, attributes) -> {
+                Files.find(Paths.get(basePath), Integer.MAX_VALUE, (dirPath, attributes) -> {
                     if (!attributes.isDirectory())
                         return false;
                     String absolutePath = dirPath.toAbsolutePath().toString();
-                    for (String p : paths) {
+                    for (String p : paths)
                         if (absolutePath.equalsIgnoreCase(p))
                             return true;
-                    }
                     return false;
                 }).forEach(file -> dirs.add(file.toFile()));
                 break;
             case PATTERN_MATCH:
                 List<Pattern> patterns = new ArrayList<>();
                 for (String p : paths) {
-                    Pattern pattern = Pattern.compile(p);
+                    Pattern pattern = Pattern.compile(p.replace("\\", "\\\\"));
                     patterns.add(pattern);
                 }
-                Files.find(Paths.get("c:\\"), Integer.MAX_VALUE, (dirPath, attributes) -> {
+                Files.find(Paths.get(basePath), Integer.MAX_VALUE, (dirPath, attributes) -> {
                     if (!attributes.isDirectory())
                         return false;
-                    for (Pattern pattern : patterns) {
+                    for (Pattern pattern : patterns)
                         if (pattern.matcher(dirPath.toAbsolutePath().toString()).find())
                             return true;
-                    }
                     return false;
                 }).forEach(file -> dirs.add(file.toFile()));
                 break;
@@ -123,10 +114,10 @@ public class WinFileItemExtractor implements OvalItemExtractor {
             for (File file : dir.listFiles()) {
                 if (file.isDirectory())
                     continue;
-                String inputFilename = (String) filename.getValue().getValue();
-                switch (filename.getValue().getOperation()) {
+                String inputFilename = (String) filenameEntity.getValue().getValue();
+                switch (filenameEntity.getValue().getOperation()) {
                     case EQUALS:
-                        if (filename.getValue().getValue().equals(file.getName()))
+                        if (filenameEntity.getValue().getValue().equals(file.getName()))
                             fileItems.add(toFileItem(file));
                         break;
                     case CASE_INSENSITIVE_EQUALS:
@@ -157,8 +148,7 @@ public class WinFileItemExtractor implements OvalItemExtractor {
                 }
                 break;
             case CASE_INSENSITIVE_EQUALS:
-                // 대소문자?
-                Files.find(Paths.get("c:\\"), Integer.MAX_VALUE, (filepath, attributes) -> {
+                Files.find(Paths.get(basePath), Integer.MAX_VALUE, (filepath, attributes) -> {
                     if (!attributes.isDirectory())
                         return false;
                     String absolutePath = filepath.toAbsolutePath().toString();
@@ -172,10 +162,10 @@ public class WinFileItemExtractor implements OvalItemExtractor {
             case PATTERN_MATCH:
                 List<Pattern> patterns = new ArrayList<>();
                 for (String p : paths) {
-                    Pattern pattern = Pattern.compile(p);
+                    Pattern pattern = Pattern.compile(p.replace("\\", "\\\\"));
                     patterns.add(pattern);
                 }
-                Files.find(Paths.get("c:\\"), Integer.MAX_VALUE, (filepath, attributes) -> {
+                Files.find(Paths.get(basePath), Integer.MAX_VALUE, (filepath, attributes) -> {
                     if (attributes.isDirectory())
                         return false;
                     for (Pattern pattern : patterns) {
@@ -249,5 +239,27 @@ public class WinFileItemExtractor implements OvalItemExtractor {
         fileItem.setOwner(ownerItem);
         fileItem.setWindowsView(entityItemWindowsViewType);
         return fileItem;
+    }
+
+    private static List<Object> getBaseTypeValue(EntitySimpleBaseType baseType, OvalEntityMapping mapping)
+            throws Exception {
+        Object value = baseType.getValue();
+        String varRef = baseType.getVarRef();
+        if (value != null && varRef != null)
+            throw new Exception("EntitySimpleBaseType cannot have value and var_ref at the same time.");
+        if (value != null) {
+            List<Object> variables = new ArrayList<>();
+            variables.add(value);
+            return variables;
+        }
+        VariableType variableType = mapping.getVariableType(varRef);
+        if (variableType == null)
+            return new ArrayList<>();
+        Object variable = OvalVariableExtractorFactory.getExtractor(mapping, variableType).extract();
+        if (variable instanceof List)
+            return (List<Object>) variable;
+        List<Object> variables = new ArrayList<>();
+        variables.add(variable);
+        return variables;
     }
 }
