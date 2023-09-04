@@ -45,9 +45,21 @@ public class OvalVersionComparatorTest {
         compare = "1";
         assert OvalVersionComparator.isGraterThan(version, compare, false);
 
-        version = "1.12,343";
+        version = "1.13,343";
         compare = "1.12,343";
         assert OvalVersionComparator.isGraterThan(version, compare, false);
+
+        version = "1.12,343";
+        compare = "1.13,343";
+        assert !OvalVersionComparator.isGraterThan(version, compare, false);
+
+        version = "1.12,343";
+        compare = "1.12,343";
+        assert !OvalVersionComparator.isGraterThan(version, compare, false);
+
+        version = "1.12,343";
+        compare = "1.12,343";
+        assert OvalVersionComparator.isGraterThan(version, compare, true);
     }
 
 }

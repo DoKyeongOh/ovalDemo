@@ -27,16 +27,17 @@ public class OvalVersionComparator {
                 return false;
             int versionNum = Integer.parseInt(versionArr[i]);
             int compareNum = Integer.parseInt(compareArr[i]);
-            if (containEqual && versionNum < compareNum)
-                return false;
-            if (!containEqual && versionNum <= compareNum)
+            if (versionNum > compareNum)
+                return true;
+            if (versionNum < compareNum)
                 return false;
         }
-        if (versionArr.length <= compareArr.length)
-            return false;
-        return true;
+        if (containEqual && versionArr.length == compareArr.length)
+            return true;
+        if (versionArr.length > compareArr.length)
+            return true;
+        return false;
     }
-
     public static boolean isLessThan(String version, String compare, boolean containEqual) {
         if (version == null || compare == null)
             return false;
@@ -44,14 +45,20 @@ public class OvalVersionComparator {
         String[] compareArr = compare.split("\\D");
         int loopCount = versionArr.length > compareArr.length ? compareArr.length : versionArr.length;
         for (int i=0 ; i<loopCount ; i++) {
+            if (versionArr[i].isEmpty() || compareArr[i].isEmpty())
+                return false;
             int versionNum = Integer.parseInt(versionArr[i]);
             int compareNum = Integer.parseInt(compareArr[i]);
-            if (containEqual && versionNum > compareNum)
-                return false;
-            if (!containEqual && versionNum >= compareNum)
+            if (versionNum < compareNum)
+                return true;
+            if (versionNum > compareNum)
                 return false;
         }
-        return true;
+        if (containEqual && versionArr.length == compareArr.length)
+            return true;
+        if (versionArr.length < compareArr.length)
+            return true;
+        return false;
     }
 
 }
