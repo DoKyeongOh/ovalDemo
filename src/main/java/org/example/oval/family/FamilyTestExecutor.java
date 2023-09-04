@@ -1,4 +1,4 @@
-package org.example.oval.test.impl;
+package org.example.oval.family;
 
 import org.example.oval.OvalEntityMapping;
 import org.example.oval.test.OvalTestExecutor;

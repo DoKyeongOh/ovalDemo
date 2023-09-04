@@ -1,6 +1,7 @@
-package org.example.oval.item.impl;
+package org.example.oval.file;
 
 import org.example.oval.OvalEntityMapping;
+import org.example.oval.file.WinFileItemExtractor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,8 +20,8 @@ import java.util.stream.Collectors;
 
 public class WinFileItemExtractorTest {
 
-    private static final String basePath = "target\\fileExtractorTest";
-    private static final String basePath2 = "target\\fileExtractorTest2";
+    private static final String basePath = "target/fileExtractorTest";
+    private static final String basePath2 = "target/fileExtractorTest2";
     private static final int fileCount = 3;
     @Before
     public void before() throws Exception {
@@ -74,7 +75,7 @@ public class WinFileItemExtractorTest {
             assert fileItems.size() == 1;
             assert fileItem.getPath().getValue().equals(basePathFile.getAbsolutePath());
             assert fileItem.getFilename().getValue().getValue().equals(filename);
-            assert fileItem.getFilepath().getValue().equals(basePathFile.getAbsolutePath() + "\\" + filename);
+            assert fileItem.getFilepath().getValue().equals(basePathFile.getAbsolutePath() + "/" + filename);
         }
     }
     @Test
@@ -91,7 +92,7 @@ public class WinFileItemExtractorTest {
             assert fileItems.size() == 1;
             assert fileItem.getPath().getValue().equals(basePathFile.getAbsolutePath());
             assert fileItem.getFilename().getValue().getValue().equals(filename);
-            assert fileItem.getFilepath().getValue().equals(basePathFile.getAbsolutePath() + "\\" + filename);
+            assert fileItem.getFilepath().getValue().equals(basePathFile.getAbsolutePath() + "/" + filename);
         }
     }
     @Test
@@ -109,13 +110,13 @@ public class WinFileItemExtractorTest {
             FileItem fileItem = fileItems.get(0);
             assert fileItem.getPath().getValue().equals(basePathFile.getAbsolutePath());
             assert fileItem.getFilename().getValue().getValue().equals(filename);
-            assert fileItem.getFilepath().getValue().equals(basePathFile.getAbsolutePath() + "\\" + filename);
+            assert fileItem.getFilepath().getValue().equals(basePathFile.getAbsolutePath() + "/" + filename);
 
             File basePathFile2 = new File(basePath2);
             FileItem fileItem2 = fileItems.get(1);
             assert fileItem2.getPath().getValue().equals(basePathFile2.getAbsolutePath());
             assert fileItem2.getFilename().getValue().getValue().equals(filename);
-            assert fileItem2.getFilepath().getValue().equals(basePathFile2.getAbsolutePath() + "\\" + filename);
+            assert fileItem2.getFilepath().getValue().equals(basePathFile2.getAbsolutePath() + "/" + filename);
         }
     }
     @Test
@@ -133,7 +134,7 @@ public class WinFileItemExtractorTest {
             assert fileItem.getPath().getValue().equals(basePathFile.getAbsolutePath());
             assert ((String) fileItem.getFilename().getValue().getValue()).equalsIgnoreCase(filename);
             assert ((String) fileItem.getFilepath().getValue())
-                    .equalsIgnoreCase(basePathFile.getAbsolutePath() + "\\" + filename);
+                    .equalsIgnoreCase(basePathFile.getAbsolutePath() + "/" + filename);
         }
     }
     @Test
@@ -153,7 +154,7 @@ public class WinFileItemExtractorTest {
             String filepath = (String) fileitem.getFilepath().getValue();
             assert path.equals(basePathFile.getAbsolutePath());
             assert filename.equals("dumy" + i);
-            assert filepath.equals(basePathFile.getAbsolutePath() + "\\dumy" + i);
+            assert filepath.equals(basePathFile.getAbsolutePath() + "/dumy" + i);
         }
     }
 
@@ -163,12 +164,6 @@ public class WinFileItemExtractorTest {
             pathOperation = OperationEnumeration.EQUALS;
         if (filenameOperation == null)
             filenameOperation = OperationEnumeration.EQUALS;
-        FileTest fileTest = new FileTest();
-        fileTest.setId("fileTest-1");
-        ObjectRefType objectRefType = new ObjectRefType();
-        objectRefType.setObjectRef("fileObject-1");
-        fileTest.setObject(objectRefType);
-
         FileObject fileObject = new FileObject();
         EntityObjectStringType pathEntity = new EntityObjectStringType();
         pathEntity.setValue(path);
@@ -186,7 +181,7 @@ public class WinFileItemExtractorTest {
         OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
         ovalEntityMapping.addObjectType("fileObject-1", fileObject);
 
-        WinFileItemExtractor winFileItemExtractor = new WinFileItemExtractor(fileTest, ovalEntityMapping);
+        WinFileItemExtractor winFileItemExtractor = new WinFileItemExtractor(fileObject, ovalEntityMapping);
         return winFileItemExtractor.extract().stream()
                 .map(item -> (FileItem) item).collect(Collectors.toList());
     }
@@ -194,8 +189,8 @@ public class WinFileItemExtractorTest {
 
     @Test
     public void testExist() {
-        File file = new File("C:\\Users\\82105\\IdeaProjects\\ovalDemo\\target\\hello.txt");
-        System.out.println(file.getParent());
+//        File file = new File("C:/Users/82105/IdeaProjects/ovalDemo/target/hello.txt");
+//        System.out.println(file.getParent());
     }
 
 }

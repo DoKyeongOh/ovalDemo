@@ -1,11 +1,10 @@
-package org.example.oval.item.impl;
+package org.example.oval.registry;
 
 import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalItemExtractor;
 import org.example.oval.OvalSimpleBaseTypeConverter;
-import org.example.oval.item.OvalItemExtractor;
-import org.mitre.oval.xmlschema.oval_definitions_5.TestType;
+import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryObject;
-import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryTest;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 
 import java.util.List;
@@ -16,10 +15,12 @@ public class RegistryItemExtractor implements OvalItemExtractor {
     private OvalEntityMapping ovalEntityMapping;
     private OvalSimpleBaseTypeConverter baseTypeConverter;
 
-    public RegistryItemExtractor(TestType testType, OvalEntityMapping ovalEntityMapping) {
-        RegistryTest registryTest = (RegistryTest) testType;
-        String objectRef = registryTest.getObject().getObjectRef();
-        registryObject = (RegistryObject) ovalEntityMapping.getObjectType(objectRef);
+    public RegistryItemExtractor(ObjectType inputObject, OvalEntityMapping ovalEntityMapping) throws Exception {
+        if (inputObject == null)
+            throw new Exception("input registry object is not null.");
+        if (!inputObject.getClass().equals(RegistryObject.class))
+            throw new Exception("input registry object is not registry_object.");
+        registryObject = (RegistryObject) inputObject;
         baseTypeConverter = new OvalSimpleBaseTypeConverter(ovalEntityMapping);
         this.ovalEntityMapping = ovalEntityMapping;
     }

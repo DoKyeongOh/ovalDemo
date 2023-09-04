@@ -1,7 +1,8 @@
-package org.example.oval.item.impl;
+package org.example.oval.family;
 
-import org.example.oval.OvalEntityMapping;
-import org.example.oval.item.OvalItemExtractor;
+import org.example.oval.OvalItemExtractor;
+import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
+import org.mitre.oval.xmlschema.oval_definitions_5_independent.FamilyObject;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.StatusEnumeration;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_independent.EntityItemFamilyType;
@@ -12,6 +13,14 @@ import java.util.List;
 
 
 public class FamilyItemExtractor implements OvalItemExtractor {
+    private FamilyObject familyObject;
+    public FamilyItemExtractor(ObjectType inputObject) throws Exception {
+        if (inputObject == null)
+            throw new Exception("input family object is not null.");
+        if (!inputObject.getClass().equals(FamilyObject.class))
+            throw new Exception("input family object is not family_object.");
+        familyObject = (FamilyObject) inputObject;
+    }
     @Override
     public List<ItemType> extract() throws Exception {
         EntityItemFamilyType entityItemFamilyType = new EntityItemFamilyType();

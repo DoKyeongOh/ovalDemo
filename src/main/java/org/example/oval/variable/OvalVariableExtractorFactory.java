@@ -11,7 +11,7 @@ public class OvalVariableExtractorFactory {
             LocalVariable localVariable = (LocalVariable) variableType;
             return LocalVariableExtractorFactory.getLocalVariableExtractor(ovalEntityMapping, localVariable);
         } else
-            return null;
+            throw new Exception("variable is not expected type of variable. id : " + variableType.getId());
     }
 
 }

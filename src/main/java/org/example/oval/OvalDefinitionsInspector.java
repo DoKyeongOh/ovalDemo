@@ -1,10 +1,8 @@
 package org.example.oval;
 
-import org.example.oval.item.OvalItemExtractorFactory;
 import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestExecutorFactory;
 import org.example.oval.test.OvalTestResultType;
-import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 

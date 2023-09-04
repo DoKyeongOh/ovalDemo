@@ -5,11 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ec513e70-630f-417d-bc96-071b03599711" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/file/UnixFileItemExtractor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalDefinitionsInspector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalDefinitionsInspector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalInspectResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalInspectResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/WinFileTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/WinFileTestExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/item/OvalItemExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalItemExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/item/OvalItemExtractorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalItemExtractorFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/item/impl/FamilyItemExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/family/FamilyItemExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/item/impl/RegistryItemExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/registry/RegistryItemExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/item/impl/RpmInfoItemExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/rpminfo/RpmInfoItemExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/item/impl/UnixFileItemExtractor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/item/impl/WinFileItemExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/file/WinFileItemExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/set/OvalItemSetExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/OvalItemSetExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/set/OvalItemSetExtractorFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/set/RegistryItemSetExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/registry/RegistryItemSetExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/set/WinFileItemSetExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/file/WinFileItemSetExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/OvalTestExecutorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/test/OvalTestExecutorFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/FamilyTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/family/FamilyTestExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/RegistryTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/registry/RegistryTestExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/RpmInfoTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/rpminfo/RpmInfoTestExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/UnixFileTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/file/UnixFileTestExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/test/impl/WinFileTestExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/file/WinFileTestExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/oval/variable/OvalVariableExtractorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/oval/variable/OvalVariableExtractorFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/org/example/oval/DefinitionsLoaderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/oval/DefinitionsLoaderTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/oval/item/impl/RegistryItemExtractorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/oval/registry/RegistryItemExtractorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/oval/item/impl/WinFileItemExtractorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/oval/file/WinFileItemExtractorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/oval/test/impl/FamilyTestExecutorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/oval/family/FamilyTestExecutorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/oval/test/item/FamilyItemExtractorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/oval/family/FamilyItemExtractorTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +41,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="JUnit3 Test Class" />
         <option value="Interface" />
+        <option value="JUnit3 Test Class" />
         <option value="Class" />
       </list>
     </option>
@@ -40,26 +61,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit3",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3": "junit.framework.TestCase",
-    "last_opened_file_path": "/Users/dokyeongoh/IdeaProjects/ovalDemo",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.15527344",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit3&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3&quot;: &quot;junit.framework.TestCase&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dokyeongoh/IdeaProjects/ovalDemo&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15527344&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="org.example.oval.test" />
@@ -77,10 +98,15 @@
       <recent name="junit.framework.TestCase" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="org.example.oval.test" />
+      <recent name="org.example.oval.family" />
+      <recent name="org.example.oval.registry" />
+      <recent name="org.example.oval.file" />
       <recent name="org.example.oval" />
+      <recent name="org.example.oval.test" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="org.example.oval.file" />
+      <recent name="org.example.oval.item.impl" />
       <recent name="org.example.oval.test.impl" />
       <recent name="org.example.oval" />
       <recent name="org.example" />
@@ -89,81 +115,81 @@
       <recent name="org.example.oval.test.impl" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.DefinitionsLoaderTest.testLoadDefinitionsFile (1)">
-    <configuration name="DefinitionsLoaderTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="OvalDemo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.oval.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.example.oval" />
-      <option name="MAIN_CLASS_NAME" value="org.example.oval.DefinitionsLoaderTest" />
-      <option name="METHOD_NAME" value="test" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DefinitionsLoaderTest.testLoadDefinitionsFile (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.UnixFileItemExtractorTest">
+    <configuration name="UnixFileItemExtractorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ovalDemo" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.example.oval.*" />
+          <option name="PATTERN" value="org.example.oval.file.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.example.oval" />
-      <option name="MAIN_CLASS_NAME" value="org.example.oval.DefinitionsLoaderTest" />
-      <option name="METHOD_NAME" value="testLoadDefinitionsFile" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DefinitionsLoaderTest.testLoadDefinitionsFile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="OvalDemo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.oval.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.example.oval" />
-      <option name="MAIN_CLASS_NAME" value="org.example.oval.DefinitionsLoaderTest" />
-      <option name="METHOD_NAME" value="testLoadDefinitionsFile" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="FamilyTestExecutorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="OvalDemo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.oval.test.impl.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.example.oval.test.impl" />
-      <option name="MAIN_CLASS_NAME" value="org.example.oval.test.impl.FamilyTestExecutorTest" />
+      <option name="PACKAGE_NAME" value="org.example.oval.file" />
+      <option name="MAIN_CLASS_NAME" value="org.example.oval.file.UnixFileItemExtractorTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="FamilyTestExecutorTest.testOtherStateType" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="OvalDemo" />
+    <configuration name="UnixFileItemExtractorTest.testFilepathCaseInsensitiveEquals" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ovalDemo" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.example.oval.test.impl.*" />
+          <option name="PATTERN" value="org.example.oval.file.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.example.oval.test.impl" />
-      <option name="MAIN_CLASS_NAME" value="org.example.oval.test.impl.FamilyTestExecutorTest" />
-      <option name="METHOD_NAME" value="testOtherStateType" />
+      <option name="PACKAGE_NAME" value="org.example.oval.file" />
+      <option name="MAIN_CLASS_NAME" value="org.example.oval.file.UnixFileItemExtractorTest" />
+      <option name="METHOD_NAME" value="testFilepathCaseInsensitiveEquals" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UnixFileItemExtractorTest.testFilepathPatternMatch" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ovalDemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.oval.file.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.oval.file" />
+      <option name="MAIN_CLASS_NAME" value="org.example.oval.file.UnixFileItemExtractorTest" />
+      <option name="METHOD_NAME" value="testFilepathPatternMatch" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UnixFileItemExtractorTest.testPathEquals" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ovalDemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.oval.file.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.oval.file" />
+      <option name="MAIN_CLASS_NAME" value="org.example.oval.file.UnixFileItemExtractorTest" />
+      <option name="METHOD_NAME" value="testPathEquals" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UnixFileItemExtractorTest.testPathPatternMatch" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ovalDemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.oval.file.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.oval.file" />
+      <option name="MAIN_CLASS_NAME" value="org.example.oval.file.UnixFileItemExtractorTest" />
+      <option name="METHOD_NAME" value="testPathPatternMatch" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -171,11 +197,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.DefinitionsLoaderTest.testLoadDefinitionsFile (1)" />
-        <item itemvalue="JUnit.DefinitionsLoaderTest.test" />
-        <item itemvalue="JUnit.DefinitionsLoaderTest.testLoadDefinitionsFile" />
-        <item itemvalue="JUnit.FamilyTestExecutorTest" />
-        <item itemvalue="JUnit.FamilyTestExecutorTest.testOtherStateType" />
+        <item itemvalue="JUnit.UnixFileItemExtractorTest" />
+        <item itemvalue="JUnit.UnixFileItemExtractorTest.testPathEquals" />
+        <item itemvalue="JUnit.UnixFileItemExtractorTest.testFilepathPatternMatch" />
+        <item itemvalue="JUnit.UnixFileItemExtractorTest.testFilepathCaseInsensitiveEquals" />
+        <item itemvalue="JUnit.UnixFileItemExtractorTest.testPathPatternMatch" />
       </list>
     </recent_temporary>
   </component>
@@ -191,6 +217,7 @@
       <workItem from="1692246489663" duration="33008000" />
       <workItem from="1692748915834" duration="77068000" />
       <workItem from="1693116002877" duration="16051000" />
+      <workItem from="1693651745222" duration="24304000" />
     </task>
     <servers />
   </component>
@@ -218,7 +245,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/org/example/oval/DefinitionsLoaderTest.java</url>
-          <line>15</line>
+          <line>21</line>
           <option name="timeStamp" value="85" />
         </line-breakpoint>
       </breakpoints>
@@ -229,11 +256,17 @@
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ovalDemo$FileFinderTest_test.ic" NAME="FileFinderTest.test Coverage Results" MODIFIED="1693741415922" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>org.example.oval.file.*</FILTER>
+    </SUITE>
     <SUITE FILE_PATH="coverage/ovalDemo$OvalCriteriaCheckerTest_testCriteria.ic" NAME="OvalCriteriaCheckerTest.testCriteria Coverage Results" MODIFIED="1692772895148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>org.example.oval.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/ovalDemo$OvalCriteriaCheckerTest.ic" NAME="OvalCriteriaCheckerTest Coverage Results" MODIFIED="1692841597049" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>org.example.oval.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/ovalDemo$UnixFileItemExtractorTest.ic" NAME="UnixFileItemExtractorTest Coverage Results" MODIFIED="1693746692877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>org.example.oval.file.*</FILTER>
     </SUITE>
   </component>
 </project>

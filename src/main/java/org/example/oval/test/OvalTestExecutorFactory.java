@@ -1,6 +1,10 @@
 package org.example.oval.test;
 
-import org.example.oval.test.impl.*;
+import org.example.oval.family.FamilyTestExecutor;
+import org.example.oval.file.UnixFileTestExecutor;
+import org.example.oval.file.WinFileTestExecutor;
+import org.example.oval.registry.RegistryTestExecutor;
+import org.example.oval.rpminfo.RpmInfoTestExecutor;
 import org.mitre.oval.xmlschema.oval_definitions_5.TestType;
 
 public class OvalTestExecutorFactory {

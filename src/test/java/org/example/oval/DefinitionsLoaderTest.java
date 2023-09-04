@@ -1,5 +1,6 @@
 package org.example.oval;
 
+import org.example.oval.file.FileFinder;
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 
@@ -63,4 +64,14 @@ public class DefinitionsLoaderTest {
             System.out.println(line);
         }
     }
+
+    @Test
+    public void test2() throws IOException {
+        File baseDir = new File("/");
+        FileFinder fileFinder = new FileFinder();
+        fileFinder.findDown(baseDir, 2, 0, file -> {
+            System.out.println(file.getAbsolutePath());
+        });
+    }
+
 }

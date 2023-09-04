@@ -1,4 +1,4 @@
-package org.example.oval.item.impl;
+package org.example.oval.registry;
 
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_windows.RegistryItem;

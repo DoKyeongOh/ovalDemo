@@ -1,4 +1,4 @@
-package org.example.oval.item;
+package org.example.oval;
 
 import org.example.oval.OvalEntityMapping;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
