@@ -1,10 +1,9 @@
-package org.example.oval;
+package org.example.oval.item;
 
-import org.example.oval.OvalEntityMapping;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 
 import java.util.List;
 
-public interface OvalItemExtractor {
+public interface OvalItemSetExtractor {
     List<ItemType> extract() throws Exception;
 }
