@@ -1,7 +1,8 @@
 package org.example.oval.registry;
 
 import org.example.oval.OvalEntityMapping;
-import org.example.oval.OvalItemExtractor;
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.OvalItemExtractor;
 import org.example.oval.OvalSimpleBaseTypeConverter;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryObject;
@@ -26,7 +27,7 @@ public class RegistryItemExtractor implements OvalItemExtractor {
     }
 
     @Override
-    public List<ItemType> extract() throws Exception {
+    public ItemExtractResult extract() throws Exception {
         List<Object> hives = baseTypeConverter.convert(registryObject.getHive());
         List<Object> keys = baseTypeConverter.convert(registryObject.getHive());
         List<Object> names = baseTypeConverter.convert(registryObject.getHive());

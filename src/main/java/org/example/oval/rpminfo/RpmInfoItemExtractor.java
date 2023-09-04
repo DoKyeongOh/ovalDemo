@@ -1,7 +1,8 @@
 package org.example.oval.rpminfo;
 
 import org.example.oval.OvalEntityMapping;
-import org.example.oval.OvalItemExtractor;
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5_linux.RpminfoObject;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
@@ -23,7 +24,7 @@ public class RpmInfoItemExtractor implements OvalItemExtractor {
     }
 
     @Override
-    public List<ItemType> extract() {
+    public ItemExtractResult extract() {
         return null;
     }
 }

@@ -1,5 +1,7 @@
 package org.example.oval;
 
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.OvalItemExtractor;
 import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestExecutorFactory;
 import org.example.oval.test.OvalTestResultType;
@@ -49,10 +51,11 @@ public class OvalDefinitionsInspector {
                 // 시스템에 대한 정보를 얻어오는 부분 == charactoristic
 
                 OvalItemExtractor extractor = OvalItemExtractorFactory.getExtractor(testType, ovalEntityMapping);
-                List<ItemType> itemTypes = extractor.extract();
+                ItemExtractResult itemExtractResult = extractor.extract();
 
                 OvalTestExecutor executor = OvalTestExecutorFactory.getInstance(testType);
-                testResultMap.put(testType.getId(), executor.execute(ovalEntityMapping, itemTypes));
+                testResultMap.put(testType.getId(), executor.execute(ovalEntityMapping,
+                        itemExtractResult.getExtractedItems()));
             } catch (Exception e) {
                 testResultMap.put(testType.getId(), OvalTestResultType.ERROR);
                 System.out.println(e.getMessage());

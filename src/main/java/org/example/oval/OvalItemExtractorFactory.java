@@ -3,6 +3,7 @@ package org.example.oval;
 import org.example.oval.family.FamilyItemExtractor;
 import org.example.oval.file.UnixFileItemExtractor;
 import org.example.oval.file.WinFileItemExtractor;
+import org.example.oval.item.OvalItemExtractor;
 import org.example.oval.registry.RegistryItemExtractor;
 import org.example.oval.rpminfo.RpmInfoItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;

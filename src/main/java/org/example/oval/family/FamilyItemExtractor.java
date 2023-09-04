@@ -1,6 +1,7 @@
 package org.example.oval.family;
 
-import org.example.oval.OvalItemExtractor;
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5_independent.FamilyObject;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
@@ -22,14 +23,15 @@ public class FamilyItemExtractor implements OvalItemExtractor {
         familyObject = (FamilyObject) inputObject;
     }
     @Override
-    public List<ItemType> extract() throws Exception {
+    public ItemExtractResult extract() throws Exception {
         EntityItemFamilyType entityItemFamilyType = new EntityItemFamilyType();
         entityItemFamilyType.setValue(System.getProperty("os.name"));
         entityItemFamilyType.setStatus(StatusEnumeration.EXISTS);
         FamilyItem familyItem = new FamilyItem();
         familyItem.setFamily(entityItemFamilyType);
-        List<ItemType> itemTypes = new ArrayList<>();
-        itemTypes.add(familyItem);
-        return itemTypes;
+        ItemExtractResult itemExtractResult = new ItemExtractResult();
+        itemExtractResult.getExtractedItems().add(familyItem);
+        itemExtractResult.setResultType(ItemExtractResult.ItemExtractResultType.COMPLETE);
+        return itemExtractResult;
     }
 }

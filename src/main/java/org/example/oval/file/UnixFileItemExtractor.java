@@ -1,14 +1,13 @@
 package org.example.oval.file;
 
 import org.example.oval.OvalEntityMapping;
-import org.example.oval.OvalItemExtractor;
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.OvalItemExtractor;
 import org.example.oval.OvalSimpleBaseTypeConverter;
 import org.mitre.oval.xmlschema.oval_definitions_5.EntityObjectStringType;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5.Set;
-import org.mitre.oval.xmlschema.oval_definitions_5.TestType;
 import org.mitre.oval.xmlschema.oval_definitions_5_unix.FileObject;
-import org.mitre.oval.xmlschema.oval_definitions_5_unix.FileTest;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.*;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_unix.FileItem;
 
@@ -41,26 +40,40 @@ public class UnixFileItemExtractor implements OvalItemExtractor {
         baseTypeConverter = new OvalSimpleBaseTypeConverter(ovalEntityMapping);
         fileObject = (FileObject) inputObject;
         this.ovalEntityMapping = ovalEntityMapping;
-
     }
 
     @Override
-    public List<ItemType> extract() throws Exception {
+    public ItemExtractResult extract() {
+        ItemExtractResult result = new ItemExtractResult();
         boolean setExist = fileObject.getSet() != null;
         boolean filepathExist = fileObject.getFilepath() != null;
         boolean pathExist = fileObject.getFilename() != null || fileObject.getPath() != null;
-        if (setExist && (filepathExist || pathExist))
-            throw new Exception("fileObject has set and path. object id : " + fileObject.getId());
-        if (!setExist && !filepathExist && !pathExist)
-            throw new Exception("fileObject has set and path. object id : " + fileObject.getId());
-        if (filepathExist && pathExist)
-            throw new Exception("fileObject has filepath and path. object id. object id : " + fileObject.getId());
-        if (setExist)
-            return findFilesBySet(fileObject.getSet());
-        else if (filepathExist)
-            return findFilesByFilepath(fileObject.getFilepath());
-        else
-            return findFilesByPath(fileObject.getPath(), fileObject.getFilename());
+        if (setExist && (filepathExist || pathExist)) {
+            result.setResultType(ItemExtractResult.ItemExtractResultType.ERROR);
+            return result;
+        }
+        if (!setExist && !filepathExist && !pathExist){
+            result.setResultType(ItemExtractResult.ItemExtractResultType.ERROR);
+            return result;
+        }
+        if (filepathExist && pathExist){
+            result.setResultType(ItemExtractResult.ItemExtractResultType.ERROR);
+            return result;
+        }
+
+        try {
+            if (setExist)
+                result.setExtractedItems(findFilesBySet(fileObject.getSet()));
+            else if (filepathExist)
+                result.setExtractedItems(findFilesByFilepath(fileObject.getFilepath()));
+            else
+                result.setExtractedItems(findFilesByPath(fileObject.getPath(), fileObject.getFilename()));
+            if (result.getExtractedItems().isEmpty())
+                result.setResultType(ItemExtractResult.ItemExtractResultType.DOES_NOT_EXIST);
+        } catch (Exception e) {
+            result.setResultType(ItemExtractResult.ItemExtractResultType.ERROR);
+        }
+        return result;
     }
 
     private List<ItemType> findFilesByPath(EntityObjectStringType pathEntity,
@@ -115,14 +128,13 @@ public class UnixFileItemExtractor implements OvalItemExtractor {
                             fileItems.add(toFileItem(file));
                         break;
                     case CASE_INSENSITIVE_EQUALS:
-                        for (String filename : filenames) {
+                        for (String filename : filenames)
                             if (filename.equalsIgnoreCase(file.getName()))
                                 fileItems.add(toFileItem(file));
-                        }
                         break;
                     case PATTERN_MATCH:
-                        for (String pattern : filenames) {
-                            if (Pattern.compile(pattern).matcher(file.getName()).find())
+                        for (String filename : filenames) {
+                            if (Pattern.compile(filename).matcher(file.getName()).find())
                                 fileItems.add(toFileItem(file));
                         }
                         break;
@@ -175,7 +187,7 @@ public class UnixFileItemExtractor implements OvalItemExtractor {
         return fileItems;
     }
 
-    private List<ItemType> findFilesBySet(Set set) {
+    private List<ItemType> findFilesBySet(Set set) throws Exception {
         return new UnixFileItemSetExtractor(set, ovalEntityMapping).extract();
     }
 
@@ -185,12 +197,12 @@ public class UnixFileItemExtractor implements OvalItemExtractor {
             Process process = null;
             BufferedReader br = null;
 
-            process = runtime.exec("stat -f \"%g\" " + file.getAbsolutePath());
+            process = runtime.exec("stat -c \"%g\" " + file.getAbsolutePath());
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             FileItem.GroupId groupId = new FileItem.GroupId();
             groupId.setValue(br.readLine());
 
-            process = runtime.exec("stat -f \"%u\" " + file.getAbsolutePath());
+            process = runtime.exec("stat -c \"%u\" " + file.getAbsolutePath());
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             FileItem.UserId userId = new FileItem.UserId();
             userId.setValue(br.readLine());

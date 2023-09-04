@@ -2,10 +2,10 @@ package org.example.oval.file;
 
 import org.example.oval.OvalEntityMapping;
 import org.example.oval.OvalSimpleBaseTypeConverter;
-import org.example.oval.OvalItemExtractor;
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.FileObject;
-import org.mitre.oval.xmlschema.oval_definitions_5_windows.FileTest;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemIntType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemStringType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,22 +43,38 @@ public class WinFileItemExtractor implements OvalItemExtractor {
     }
 
     @Override
-    public List<ItemType> extract() throws Exception {
+    public ItemExtractResult extract() throws Exception {
+        ItemExtractResult result = new ItemExtractResult();
         boolean setExist = fileObject.getSet() != null;
         boolean filepathExist = fileObject.getFilepath() != null;
         boolean pathExist = fileObject.getFilename() != null || fileObject.getPath() != null;
-        if (setExist && (filepathExist || pathExist))
-            throw new Exception("fileObject has set and path. object id : " + fileObject.getId());
-        if (!setExist && !filepathExist && !pathExist)
-            throw new Exception("fileObject has set and path. object id : " + fileObject.getId());
-        if (filepathExist && pathExist)
-            throw new Exception("fileObject has filepath and path. object id. object id : " + fileObject.getId());
-        if (setExist)
-            return findFilesBySet(fileObject.getSet());
-        else if (filepathExist)
-            return findFilesByFilepath(fileObject.getFilepath());
-        else
-            return findFilesByPath(fileObject.getPath(), fileObject.getFilename());
+        if (setExist && (filepathExist || pathExist)) {
+            result.setResultType(ItemExtractResult.ItemExtractResultType.ERROR);
+            return result;
+        }
+        if (!setExist && !filepathExist && !pathExist){
+            result.setResultType(ItemExtractResult.ItemExtractResultType.ERROR);
+            return result;
+        }
+        if (filepathExist && pathExist){
+            result.setResultType(ItemExtractResult.ItemExtractResultType.ERROR);
+            return result;
+        }
+
+        try {
+            if (setExist)
+                result.setExtractedItems(findFilesBySet(fileObject.getSet()));
+            else if (filepathExist)
+                result.setExtractedItems(findFilesByFilepath(fileObject.getFilepath()));
+            else
+                result.setExtractedItems(findFilesByPath(fileObject.getPath(), fileObject.getFilename()));
+            result.setResultType(ItemExtractResult.ItemExtractResultType.COMPLETE);
+        } catch (Exception e) {
+            result.setResultType(ItemExtractResult.ItemExtractResultType.ERROR);
+        }
+        if (result.getExtractedItems().isEmpty())
+            result.setResultType(ItemExtractResult.ItemExtractResultType.DOES_NOT_EXIST);
+        return result;
     }
 
     private List<ItemType> findFilesByPath(EntityObjectStringType pathEntity,
@@ -102,7 +117,7 @@ public class WinFileItemExtractor implements OvalItemExtractor {
             default:
                 break;
         }
-        java.util.Set<String> inputFilenames = baseTypeConverter.convert(filenameEntity.getValue()).stream()
+        java.util.Set<String> filenames = baseTypeConverter.convert(filenameEntity.getValue()).stream()
                 .map(item -> item.toString()).collect(Collectors.toSet());
         List<ItemType> fileItems = new ArrayList<>();
         for (File dir : dirs) {
@@ -111,17 +126,17 @@ public class WinFileItemExtractor implements OvalItemExtractor {
                     continue;
                 switch (filenameEntity.getValue().getOperation()) {
                     case EQUALS:
-                        if (inputFilenames.contains(file.getName()))
+                        if (filenames.contains(file.getName()))
                             fileItems.add(toFileItem(file));
                         break;
                     case CASE_INSENSITIVE_EQUALS:
-                        for (String inputFilename : inputFilenames)
-                            if (inputFilename.equalsIgnoreCase(file.getName()))
+                        for (String filename : filenames)
+                            if (filename.equalsIgnoreCase(file.getName()))
                                 fileItems.add(toFileItem(file));
                         break;
                     case PATTERN_MATCH:
-                        for (String inputFilename : inputFilenames) {
-                            String pattern = inputFilename.replace("\\", "\\\\");
+                        for (String filename : filenames) {
+                            String pattern = filename.replace("\\", "\\\\");
                             if (Pattern.compile(pattern).matcher(file.getName()).find())
                                 fileItems.add(toFileItem(file));
                         }
@@ -135,25 +150,23 @@ public class WinFileItemExtractor implements OvalItemExtractor {
     private List<ItemType> findFilesByFilepath(EntityObjectStringType filepathEntity) throws Exception {
         List<String> paths = baseTypeConverter.convert(filepathEntity).stream()
                 .map(item -> item.toString()).collect(Collectors.toList());
-        List<ItemType> fileItems = new ArrayList<>();
+        List<File> files = new ArrayList<>();
         switch (filepathEntity.getOperation()) {
             case EQUALS:
                 for (String filepath : paths) {
                     File file = new File(filepath);
                     if (file.exists() && file.isFile())
-                        fileItems.add(toFileItem(file));
+                        files.add(file);
                 }
                 break;
             case CASE_INSENSITIVE_EQUALS:
-                Files.find(Paths.get(basePath), Integer.MAX_VALUE, (filepath, attributes) -> {
-                    if (!attributes.isDirectory())
-                        return false;
-                    String absolutePath = filepath.toAbsolutePath().toString();
-                    for (String p : paths) {
+                FileFinder.findDown(new File(basePath), file -> {
+                    if (file.isDirectory())
+                        return;
+                    String absolutePath = file.getAbsolutePath();
+                    for (String p : paths)
                         if (absolutePath.equalsIgnoreCase(p))
-                            return true;
-                    }
-                    return false;
+                            files.add(file);
                 });
                 break;
             case PATTERN_MATCH:
@@ -162,25 +175,25 @@ public class WinFileItemExtractor implements OvalItemExtractor {
                     Pattern pattern = Pattern.compile(p.replace("\\", "\\\\"));
                     patterns.add(pattern);
                 }
-                Files.find(Paths.get(basePath), Integer.MAX_VALUE, (filepath, attributes) -> {
-                    if (attributes.isDirectory())
-                        return false;
-                    for (Pattern pattern : patterns) {
-                        if (pattern.matcher(filepath.toAbsolutePath().toString()).find())
-                            return true;
-                    }
-                    return false;
+                FileFinder.findDown(new File(basePath), file -> {
+                    if (file.isDirectory())
+                        return;
+                    for (Pattern pattern : patterns)
+                        if (pattern.matcher(file.getAbsolutePath()).find())
+                            files.add(file);
                 });
                 break;
             default:
                 break;
         }
+        List<ItemType> fileItems = new ArrayList<>();
+        for (File file : files)
+            fileItems.add(toFileItem(file));
         return fileItems;
     }
 
-    private List<ItemType> findFilesBySet(Set set) {
-        List<ItemType> files = new ArrayList<>();
-        return files;
+    private List<ItemType> findFilesBySet(Set set) throws Exception {
+        return new WinFileItemSetExtractor(set, ovalEntityMapping).extract();
     }
 
     private static FileItem toFileItem(File file) throws IOException {

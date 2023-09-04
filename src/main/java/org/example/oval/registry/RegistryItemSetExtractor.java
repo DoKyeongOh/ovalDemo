@@ -1,7 +1,6 @@
 package org.example.oval.registry;
 
-import org.example.oval.OvalEntityMapping;
-import org.example.oval.OvalItemSetExtractor;
+import org.example.oval.item.OvalItemSetExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5.Set;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryObject;
