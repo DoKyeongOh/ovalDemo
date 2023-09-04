@@ -13,7 +13,7 @@ public class FamilyItemExtractorTest {
     @Test
     public void test() throws Exception {
         FamilyItemExtractor familyItemExtractor = new FamilyItemExtractor(new FamilyObject());
-        List<ItemType> familyItems = familyItemExtractor.extract();
+        List<ItemType> familyItems = familyItemExtractor.extract().getExtractedItems();
         assert familyItems.size() == 1;
         FamilyItem familyItem = (FamilyItem) familyItems.get(0);
         assert familyItem.getFamily().getValue().toString().toLowerCase().contains("windows");

@@ -231,7 +231,7 @@ public class UnixFileItemExtractorTest {
         ovalEntityMapping.addObjectType("fileObject-1", fileObject);
 
         UnixFileItemExtractor unixFileItemExtractor = new UnixFileItemExtractor(fileObject, ovalEntityMapping);
-        return unixFileItemExtractor.extract().stream()
+        return unixFileItemExtractor.extract().getExtractedItems().stream()
                 .map(item -> (FileItem) item).collect(Collectors.toList());
     }
     private List<FileItem> getItemByFilepath(String filepath, OperationEnumeration filepathOperation) throws Exception {
@@ -247,7 +247,7 @@ public class UnixFileItemExtractorTest {
         ovalEntityMapping.addObjectType("fileObject-1", fileObject);
 
         UnixFileItemExtractor unixFileItemExtractor = new UnixFileItemExtractor(fileObject, ovalEntityMapping);
-        return unixFileItemExtractor.extract().stream()
+        return unixFileItemExtractor.extract().getExtractedItems().stream()
                 .map(item -> (FileItem) item).collect(Collectors.toList());
     }
 }
