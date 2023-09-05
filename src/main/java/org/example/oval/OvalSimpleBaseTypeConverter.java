@@ -1,6 +1,7 @@
 package org.example.oval;
 
 import org.example.oval.variable.OvalVariableExtractorFactory;
+import org.mitre.oval.xmlschema.oval_common_5.SimpleDatatypeEnumeration;
 import org.mitre.oval.xmlschema.oval_definitions_5.EntitySimpleBaseType;
 import org.mitre.oval.xmlschema.oval_definitions_5.VariableType;
 
@@ -16,23 +17,22 @@ public class OvalSimpleBaseTypeConverter {
     }
 
     public List<Object> convert(EntitySimpleBaseType entitySimpleBaseType) throws Exception {
-        Object value = entitySimpleBaseType.getValue();
+        List<Object> variables = new ArrayList<>();
         String varRef = entitySimpleBaseType.getVarRef();
-        if (value != null && varRef != null)
-            throw new Exception("EntitySimpleBaseType cannot have value and var_ref at the same time.");
-        if (value != null) {
-            List<Object> variables = new ArrayList<>();
-            variables.add(value);
+        if (varRef != null) {
+            VariableType variableType = ovalEntityMapping.getVariableType(varRef);
+            if (variableType == null)
+                return new ArrayList<>();
+            Object variable = OvalVariableExtractorFactory.getExtractor(ovalEntityMapping, variableType).extract();
+            if (variable instanceof List)
+                return (List<Object>) variable;
+            variables.add(variable);
             return variables;
         }
-        VariableType variableType = ovalEntityMapping.getVariableType(varRef);
-        if (variableType == null)
-            return new ArrayList<>();
-        Object variable = OvalVariableExtractorFactory.getExtractor(ovalEntityMapping, variableType).extract();
-        if (variable instanceof List)
-            return (List<Object>) variable;
-        List<Object> variables = new ArrayList<>();
-        variables.add(variable);
+        Object value = entitySimpleBaseType.getValue();
+        if (value == null)
+            return variables;
+        variables.add(value);
         return variables;
     }
 
