@@ -5,11 +5,9 @@ import org.example.oval.OvalSimpleBaseTypeConverter;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
+import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.FileObject;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemIntType;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemStringType;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.StatusEnumeration;
+import org.mitre.oval.xmlschema.oval_system_characteristics_5.*;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_windows.EntityItemWindowsViewType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_windows.FileItem;
 
@@ -32,7 +30,7 @@ public class WinFileItemExtractor implements OvalItemExtractor {
     private OvalEntityMapping ovalEntityMapping;
     private OvalSimpleBaseTypeConverter baseTypeConverter;
 
-    public WinFileItemExtractor(ObjectType inputObject, OvalEntityMapping ovalEntityMapping) throws Exception { // todo: behavior 필요
+    public WinFileItemExtractor(ObjectType inputObject, OvalEntityMapping ovalEntityMapping) throws Exception {
         if (inputObject == null)
             throw new Exception("input file object is not null. object id : " + fileObject.getId());
         if (!inputObject.getClass().equals(FileObject.class))
@@ -200,25 +198,25 @@ public class WinFileItemExtractor implements OvalItemExtractor {
         Path path = file.toPath();
         BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);
 
-        EntityItemIntType createTimeItem = new EntityItemIntType();
-        createTimeItem.setStatus(StatusEnumeration.EXISTS);
-        createTimeItem.setValue("" + attributes.creationTime().toMillis() * 100 + 116615024815702500L);
+        EntityItemIntType itemCreateTime = new EntityItemIntType();
+        itemCreateTime.setStatus(StatusEnumeration.EXISTS);
+        itemCreateTime.setValue("" + attributes.creationTime().toMillis() * 100 + 116615024815702500L);
 
-        EntityItemIntType accessTimeItem = new EntityItemIntType();
-        accessTimeItem.setStatus(StatusEnumeration.EXISTS);
-        accessTimeItem.setValue("" + attributes.lastAccessTime().toMillis() * 100 + 116615024815702500L);
+        EntityItemIntType itemAccessTime = new EntityItemIntType();
+        itemAccessTime.setStatus(StatusEnumeration.EXISTS);
+        itemAccessTime.setValue("" + attributes.lastAccessTime().toMillis() * 100 + 116615024815702500L);
 
-        EntityItemIntType modifyTimeItem = new EntityItemIntType();
-        modifyTimeItem.setStatus(StatusEnumeration.EXISTS);
-        modifyTimeItem.setValue("" + attributes.lastModifiedTime().toMillis() * 100 + 116615024815702500L);
+        EntityItemIntType itemModifyTime = new EntityItemIntType();
+        itemModifyTime.setStatus(StatusEnumeration.EXISTS);
+        itemModifyTime.setValue("" + attributes.lastModifiedTime().toMillis() * 100 + 116615024815702500L);
 
-        EntityItemStringType FilepathItem = new EntityItemStringType();
-        FilepathItem.setValue(file.getAbsolutePath());
-        FilepathItem.setStatus(StatusEnumeration.EXISTS);
+        EntityItemStringType itemFilepath = new EntityItemStringType();
+        itemFilepath.setValue(file.getAbsolutePath());
+        itemFilepath.setStatus(StatusEnumeration.EXISTS);
 
-        EntityItemStringType dirPathItem = new EntityItemStringType();
-        dirPathItem.setValue(file.getParentFile().getAbsolutePath());
-        dirPathItem.setStatus(StatusEnumeration.EXISTS);
+        EntityItemStringType itemDirPath = new EntityItemStringType();
+        itemDirPath.setValue(file.getParentFile().getAbsolutePath());
+        itemDirPath.setStatus(StatusEnumeration.EXISTS);
 
         EntityItemStringType filename = new EntityItemStringType();
         filename.setValue(file.getName());
@@ -228,26 +226,28 @@ public class WinFileItemExtractor implements OvalItemExtractor {
                 filename
         );
 
-        EntityItemStringType ownerItem = new EntityItemStringType();
-        ownerItem.setValue(Files.getOwner(file.toPath()).getName());
+        EntityItemStringType itemOwner = new EntityItemStringType();
+        itemOwner.setValue(Files.getOwner(file.toPath()).getName());
 
-        EntityItemIntType sizeItem = new EntityItemIntType();
-        sizeItem.setValue("" + Files.size(file.toPath()));
+        EntityItemIntType itemSize = new EntityItemIntType();
+        itemSize.setDatatype("int");
+        itemSize.setValue("" + Files.size(file.toPath()));
 
-        EntityItemWindowsViewType entityItemWindowsViewType = new EntityItemWindowsViewType();
-        entityItemWindowsViewType.setValue(System.getProperty("os.arch"));
+        EntityItemWindowsViewType itemWindowsView = new EntityItemWindowsViewType();
+        itemWindowsView.setValue(System.getProperty("os.arch"));
+        itemWindowsView.setDatatype("string");
 
         FileItem fileItem = new FileItem();
         fileItem.setId(new BigInteger("31"));
-        fileItem.setCTime(createTimeItem);
-        fileItem.setATime(accessTimeItem);
-        fileItem.setMTime(modifyTimeItem);
-        fileItem.setFilepath(FilepathItem);
-        fileItem.setPath(dirPathItem);
+        fileItem.setCTime(itemCreateTime);
+        fileItem.setATime(itemAccessTime);
+        fileItem.setMTime(itemModifyTime);
+        fileItem.setFilepath(itemFilepath);
+        fileItem.setPath(itemDirPath);
         fileItem.setFilename(filenameElement);
-        fileItem.setSize(sizeItem);
-        fileItem.setOwner(ownerItem);
-        fileItem.setWindowsView(entityItemWindowsViewType);
+        fileItem.setSize(itemSize);
+        fileItem.setOwner(itemOwner);
+        fileItem.setWindowsView(itemWindowsView);
         return fileItem;
     }
 

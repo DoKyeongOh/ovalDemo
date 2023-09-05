@@ -3,15 +3,23 @@ package org.example.oval.file;
 import org.example.oval.OvalEntityMapping;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.OvalItemSetExtractor;
+import org.example.oval.compare.OvalSimpleValueComparator;
+import org.example.oval.compare.OvalSimpleValueComparator.OvalSimpleValueCompareResult;
+import org.example.oval.compare.OvalSimpleValueComparatorFactory;
+import org.mitre.oval.xmlschema.oval_common_5.OperationEnumeration;
+import org.mitre.oval.xmlschema.oval_common_5.SimpleDatatypeEnumeration;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
-import org.mitre.oval.xmlschema.oval_definitions_5.Set;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.FileState;
+import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemStringType;
+import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemVersionType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_windows.FileItem;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WinFileItemSetExtractor implements OvalItemSetExtractor {
 
@@ -97,7 +105,7 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
         List<Filter> filters = fileItemSet.getFilter();
         for (ItemType itemType : itemTypeMap.values()) {
             FileItem fileItem = (FileItem) itemType;
-            boolean achieved = true;
+            boolean success = true;
             for (Filter filter : filters) {
                 String stateId = filter.getValue();
                 StateType stateType = ovalEntityMapping.getStateType(stateId);
@@ -107,13 +115,11 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
                     throw new Exception("file set filter error");
                 FileState fileState = (FileState) stateType;
                 boolean filterInclude = filter.getAction() == FilterActionEnumeration.INCLUDE;
-                boolean success = filterFileItem(fileItem, fileState);
-                if (filterInclude != success) {
-                    achieved = false;
+                success = filterInclude == filterFileItem(fileItem, fileState);
+                if (!success)
                     break;
-                }
             }
-            if (achieved)
+            if (success)
                 result.add(itemType);
         }
         return result;
@@ -123,16 +129,29 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
         if (fileState.getRest().isEmpty())
             return true;
 
-        for (JAXBElement<? extends EntityStateSimpleBaseType> itemElement : fileState.getRest()) {
-            String stateName = itemElement.getName().getLocalPart();
-            EntityStateSimpleBaseType stateSimpleBaseType = itemElement.getValue();
-            Object value = stateSimpleBaseType.getValue();
+        for (JAXBElement<? extends EntityStateSimpleBaseType> stateElement : fileState.getRest()) {
+            EntityStateSimpleBaseType stateSimpleType = stateElement.getValue();
+            Object object = stateSimpleType.getValue();
+            String stateName = stateElement.getName().getLocalPart();
+            OperationEnumeration operation = stateSimpleType.getOperation();
             if (stateName.equalsIgnoreCase("version")) {
-                if (!stateSimpleBaseType.getDatatype().equalsIgnoreCase("version"))
+                EntityItemVersionType version = fileItem.getVersion();
+                Object compare = version == null ? null : version.getValue();
+                OvalSimpleValueComparator comparator = OvalSimpleValueComparatorFactory
+                        .getComparator(SimpleDatatypeEnumeration.VERSION);
+                OvalSimpleValueCompareResult compareResult =
+                        comparator.compare(object, compare, operation);
+                if (compareResult != OvalSimpleValueCompareResult.SUCCESS)
                     return false;
-                String stateVersion = (String) value;
-                String itemVersion = (String) fileItem.getVersion().getValue();
-//                switch ()
+            }
+            if (stateName.equalsIgnoreCase("filepath")) {
+                EntityItemStringType filepath = fileItem.getFilepath();
+                Object compare = filepath.getValue();
+                OvalSimpleValueComparator comparator = OvalSimpleValueComparatorFactory
+                        .getComparator(SimpleDatatypeEnumeration.STRING);
+                OvalSimpleValueCompareResult compareResult = comparator.compare(object, compare, operation);
+                if (compareResult != OvalSimpleValueCompareResult.SUCCESS)
+                    return false;
             }
         }
         return true;
