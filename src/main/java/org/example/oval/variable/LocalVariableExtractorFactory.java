@@ -39,36 +39,6 @@ public class LocalVariableExtractorFactory {
         }
         @Override
         public Object extract() throws Exception {
-            switch (literalComponentType.getDatatype()) {
-                case BINARY:
-                    break;
-                case BOOLEAN:
-                    break;
-                case EVR_STRING:
-                    break;
-                case DEBIAN_EVR_STRING:
-                    break;
-                case FILESET_REVISION:
-                    break;
-                case FLOAT:
-                    if (literalComponentType.getValue() instanceof Float == false)
-                        throw new Exception("literal value datatype error");
-                    break;
-                case IOS_VERSION:
-                    break;
-                case INT:
-                    if (literalComponentType.getValue() instanceof Integer == false)
-                        throw new Exception("literal value datatype error");
-                    break;
-                case IPV_4_ADDRESS:
-                    break;
-                case IPV_6_ADDRESS:
-                    break;
-                case STRING:
-                    break;
-                case VERSION:
-                    break;
-            }
             return literalComponentType.getValue();
         }
     }
