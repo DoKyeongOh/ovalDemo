@@ -1,5 +1,7 @@
 package org.example.oval;
 
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.variable.VariableExtractResult;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 
 import javax.xml.bind.JAXBElement;
@@ -10,11 +12,15 @@ public class OvalEntityMapping {
     private Map<String, ObjectType> objectTypeMap;
     private Map<String, StateType> stateTypeMap;
     private Map<String, VariableType> variableTypeMap;
+    private Map<String, ItemExtractResult> itemExtractedResultMap;
+    private Map<String, VariableExtractResult> variableExtractResultMap;
 
     public OvalEntityMapping() {
         objectTypeMap = new HashMap<>();
         stateTypeMap = new HashMap<>();
         variableTypeMap = new HashMap<>();
+        itemExtractedResultMap = new HashMap<>();
+        variableExtractResultMap = new HashMap<>();
     }
 
     public void init(OvalDefinitions ovalDefinitions) {
@@ -54,6 +60,18 @@ public class OvalEntityMapping {
     }
     public VariableType getVariableType(String variableId) {
         return this.variableTypeMap.get(variableId);
+    }
+    public void addItemResult(String objectId, ItemExtractResult itemExtractResult) {
+        this.itemExtractedResultMap.put(objectId, itemExtractResult);
+    }
+    public ItemExtractResult getItemResult(String objectId) {
+        return this.itemExtractedResultMap.get(objectId);
+    }
+    public void addVariableResult(String variableId, VariableExtractResult variableExtractResult) {
+        this.variableExtractResultMap.put(variableId, variableExtractResult);
+    }
+    public VariableExtractResult getVariableResult(String variableId) {
+        return this.variableExtractResultMap.get(variableId);
     }
 
 }
