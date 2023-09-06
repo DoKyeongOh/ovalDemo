@@ -1,11 +1,40 @@
 package org.example.oval;
 
+import java.util.Map;
+
 public class OvalInspectResult {
 
-    int totalDefCount;
-    int successDefCount;
-    int unknownDefCount;
-    int errorDefCount;
+    private int totalDefCount;
+    private int successDefCount;
+    private int unknownDefCount;
+    private int errorDefCount;
+    private int notEvaluateDefCount;
+    private int notApplicableCount;
+
+    public OvalInspectResult(Map<String, OvalCriteriaResultType> resultMap) {
+        for (OvalCriteriaResultType resultType : resultMap.values()) {
+            totalDefCount++;
+            switch (resultType) {
+                case TRUE:
+                    successDefCount++;
+                    break;
+                case FALSE:
+                    break;
+                case UNKNOWN:
+                    unknownDefCount++;
+                    break;
+                case ERROR:
+                    errorDefCount++;
+                    break;
+                case NOT_EVALUATED:
+                    notEvaluateDefCount++;
+                    break;
+                case NOT_APPLICABLE:
+                    notApplicableCount++;
+                    break;
+            }
+        }
+    }
 
     public int getTotalDefCount() {
         return totalDefCount;
@@ -39,13 +68,31 @@ public class OvalInspectResult {
         this.errorDefCount = errorDefCount;
     }
 
+    public int getNotEvaluateDefCount() {
+        return notEvaluateDefCount;
+    }
+
+    public void setNotEvaluateDefCount(int notEvaluateDefCount) {
+        this.notEvaluateDefCount = notEvaluateDefCount;
+    }
+
+    public int getNotApplicableCount() {
+        return notApplicableCount;
+    }
+
+    public void setNotApplicableCount(int notApplicableCount) {
+        this.notApplicableCount = notApplicableCount;
+    }
+
     @Override
     public String toString() {
         return "OvalInspectResult{" +
                 "totalDefCount=" + totalDefCount +
-                ", successCount=" + successDefCount +
-                ", unknownCount=" + unknownDefCount +
-                ", errorCount=" + errorDefCount +
+                ", successDefCount=" + successDefCount +
+                ", unknownDefCount=" + unknownDefCount +
+                ", errorDefCount=" + errorDefCount +
+                ", notEvaluateDefCount=" + notEvaluateDefCount +
+                ", notApplicableCount=" + notApplicableCount +
                 '}';
     }
 }
