@@ -2,6 +2,7 @@ package org.example.oval.family;
 
 import org.example.oval.OvalEntityMapping;
 import org.example.oval.family.FamilyTestExecutor;
+import org.example.oval.item.ItemExtractResult;
 import org.example.oval.test.OvalTestResultType;
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_common_5.ExistenceEnumeration;
@@ -44,43 +45,43 @@ public class FamilyTestExecutorTest {
         ovalEntityMapping.setStateTypeMap(stateTypeMap);
 
         // prepare family object
-        List<ItemType> itemTypes = new ArrayList<>();
+        ItemExtractResult itemExtractResult = new ItemExtractResult();
         FamilyItem familyItem = new FamilyItem();
         EntityItemFamilyType entityItemFamilyType = new EntityItemFamilyType();
         entityItemFamilyType.setStatus(StatusEnumeration.EXISTS);
         familyItem.setFamily(entityItemFamilyType);
-        itemTypes.add(familyItem);
+        itemExtractResult.getExtractedItems().add(familyItem);
 
         FamilyTestExecutor executor = new FamilyTestExecutor(familyTest);
         {
             entityStateFamilyType.setValue("WINDOWS");
             entityItemFamilyType.setValue("windows");
-            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemExtractResult);
             assert execute.equals(OvalTestResultType.TRUE);
         }
         {
             entityStateFamilyType.setValue("WINDOWS");
             entityItemFamilyType.setValue("unix");
-            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemExtractResult);
             assert execute.equals(OvalTestResultType.FALSE);
         }
         {
             entityStateFamilyType.setValue("UNIX");
             entityItemFamilyType.setValue("linux");
-            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemExtractResult);
             assert execute.equals(OvalTestResultType.TRUE);
         }
         {
             entityStateFamilyType.setValue("UNIX");
             entityItemFamilyType.setValue("windows");
-            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemExtractResult);
             assert execute.equals(OvalTestResultType.FALSE);
         }
         {
             familyTest.setCheckExistence(ExistenceEnumeration.NONE_EXIST);
             entityStateFamilyType.setValue("WINDOWS");
             entityItemFamilyType.setValue("windows");
-            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemTypes);
+            OvalTestResultType execute = executor.execute(ovalEntityMapping, itemExtractResult);
             assert execute.equals(OvalTestResultType.FALSE);
         }
     }
@@ -91,32 +92,34 @@ public class FamilyTestExecutorTest {
             FakeFamilyTest familyTest = new FakeFamilyTest();
             FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
             OvalTestResultType result = null;
-            result = familyTestExecutor.execute(null, new ArrayList<>());
-            assert result.equals(OvalTestResultType.UNKNOWN);
+            result = familyTestExecutor.execute(null, new ItemExtractResult());
+            assert result.equals(OvalTestResultType.ERROR);
             result = familyTestExecutor.execute(null, null);
-            assert result.equals(OvalTestResultType.UNKNOWN);
+            assert result.equals(OvalTestResultType.ERROR);
         }
         { // item null
             FakeFamilyTest familyTest = new FakeFamilyTest();
             FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(null);
-            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.UNKNOWN);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(null);
+            assert familyTestExecutor.execute(null, itemExtractResult)
+                    .equals(OvalTestResultType.ERROR);
         }
         { // not familyItem
             FakeFamilyTest familyTest = new FakeFamilyTest();
             FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(new FileItem());
-            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.UNKNOWN);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(new FileItem());
+            assert familyTestExecutor.execute(null, itemExtractResult)
+                    .equals(OvalTestResultType.ERROR);
         }
         { // empty familyItem
             FakeFamilyTest familyTest = new FakeFamilyTest();
             FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
             FamilyItem familyItem = new FamilyItem();
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(familyItem);
-            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.UNKNOWN);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(familyItem);
+            assert familyTestExecutor.execute(null, itemExtractResult).equals(OvalTestResultType.ERROR);
         }
         { // real family value is null
             FakeFamilyTest familyTest = new FakeFamilyTest();
@@ -124,9 +127,10 @@ public class FamilyTestExecutorTest {
             EntityItemFamilyType entityItemFamilyType = new EntityItemFamilyType();
             FamilyItem familyItem = new FamilyItem();
             familyItem.setFamily(entityItemFamilyType);
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(familyItem);
-            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.UNKNOWN);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(familyItem);
+            assert familyTestExecutor.execute(null, itemExtractResult)
+                    .equals(OvalTestResultType.ERROR);
         }
         { // normal but state is empty
             FakeFamilyTest familyTest = new FakeFamilyTest();
@@ -135,9 +139,9 @@ public class FamilyTestExecutorTest {
             entityItemFamilyType.setValue("unix");
             FamilyItem familyItem = new FamilyItem();
             familyItem.setFamily(entityItemFamilyType);
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(familyItem);
-            assert familyTestExecutor.execute(null, itemTypes).equals(OvalTestResultType.TRUE);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(familyItem);
+            assert familyTestExecutor.execute(null, itemExtractResult).equals(OvalTestResultType.TRUE);
         }
         { // state map is empty
             List<StateRefType> stateRefTypes = new ArrayList<>();
@@ -148,11 +152,11 @@ public class FamilyTestExecutorTest {
             entityItemFamilyType.setValue("unix");
             FamilyItem familyItem = new FamilyItem();
             familyItem.setFamily(entityItemFamilyType);
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(familyItem);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(familyItem);
             try {
                 FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-                familyTestExecutor.execute(null, itemTypes);
+                familyTestExecutor.execute(null, itemExtractResult);
                 assert false;
             } catch (Exception e) {
                 assert true;
@@ -168,11 +172,11 @@ public class FamilyTestExecutorTest {
             entityItemFamilyType.setValue("unix");
             FamilyItem familyItem = new FamilyItem();
             familyItem.setFamily(entityItemFamilyType);
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(familyItem);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(familyItem);
             try {
                 FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-                familyTestExecutor.execute(null, itemTypes);
+                familyTestExecutor.execute(null, itemExtractResult);
                 assert false;
             } catch (Exception e) {
                 assert true;
@@ -189,15 +193,15 @@ public class FamilyTestExecutorTest {
             entityItemFamilyType.setValue("unix");
             FamilyItem familyItem = new FamilyItem();
             familyItem.setFamily(entityItemFamilyType);
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(familyItem);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(familyItem);
             try {
                 Map<String, StateType> stateTypeMap = new HashMap<>();
                 stateTypeMap.put("state-1", new FamilyState());
                 FakeOvalEntityMapping ovalEntityMapping = new FakeOvalEntityMapping();
                 ovalEntityMapping.setStateTypeMap(stateTypeMap);
                 FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-                familyTestExecutor.execute(ovalEntityMapping, itemTypes);
+                familyTestExecutor.execute(ovalEntityMapping, itemExtractResult);
                 assert false;
             } catch (Exception e) {
                 assert true;
@@ -214,8 +218,8 @@ public class FamilyTestExecutorTest {
             entityItemFamilyType.setValue("unix");
             FamilyItem familyItem = new FamilyItem();
             familyItem.setFamily(entityItemFamilyType);
-            List<ItemType> itemTypes = new ArrayList<>();
-            itemTypes.add(familyItem);
+            ItemExtractResult itemExtractResult = new ItemExtractResult();
+            itemExtractResult.getExtractedItems().add(familyItem);
             try {
                 FamilyState familyState = new FamilyState();
                 familyState.setFamily(new EntityStateFamilyType());
@@ -224,7 +228,7 @@ public class FamilyTestExecutorTest {
                 FakeOvalEntityMapping ovalEntityMapping = new FakeOvalEntityMapping();
                 ovalEntityMapping.setStateTypeMap(stateTypeMap);
                 FamilyTestExecutor familyTestExecutor = new FamilyTestExecutor(familyTest);
-                familyTestExecutor.execute(ovalEntityMapping, itemTypes);
+                familyTestExecutor.execute(ovalEntityMapping, itemExtractResult);
                 assert false;
             } catch (Exception e) {
                 assert true;

@@ -1,6 +1,7 @@
 package org.example.oval.family;
 
 import org.example.oval.OvalEntityMapping;
+import org.example.oval.item.ItemExtractResult;
 import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestResultType;
 import org.mitre.oval.xmlschema.oval_definitions_5.StateRefType;
@@ -34,12 +35,18 @@ public class FamilyTestExecutor implements OvalTestExecutor {
     }
 
     @Override
-    public OvalTestResultType execute(OvalEntityMapping ovalEntityMapping, List<ItemType> itemTypes) throws Exception {
-        boolean success = true;
-        if (!validateItem(itemTypes))
-            return OvalTestResultType.UNKNOWN;
-        FamilyItem familyItem = (FamilyItem) itemTypes.get(0);
+    public OvalTestResultType execute(OvalEntityMapping ovalEntityMapping, ItemExtractResult itemExtractResult)
+            throws Exception {
+        if (itemExtractResult == null)
+            return OvalTestResultType.ERROR;
+
+        if (!validateItem(itemExtractResult.getExtractedItems()))
+            return OvalTestResultType.ERROR;
+
+        FamilyItem familyItem = (FamilyItem) itemExtractResult.getExtractedItems().get(0);
         String familyItemValue = (String) familyItem.getFamily().getValue();
+
+        boolean success = true;
         for (StateRefType stateRefType : familyTest.getState()) {
             StateType inputState = ovalEntityMapping.getStateType(stateRefType.getStateRef());
             if (inputState == null)

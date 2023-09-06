@@ -39,7 +39,7 @@ public class OvalItemExtractorFactory {
             FamilyTest familyTest = (FamilyTest) testType;
             String objectRef = familyTest.getObject().getObjectRef();
             ObjectType objectType = ovalEntityMapping.getObjectType(objectRef);
-            return new FamilyItemExtractor(objectType);
+            return new FamilyItemExtractor(objectType, ovalEntityMapping);
         }
         if (testTypeClass.equals(org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryTest.class)) {
             RegistryTest registryTest = (RegistryTest) testType;

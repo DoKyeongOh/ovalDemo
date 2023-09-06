@@ -1,6 +1,7 @@
 package org.example.oval.file;
 
 import org.example.oval.OvalEntityMapping;
+import org.example.oval.item.ItemSetExtractResult;
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_definitions_5.EntityObjectStringType;
 import org.mitre.oval.xmlschema.oval_definitions_5.Filter;
@@ -29,7 +30,7 @@ public class UnixFileItemSetExtractorTest {
         }
 
         UnixFileItemSetExtractor unixFileItemSetExtractor = new UnixFileItemSetExtractor(set, ovalEntityMapping);
-        List<ItemType> extract = unixFileItemSetExtractor.extract();
+        ItemSetExtractResult extract = unixFileItemSetExtractor.extract();
     }
 
     private class FakeSet extends Set {

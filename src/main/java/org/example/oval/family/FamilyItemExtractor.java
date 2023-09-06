@@ -1,5 +1,6 @@
 package org.example.oval.family;
 
+import org.example.oval.OvalEntityMapping;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
@@ -15,12 +16,14 @@ import java.util.List;
 
 public class FamilyItemExtractor implements OvalItemExtractor {
     private FamilyObject familyObject;
-    public FamilyItemExtractor(ObjectType inputObject) throws Exception {
+    private OvalEntityMapping ovalEntityMapping;
+    public FamilyItemExtractor(ObjectType inputObject, OvalEntityMapping ovalEntityMapping) throws Exception {
         if (inputObject == null)
             throw new Exception("input family object is not null.");
         if (!inputObject.getClass().equals(FamilyObject.class))
             throw new Exception("input family object is not family_object.");
         familyObject = (FamilyObject) inputObject;
+        this.ovalEntityMapping = ovalEntityMapping;
     }
     @Override
     public ItemExtractResult extract() throws Exception {
@@ -33,5 +36,11 @@ public class FamilyItemExtractor implements OvalItemExtractor {
         itemExtractResult.getExtractedItems().add(familyItem);
         itemExtractResult.setResultType(ItemExtractResult.ItemExtractResultType.COMPLETE);
         return itemExtractResult;
+    }
+
+    @Override
+    public ItemExtractResult extractFromCache() {
+        ItemExtractResult itemResult = ovalEntityMapping.getItemResult(familyObject.getId());
+        return itemResult;
     }
 }

@@ -2,15 +2,18 @@ package org.example.oval.file;
 
 import org.example.oval.OvalEntityMapping;
 import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.ItemSetExtractResult;
+import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
 import org.example.oval.item.OvalItemSetExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
-import org.mitre.oval.xmlschema.oval_definitions_5.Set;
 import org.mitre.oval.xmlschema.oval_definitions_5_unix.FileState;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_unix.FileItem;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
 
@@ -23,9 +26,9 @@ public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
     }
 
     @Override
-    public List<ItemType> extract() throws Exception {
+    public ItemSetExtractResult extract() throws Exception {
         if (fileItemSet == null)
-            return new ArrayList<>();
+            return new ItemSetExtractResult(ItemSetExtractResultType.NOT_COLLECTED);
         List<Set> childSets = fileItemSet.getSet();
         if (!childSets.isEmpty())
             return extractFromChildSet();
@@ -33,28 +36,33 @@ public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
             return extractFromObject();
     }
 
-    private List<ItemType> extractFromChildSet() throws Exception {
+    private ItemSetExtractResult extractFromChildSet() throws Exception {
         List<Set> sets = fileItemSet.getSet();
         if (sets.isEmpty())
-            return new ArrayList<>();
+            return new ItemSetExtractResult(ItemSetExtractResultType.NOT_COLLECTED);
         if (sets.size() == 1)
             return new UnixFileItemSetExtractor(sets.get(0), ovalEntityMapping).extract();
 
         Set set1 = sets.get(0);
         Map<String, FileItem> fileItemMap1 = new HashMap<>();
-        List<ItemType> itemTypes1 = new UnixFileItemSetExtractor(set1, ovalEntityMapping).extract();
-        for (ItemType itemType : itemTypes1) {
+        ItemSetExtractResult extract1 = new UnixFileItemSetExtractor(set1, ovalEntityMapping).extract();
+        for (ItemType itemType : extract1.getExtractedItems()) {
             FileItem fileItem = (FileItem) itemType;
             fileItemMap1.put((String) fileItem.getFilepath().getValue(), fileItem);
         }
 
         Set set2 = sets.get(1);
         Map<String, FileItem> fileItemMap2 = new HashMap<>();
-        List<ItemType> itemTypes2 = new UnixFileItemSetExtractor(set2, ovalEntityMapping).extract();
-        for (ItemType itemType : itemTypes2) {
+        ItemSetExtractResult extract2 = new UnixFileItemSetExtractor(set2, ovalEntityMapping).extract();
+        for (ItemType itemType : extract2.getExtractedItems()) {
             FileItem fileItem = (FileItem) itemType;
             fileItemMap2.put((String) fileItem.getFilepath().getValue(), fileItem);
         }
+
+        ItemSetExtractResultType resultType1 = extract1.getResultType();
+        ItemSetExtractResultType resultType2 = extract2.getResultType();
+        if (resultType1 != ItemSetExtractResultType.COMPLETE || resultType2 == ItemSetExtractResultType.COMPLETE)
+            return getNotCompleteResult(fileItemSet.getSetOperator(), resultType1, resultType2);
 
         List<ItemType> itemTypes = new ArrayList<>();
         switch (fileItemSet.getSetOperator()) {
@@ -77,24 +85,26 @@ public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
                         .forEach(filePath -> itemTypes.add(fileItemMap1.get(filePath)));
                 break;
         }
-        return itemTypes;
+        return new ItemSetExtractResult(itemTypes);
     }
 
-    private List<ItemType> extractFromObject() throws Exception {
-        List<ItemType> itemTypes = new ArrayList<>();
-        List<String> objectReferences = fileItemSet.getObjectReference();
-        for (String objectRef : objectReferences) {
+    private ItemSetExtractResult extractFromObject() throws Exception {
+        ItemSetExtractResult itemSetExtractResult = new ItemSetExtractResult();
+        Map<String, FileItem> itemTypeMap = new HashMap<>();
+        for (String objectRef : fileItemSet.getObjectReference()) {
             ObjectType objectType = ovalEntityMapping.getObjectType(objectRef);
             ItemExtractResult itemExtractResult = new UnixFileItemExtractor(objectType, ovalEntityMapping).extract();
-            if (itemExtractResult.getResultType() == ItemExtractResult.ItemExtractResultType.COMPLETE)
-                itemTypes.addAll(itemExtractResult.getExtractedItems());
+            for (ItemType itemType : itemExtractResult.getExtractedItems()) {
+                FileItem fileItem = (FileItem) itemType;
+                itemTypeMap.put((String) fileItem.getFilepath().getValue(), fileItem);
+            }
         }
 
-        List<ItemType> result = new ArrayList<>();
+        List<ItemType> extractedItems = new ArrayList<>();
         List<Filter> filters = fileItemSet.getFilter();
-        for (ItemType itemType : itemTypes) {
+        for (ItemType itemType : itemTypeMap.values()) {
             FileItem fileItem = (FileItem) itemType;
-            boolean achieved = true;
+            boolean success = true;
             for (Filter filter : filters) {
                 String stateId = filter.getValue();
                 StateType stateType = ovalEntityMapping.getStateType(stateId);
@@ -102,18 +112,18 @@ public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
                     throw new Exception("file set filter is null");
                 if (stateType instanceof FileState == false)
                     throw new Exception("file set filter error");
-                FileState fileState = (FileState) stateType;
                 boolean filterInclude = filter.getAction() == FilterActionEnumeration.INCLUDE;
-                boolean success = filterFileItem(fileItem, fileState);
-                if (filterInclude != success) {
-                    achieved = false;
+                success = filterInclude == filterFileItem(fileItem, (FileState) stateType);
+                if (!success)
                     break;
-                }
             }
-            if (achieved)
-                result.add(itemType);
+            if (success)
+                extractedItems.add(itemType);
         }
-        return result;
+        itemSetExtractResult.setExtractedItems(extractedItems);
+        if (extractedItems.isEmpty())
+            itemSetExtractResult.setResultType(ItemSetExtractResultType.DOES_NOT_EXIST);
+        return itemSetExtractResult;
     }
 
     private boolean filterFileItem(FileItem fileItem, FileState fileState) {

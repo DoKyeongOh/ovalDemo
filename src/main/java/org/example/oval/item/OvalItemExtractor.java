@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface OvalItemExtractor {
     ItemExtractResult extract() throws Exception;
+    ItemExtractResult extractFromCache();
 }

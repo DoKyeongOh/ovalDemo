@@ -27,4 +27,10 @@ public class RpmInfoItemExtractor implements OvalItemExtractor {
     public ItemExtractResult extract() {
         return null;
     }
+
+    @Override
+    public ItemExtractResult extractFromCache() {
+        ItemExtractResult itemResult = ovalEntityMapping.getItemResult(rpminfoObject.getId());
+        return itemResult;
+    }
 }

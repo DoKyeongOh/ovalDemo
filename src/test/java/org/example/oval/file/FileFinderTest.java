@@ -44,11 +44,4 @@ public class FileFinderTest {
         assert fileSet.size() == 11;
         baseDir.delete();
     }
-
-    @Test
-    public void testAllFilesInFS() {
-        FileFinder.findDown(new File("/"), file -> {
-
-        });
-    }
 }

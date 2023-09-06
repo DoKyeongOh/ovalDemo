@@ -9,11 +9,12 @@ public class OvalDefinitionsInspectorTest {
 
     @Test
     public void test() throws Exception {
-        File ovalDefFile = new File("src/main/resources/unix.test.vulnerability.xml");
+        File ovalDefFile = new File("src/main/resources/microsoft.windows11.vulnerability.xml");
         OvalDefinitionsLoader ovalDefinitionsLoader = new OvalDefinitionsLoader();
         OvalDefinitions ovalDefinitions = ovalDefinitionsLoader.load(ovalDefFile);
         OvalDefinitionsInspector inspector = new OvalDefinitionsInspector();
         OvalInspectResult inspect = inspector.inspect(ovalDefinitions);
+        System.out.println(inspect);
     }
 
 }

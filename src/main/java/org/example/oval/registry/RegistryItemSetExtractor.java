@@ -1,5 +1,6 @@
 package org.example.oval.registry;
 
+import org.example.oval.item.ItemSetExtractResult;
 import org.example.oval.item.OvalItemSetExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5.Set;
@@ -18,7 +19,7 @@ public class RegistryItemSetExtractor implements OvalItemSetExtractor {
     };
 
     @Override
-    public List<ItemType> extract() {
+    public ItemSetExtractResult extract() throws Exception {
         return null;
     }
 }

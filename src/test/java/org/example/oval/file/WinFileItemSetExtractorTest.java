@@ -1,6 +1,8 @@
 package org.example.oval.file;
 
 import org.example.oval.OvalEntityMapping;
+import org.example.oval.item.ItemSetExtractResult;
+import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
@@ -19,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WinFileItemSetExtractorTest {
-
     private File baseDir = new File("target/temp/fileExtractorTest");
     File targetFile = new File(baseDir, "dumy0");
 
@@ -34,29 +35,38 @@ public class WinFileItemSetExtractorTest {
     @Test
     public void test() throws Exception {
         {
-            List<ItemType> itemTypes = createCaseByFilepath(targetFile.getAbsolutePath(),
+            ItemSetExtractResult caseByFilepath = createCaseByFilepath(targetFile.getAbsolutePath(),
                     FilterActionEnumeration.INCLUDE);
-            assert itemTypes.size() == 1;
+            assert caseByFilepath.getResultType() == ItemSetExtractResult.ItemSetExtractResultType.COMPLETE;
 
-            FileItem fileItem = (FileItem) itemTypes.get(0);
+            List<ItemType> extractedItems = caseByFilepath.getExtractedItems();
+            assert extractedItems.size() == 1;
+
+            FileItem fileItem = (FileItem) extractedItems.get(0);
             assert fileItem.getFilepath().getValue().equals(targetFile.getAbsolutePath());
         }
         {
-            List<ItemType> itemTypes = createCaseByFilepath(targetFile.getAbsolutePath(),
+            ItemSetExtractResult caseByFilepath = createCaseByFilepath(targetFile.getAbsolutePath(),
                     FilterActionEnumeration.EXCLUDE);
-            assert itemTypes.size() == 0;
-        }
-        {
-            List<ItemType> itemTypes = createCaseByFilepath("dumy string not file path",
-                    FilterActionEnumeration.INCLUDE);
-            assert itemTypes.size() == 0;
-        }
-        {
-            List<ItemType> itemTypes = createCaseByFilepath("dumy string not file path",
-                    FilterActionEnumeration.EXCLUDE);
-            assert itemTypes.size() == 1;
 
-            FileItem fileItem = (FileItem) itemTypes.get(0);
+            assert caseByFilepath.getResultType() == ItemSetExtractResult.ItemSetExtractResultType.DOES_NOT_EXIST;
+            assert caseByFilepath.getExtractedItems().isEmpty();
+        }
+        {
+            ItemSetExtractResult caseByFilepath = createCaseByFilepath("dumy string not file path",
+                    FilterActionEnumeration.INCLUDE);
+            assert caseByFilepath.getResultType() == ItemSetExtractResult.ItemSetExtractResultType.DOES_NOT_EXIST;
+            assert caseByFilepath.getExtractedItems().isEmpty();
+        }
+        {
+            ItemSetExtractResult caseByFilepath = createCaseByFilepath("dumy string not file path",
+                    FilterActionEnumeration.EXCLUDE);
+            assert caseByFilepath.getResultType() == ItemSetExtractResult.ItemSetExtractResultType.COMPLETE;
+
+            List<ItemType> extractedItems = caseByFilepath.getExtractedItems();
+            assert extractedItems.size() == 1;
+
+            FileItem fileItem = (FileItem) extractedItems.get(0);
             assert fileItem.getFilepath().getValue().equals(targetFile.getAbsolutePath());
         }
     }
@@ -75,15 +85,11 @@ public class WinFileItemSetExtractorTest {
         ovalEntityMapping.addObjectType(fileObject.getId(), fileObject);
         set.getObjectReference().add(fileObject.getId());
         ovalEntityMapping.addStateType("state-ref-1", null);
-        set.getFilter().add(null);
+        set.getFilter().add(new Filter());
 
-        try {
-            WinFileItemSetExtractor winFileItemSetExtractor = new WinFileItemSetExtractor(set, ovalEntityMapping);
-            winFileItemSetExtractor.extract();
-            assert false;
-        } catch (Exception e) {
-            assert true;
-        }
+        ItemSetExtractResult itemSetExtractResult = new WinFileItemSetExtractor(set, ovalEntityMapping).extract();
+        assert itemSetExtractResult.getResultType() == ItemSetExtractResultType.ERROR;
+        assert itemSetExtractResult.getExtractedItems().isEmpty();
     }
     @Test
     public void testStateValueNull() {
@@ -102,23 +108,19 @@ public class WinFileItemSetExtractorTest {
         }
 
         FamilyState familyState = new FamilyState();
+        familyState.setId("state-ref-1");
         ovalEntityMapping.addStateType("state-ref-1", familyState);
         Filter filter = new Filter();
         filter.setAction(FilterActionEnumeration.INCLUDE);
         filter.setValue(familyState.getId());
         set.getFilter().add(filter);
 
-        try {
-            WinFileItemSetExtractor winFileItemSetExtractor = new WinFileItemSetExtractor(set, ovalEntityMapping);
-            winFileItemSetExtractor.extract();
-            assert false;
-        } catch (Exception e) {
-            assert true;
-        }
+        ItemSetExtractResult itemSetExtractResult = new WinFileItemSetExtractor(set, ovalEntityMapping).extract();
+        assert itemSetExtractResult.getResultType() == ItemSetExtractResultType.ERROR;
+        assert itemSetExtractResult.getExtractedItems().isEmpty();
     }
 
-    private List<ItemType> createCaseByFilepath(String filepath, FilterActionEnumeration actionEnumeration)
-            throws Exception {
+    private ItemSetExtractResult createCaseByFilepath(String filepath, FilterActionEnumeration actionEnumeration) {
         FakeSet set = new FakeSet();
         set.setObjectReference(new ArrayList<>());
         set.setFilter(new ArrayList<>());

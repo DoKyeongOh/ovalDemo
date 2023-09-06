@@ -6,7 +6,9 @@ import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestExecutorFactory;
 import org.example.oval.test.OvalTestResultType;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
+import org.mitre.oval.xmlschema.oval_system_characteristics_5.CollectedObjectsType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
+import org.mitre.oval.xmlschema.oval_system_characteristics_5.OvalSystemCharacteristics;
 
 import javax.xml.bind.JAXBElement;
 import java.util.Set;
@@ -51,18 +53,17 @@ public class OvalDefinitionsInspector {
                 // 시스템에 대한 정보를 얻어오는 부분 == charactoristic
 
                 OvalItemExtractor extractor = OvalItemExtractorFactory.getExtractor(testType, ovalEntityMapping);
-                ItemExtractResult itemExtractResult = extractor.extract();
+                ItemExtractResult itemExtractResult = extractor.extractFromCache();
+                if (itemExtractResult == null)
+                    itemExtractResult = extractor.extract();
 
                 OvalTestExecutor executor = OvalTestExecutorFactory.getInstance(testType);
-                testResultMap.put(testType.getId(), executor.execute(ovalEntityMapping,
-                        itemExtractResult.getExtractedItems()));
+                testResultMap.put(testType.getId(), executor.execute(ovalEntityMapping, itemExtractResult));
             } catch (Exception e) {
                 testResultMap.put(testType.getId(), OvalTestResultType.ERROR);
-                System.out.println(e.getMessage());
             }
         }
 
-        OvalInspectResult result = new OvalInspectResult();
         for (DefinitionType definitionType : definitionTypes) {
             if (definitionResultMap.get(definitionType.getId()) != null)
                 continue;
@@ -74,6 +75,7 @@ public class OvalDefinitionsInspector {
                 definitionResultMap.put(definitionType.getId(), OvalCriteriaResultType.ERROR);
             }
         }
+        OvalInspectResult result = new OvalInspectResult(definitionResultMap);
         return result;
     }
 

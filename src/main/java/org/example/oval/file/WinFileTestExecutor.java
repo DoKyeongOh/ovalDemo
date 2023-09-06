@@ -1,6 +1,7 @@
 package org.example.oval.file;
 
 import org.example.oval.OvalEntityMapping;
+import org.example.oval.item.ItemExtractResult;
 import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestResultType;
 import org.mitre.oval.xmlschema.oval_definitions_5.StateRefType;
@@ -19,7 +20,8 @@ public class WinFileTestExecutor implements OvalTestExecutor {
     }
 
     @Override
-    public OvalTestResultType execute(OvalEntityMapping ovalEntityMapping, List<ItemType> itemTypes) throws Exception {
+    public OvalTestResultType execute(OvalEntityMapping ovalEntityMapping, ItemExtractResult itemExtractResult)
+            throws Exception {
         for (StateRefType stateRefType : fileTest.getState()) {
             StateType inputState = ovalEntityMapping.getStateType(stateRefType.getStateRef());
             if (inputState == null)

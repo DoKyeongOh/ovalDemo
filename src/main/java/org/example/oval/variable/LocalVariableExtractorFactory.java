@@ -3,7 +3,6 @@ package org.example.oval.variable;
 import org.example.oval.OvalEntityMapping;
 import org.example.oval.variable.function.FunctionGroupExtractorFactory;
 import org.example.oval.variable.object.ObjectComponentExtractorFactory;
-import org.example.oval.variable.object.RegistryComponentExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 
 public class LocalVariableExtractorFactory {
@@ -29,7 +28,7 @@ public class LocalVariableExtractorFactory {
         else if (localVariable.getObjectComponent() != null)
             return ObjectComponentExtractorFactory.getExtractor(ovalEntityMapping, localVariable.getObjectComponent());
         else
-            return FunctionGroupExtractorFactory.getExtractor(ovalEntityMapping, localVariable);
+            return FunctionGroupExtractorFactory.getFromVariable(ovalEntityMapping, localVariable);
     }
 
     public static class LiteralComponentExtractor implements OvalVariableExtractor {
@@ -38,8 +37,10 @@ public class LocalVariableExtractorFactory {
             this.literalComponentType = literalComponentType;
         }
         @Override
-        public Object extract() throws Exception {
-            return literalComponentType.getValue();
+        public VariableExtractResult extract() throws Exception {
+            VariableExtractResult variableExtractResult = new VariableExtractResult();
+            variableExtractResult.getExtractedItems().add(literalComponentType.getValue());
+            return variableExtractResult;
         }
     }
 
@@ -52,7 +53,7 @@ public class LocalVariableExtractorFactory {
             this.variableComponentType = variableComponentType;
         }
         @Override
-        public Object extract() throws Exception {
+        public VariableExtractResult extract() throws Exception {
             String varRef = variableComponentType.getVarRef();
             VariableType variableType = ovalEntityMapping.getVariableType(varRef);
             return OvalVariableExtractorFactory.getExtractor(ovalEntityMapping, variableType).extract();
