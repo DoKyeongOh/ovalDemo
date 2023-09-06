@@ -10,6 +10,21 @@ public class ItemExtractResult {
     private List<ItemType> extractedItems = new ArrayList<>();
     private ItemExtractResultType resultType = ItemExtractResultType.COMPLETE;
 
+    public ItemExtractResult() {
+        extractedItems = new ArrayList<>();
+        resultType = ItemExtractResultType.COMPLETE;
+    }
+
+    public ItemExtractResult(ItemExtractResultType resultType) {
+        this.resultType = resultType;
+        extractedItems = new ArrayList<>();
+    }
+
+    public ItemExtractResult(List<ItemType> extractedItems) {
+        this.extractedItems = extractedItems;
+        resultType = ItemExtractResultType.COMPLETE;
+    }
+
     public List<ItemType> getExtractedItems() {
         return extractedItems;
     }
