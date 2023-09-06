@@ -377,16 +377,16 @@ public class OvalCriteriaCheckerTest {
             Map<String, OvalTestResultType> testResultMap = new HashMap<>();
             testResultMap.put("extend-criterion1-1", OvalTestResultType.TRUE);
             testResultMap.put("extend-criterion1-2", OvalTestResultType.TRUE);
-            testResultMap.put("extend-criterion1-3", OvalTestResultType.UNKNOWN);
-            testResultMap.put("extend-criterion2-1", OvalTestResultType.FALSE);
+            testResultMap.put("extend-criterion1-3", OvalTestResultType.ERROR);
+            testResultMap.put("extend-criterion2-1", OvalTestResultType.TRUE);
             testResultMap.put("extend-criterion2-2", OvalTestResultType.FALSE);
-            testResultMap.put("extend-criterion2-3", OvalTestResultType.FALSE);
+            testResultMap.put("extend-criterion2-3", OvalTestResultType.UNKNOWN);
             OvalCriteriaChecker criteriaChecker = new OvalCriteriaChecker();
             criteriaChecker.init(testResultMap, definitionMap, definitionResultMap);
             OvalCriteriaResultType criteriaResultType = criteriaChecker.check(criteriaType);
             assert criteriaResultType.equals(OvalCriteriaResultType.ERROR);
             assert definitionResultMap.get("def-1").equals(OvalCriteriaResultType.ERROR);
-            assert definitionResultMap.get("def-2").equals(OvalCriteriaResultType.FALSE);
+            assert definitionResultMap.get("def-2").equals(OvalCriteriaResultType.UNKNOWN);
         }
     }
 

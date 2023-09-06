@@ -46,7 +46,7 @@ public class OvalCriteriaChecker {
 
             if (object instanceof ExtendDefinitionType) {
                 String definitionId = ((ExtendDefinitionType) object).getDefinitionRef();
-                if (definitionMap == null || definitionMap.get(definitionId) == null) {
+                if (definitionMap == null || (definitionMap != null && definitionMap.get(definitionId) == null)) {
                     System.out.println("[Error] extend definition is not exist - " + definitionId);
                     applyStepResult(OvalCriteriaResultType.ERROR);
                     continue;
