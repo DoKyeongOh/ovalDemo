@@ -6,13 +6,12 @@ import org.mitre.oval.xmlschema.oval_definitions_5.*;
 public class OvalVariableExtractorFactory {
 
     public static OvalVariableExtractor getExtractor(OvalEntityMappingContext entityMappingContext,
-                                                     VariableType variableType)
-            throws Exception {
+                                                     VariableType variableType) {
         if (variableType instanceof LocalVariable) {
             LocalVariable localVariable = (LocalVariable) variableType;
             return LocalVariableExtractorFactory.getLocalVariableExtractor(entityMappingContext, localVariable);
         } else
-            throw new Exception("variable is not expected type of variable. id : " + variableType.getId());
+            return null;
     }
 
 }

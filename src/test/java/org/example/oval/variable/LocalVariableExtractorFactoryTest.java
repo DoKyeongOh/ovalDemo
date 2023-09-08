@@ -1,6 +1,6 @@
 package org.example.oval.variable;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.variable.object.RegistryComponentExtractor;
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
@@ -80,12 +80,12 @@ public class LocalVariableExtractorFactoryTest {
     public void testObjectComponent() throws Exception {
         ObjectComponentType objectComponentType = new ObjectComponentType();
         objectComponentType.setObjectRef("object-1");
-        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
-        ovalEntityMapping.addObjectType("object-1", new RegistryObject());
+        OvalEntityMappingContext ovalEntityMappingContext = new OvalEntityMappingContext();
+        ovalEntityMappingContext.putObjectType("object-1", new RegistryObject());
         LocalVariable localVariable = new LocalVariable();
         localVariable.setObjectComponent(objectComponentType);
         OvalVariableExtractor localVariableExtractor =
-                LocalVariableExtractorFactory.getLocalVariableExtractor(ovalEntityMapping, localVariable);
+                LocalVariableExtractorFactory.getLocalVariableExtractor(ovalEntityMappingContext, localVariable);
         assert localVariableExtractor instanceof RegistryComponentExtractor;
     }
 

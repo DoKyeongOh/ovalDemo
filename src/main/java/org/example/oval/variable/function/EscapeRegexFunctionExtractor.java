@@ -18,7 +18,7 @@ public class EscapeRegexFunctionExtractor implements OvalVariableExtractor {
     }
 
     @Override
-    public VariableExtractResult extract() throws Exception {
+    public VariableExtractResult extract() {
         return null;
     }
 }

@@ -2,75 +2,58 @@ package org.example.oval;
 
 import org.example.oval.file.FileFinder;
 import org.junit.Test;
-import org.mitre.oval.xmlschema.oval_definitions_5.*;
+import org.mitre.oval.xmlschema.oval_definitions_5.ObjectRefType;
+import org.mitre.oval.xmlschema.oval_definitions_5.OvalDefinitions;
+import org.mitre.oval.xmlschema.oval_definitions_5.TestType;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.lang.reflect.Field;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DefinitionsLoaderTest {
     @Test
-    public void testLoadDefinitionsFile() throws JAXBException, IOException {
-        File ovalDefFile = new File("src/main/resources/microsoft.windows11.vulnerability.xml");
+    public void testLoadDefinitionsFile() throws JAXBException, IOException, NoSuchFieldException, IllegalAccessException {
+        File ovalDefFile = new File("src/main/resources/all.windows.vulnerability.xml");
         OvalDefinitionsLoader ovalDefinitionsLoader = new OvalDefinitionsLoader();
         OvalDefinitions ovalDefinitions = ovalDefinitionsLoader.load(ovalDefFile);
         System.out.println(ovalDefinitions);
     }
 
     @Test
-    public void test() throws JAXBException, IOException {
-        File ovalDefFile = new File("src/main/resources/all.windows.vulnerability.xml");
-        OvalDefinitionsLoader ovalDefinitionsLoader = new OvalDefinitionsLoader();
-        OvalDefinitions ovalDefinitions = ovalDefinitionsLoader.load(ovalDefFile);
-        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
-        ovalEntityMapping.init(ovalDefinitions);
-        java.util.Set<Class> classSet = new HashSet<>();
-        VariablesType variablesType = ovalDefinitions.getVariables();
-        if (variablesType == null) {
-            System.out.println("there is no variable");
-            return;
-        }
-        List<JAXBElement<? extends VariableType>> variableList = variablesType.getVariable();
-        for (JAXBElement<? extends VariableType> jaxbElement : variableList) {
-            VariableType variableType = jaxbElement.getValue();
-            if (variableType instanceof LocalVariable == false)
-                continue;
-
-            LocalVariable localVariable = (LocalVariable) variableType;
-            if (localVariable.getObjectComponent() == null)
-                continue;
-
-            ObjectComponentType objectComponent = localVariable.getObjectComponent();
-            String objectRef = objectComponent.getObjectRef();
-            ObjectType objectType = ovalEntityMapping.getObjectType(objectRef);
-            classSet.add(objectType.getClass());
-        }
-        classSet.forEach(System.out::println);
+    public void test2() throws ClassNotFoundException {
+        Class<?> evalutationDefinitionIds = Class.forName("EvalutationDefinitionIds.class");
     }
-
     @Test
-    public void testCommand() throws IOException {
-        Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec("cmd /c cd ../ && cd");
+    public void test() {
+        List<File> foundFiles = new ArrayList<>();
+        String baseDir = "C:\\Users\\82105\\IdeaProjects\\ovalDemo\\target\\classes\\org\\mitre";
+        File dir = new File(baseDir);
+        FileFinder.findDown(dir, file -> {
+            if (file.isDirectory())
+                return;
+            String name = file.getName();
+            if (!name.endsWith(".class"))
+                return;
+            Class specClass = null;
+            try {
+                String classname = name.substring(0, file.getName().length() - 6);
+                specClass = Class.forName(classname);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
-        String line = null;
-        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
-
-    @Test
-    public void test2() throws IOException {
-        File baseDir = new File("/");
-        FileFinder fileFinder = new FileFinder();
-        fileFinder.findDown(baseDir, 2, 0, file -> {
-            System.out.println(file.getAbsolutePath());
+            if (specClass.getSuperclass() != TestType.class)
+                return;
+            try {
+                Field field = specClass.getDeclaredField("object");
+            } catch (NoSuchFieldException e) {
+                foundFiles.add(file);
+            }
         });
     }
 

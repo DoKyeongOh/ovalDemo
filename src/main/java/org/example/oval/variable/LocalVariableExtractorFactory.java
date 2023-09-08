@@ -7,7 +7,7 @@ import org.mitre.oval.xmlschema.oval_definitions_5.*;
 
 public class LocalVariableExtractorFactory {
     public static OvalVariableExtractor getLocalVariableExtractor(OvalEntityMappingContext entityMappingContext,
-                                                                  LocalVariable localVariable) throws Exception {
+                                                                  LocalVariable localVariable) {
         int presentCount = 0;
         presentCount += localVariable.getLiteralComponent() != null ? 1 : 0;
         presentCount += localVariable.getObjectComponent() != null ? 1 : 0;
@@ -20,7 +20,7 @@ public class LocalVariableExtractorFactory {
                 || localVariable.getTimeDifference() != null || localVariable.getUnique() != null
                 ? 1 : 0;
         if (presentCount > 1)
-            throw new Exception("input variable error - " + localVariable.getId());
+            return () -> new VariableExtractResult(VariableExtractResult.VariableExtractResultType.ERROR);
         if (localVariable.getLiteralComponent() != null)
             return new LiteralComponentExtractor(localVariable.getLiteralComponent());
         else if (localVariable.getVariableComponent() != null)
@@ -37,7 +37,7 @@ public class LocalVariableExtractorFactory {
             this.literalComponentType = literalComponentType;
         }
         @Override
-        public VariableExtractResult extract() throws Exception {
+        public VariableExtractResult extract() {
             VariableExtractResult variableExtractResult = new VariableExtractResult();
             variableExtractResult.getExtractedItems().add(literalComponentType.getValue());
             return variableExtractResult;
@@ -53,7 +53,7 @@ public class LocalVariableExtractorFactory {
             this.variableComponentType = variableComponentType;
         }
         @Override
-        public VariableExtractResult extract() throws Exception {
+        public VariableExtractResult extract() {
             String varRef = variableComponentType.getVarRef();
             VariableType variableType = ovalEntityMappingContext.getVariableType(varRef);
             return OvalVariableExtractorFactory.getExtractor(ovalEntityMappingContext, variableType).extract();

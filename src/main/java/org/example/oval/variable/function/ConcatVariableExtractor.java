@@ -25,7 +25,7 @@ public class ConcatVariableExtractor implements OvalVariableExtractor {
     }
 
     @Override
-    public VariableExtractResult extract() throws Exception {
+    public VariableExtractResult extract() {
         List<OvalVariableExtractor> extractors = new ArrayList<>();
         List<Object> objects = concatFunctionType.getObjectComponentOrVariableComponentOrLiteralComponent();
         for (Object object : objects) {

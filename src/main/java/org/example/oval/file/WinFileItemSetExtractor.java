@@ -4,6 +4,7 @@ import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.ItemSetExtractResult;
 import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
+import org.example.oval.item.OvalItemExtractor;
 import org.example.oval.item.OvalItemSetExtractor;
 import org.example.oval.compare.OvalSimpleValueComparator;
 import org.example.oval.compare.OvalSimpleValueComparator.OvalSimpleValueCompareResult;
@@ -26,11 +27,11 @@ import java.util.Map;
 public class WinFileItemSetExtractor implements OvalItemSetExtractor {
 
     private Set fileItemSet;
-    private OvalEntityMappingContext ovalEntityMappingContext;
+    private OvalEntityMappingContext mappingContext;
 
-    public WinFileItemSetExtractor(Set fileItemSet, OvalEntityMappingContext ovalEntityMappingContext) {
+    public WinFileItemSetExtractor(Set fileItemSet, OvalEntityMappingContext mappingContext) {
         this.fileItemSet = fileItemSet;
-        this.ovalEntityMappingContext = ovalEntityMappingContext;
+        this.mappingContext = mappingContext;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
         List<Set> childSets = fileItemSet.getSet();
         try {
             if (childSets.isEmpty())
-                return extractFromObject();
+                return extractFromObject(new WinFileItemExtractor());
             else
                 return extractFromChildSet();
         } catch (Exception e) {
@@ -48,20 +49,21 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
         }
     }
 
-    private ItemSetExtractResult extractFromChildSet() {
+    @Override
+    public ItemSetExtractResult extractFromChildSet() {
         List<Set> sets = fileItemSet.getSet();
         if (sets.size() == 1)
-            return new WinFileItemSetExtractor(sets.get(0), ovalEntityMappingContext).extract();
+            return new WinFileItemSetExtractor(sets.get(0), mappingContext).extract();
 
         Set set1 = sets.get(0);
         Map<String, ItemType> map1 = new HashMap<>();
-        ItemSetExtractResult extract1 = new WinFileItemSetExtractor(set1, ovalEntityMappingContext).extract();
+        ItemSetExtractResult extract1 = new WinFileItemSetExtractor(set1, mappingContext).extract();
         for (ItemType itemType : extract1.getExtractedItems())
             map1.put(itemType.getId().toString(), itemType);
 
         Set set2 = sets.get(1);
         Map<String, ItemType> map2 = new HashMap<>();
-        ItemSetExtractResult extract2 = new WinFileItemSetExtractor(set2, ovalEntityMappingContext).extract();
+        ItemSetExtractResult extract2 = new WinFileItemSetExtractor(set2, mappingContext).extract();
         for (ItemType itemType : extract2.getExtractedItems())
             map2.put(itemType.getId().toString(), itemType);
 
@@ -72,43 +74,39 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
         return getCompleteResult(map1, map2, fileItemSet.getSetOperator());
     }
 
-    private ItemSetExtractResult extractFromObject() throws Exception {
-        ItemSetExtractResult itemSetExtractResult = new ItemSetExtractResult();
-        Map<String, FileItem> itemTypeMap = new HashMap<>();
+    @Override
+    public ItemSetExtractResult extractFromObject(OvalItemExtractor extractor) {
+        Map<String, FileItem> fileItemMap = new HashMap<>();
         for (String objectRef : fileItemSet.getObjectReference()) {
-            ObjectType objectType = ovalEntityMappingContext.getObjectType(objectRef);
-            ItemExtractResult itemExtractResult = ovalEntityMappingContext.getItemResult(objectRef);
-            if (itemExtractResult == null) {
-                WinFileItemExtractor extractor = new WinFileItemExtractor();
-                itemExtractResult = extractor.extract(objectType, ovalEntityMappingContext);
-            }
-            for (ItemType itemType : itemExtractResult.getExtractedItems()) {
-                FileItem fileItem = (FileItem) itemType;
-                itemTypeMap.put((String) fileItem.getFilepath().getValue(), fileItem);
-            }
+            ItemExtractResult itemExtractResult = mappingContext.getItemResult(objectRef);
+            ObjectType objectType = mappingContext.getObjectType(objectRef);
+            if (itemExtractResult == null)
+                itemExtractResult = extractor.extract(objectType, mappingContext);
+            for (ItemType itemType : itemExtractResult.getExtractedItems())
+                fileItemMap.put(itemType.getId().toString(), (FileItem) itemType);
         }
 
         List<ItemType> extractedItems = new ArrayList<>();
         List<Filter> filters = fileItemSet.getFilter();
-        for (ItemType itemType : itemTypeMap.values()) {
-            FileItem fileItem = (FileItem) itemType;
+        for (FileItem fileItem : fileItemMap.values()) {
             boolean success = true;
             for (Filter filter : filters) {
                 String stateId = filter.getValue();
-                StateType stateType = ovalEntityMappingContext.getStateType(stateId);
+                StateType stateType = mappingContext.getStateType(stateId);
                 if (stateType == null)
-                    throw new Exception("file set filter is null");
+                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
                 if (stateType instanceof FileState == false)
-                    throw new Exception("file set filter error");
+                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+                FileState fileState = (FileState) stateType;
                 boolean filterInclude = filter.getAction() == FilterActionEnumeration.INCLUDE;
-                success = filterInclude == filterFileItem(fileItem, (FileState) stateType);
+                success = filterInclude == filterFileItem(fileItem, fileState);
                 if (!success)
                     break;
             }
             if (success)
-                extractedItems.add(itemType);
+                extractedItems.add(fileItem);
         }
-        itemSetExtractResult.setExtractedItems(extractedItems);
+        ItemSetExtractResult itemSetExtractResult = new ItemSetExtractResult(extractedItems);
         if (extractedItems.isEmpty())
             itemSetExtractResult.setResultType(ItemSetExtractResultType.DOES_NOT_EXIST);
         return itemSetExtractResult;
@@ -123,6 +121,7 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
             Object object = stateSimpleType.getValue();
             String stateName = stateElement.getName().getLocalPart();
             OperationEnumeration operation = stateSimpleType.getOperation();
+
             if (stateName.equalsIgnoreCase("version")) {
                 EntityItemVersionType version = fileItem.getVersion();
                 Object compare = version == null ? null : version.getValue();
@@ -133,6 +132,7 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
                 if (compareResult != OvalSimpleValueCompareResult.SUCCESS)
                     return false;
             }
+
             if (stateName.equalsIgnoreCase("filepath")) {
                 EntityItemStringType filepath = fileItem.getFilepath();
                 Object compare = filepath.getValue();

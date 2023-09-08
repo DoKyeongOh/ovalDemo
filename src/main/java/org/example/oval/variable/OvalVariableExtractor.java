@@ -1,5 +1,5 @@
 package org.example.oval.variable;
 
 public interface OvalVariableExtractor {
-    VariableExtractResult extract() throws Exception;
+    VariableExtractResult extract();
 }

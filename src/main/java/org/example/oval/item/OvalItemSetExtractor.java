@@ -1,7 +1,11 @@
 package org.example.oval.item;
 
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
+import org.mitre.oval.xmlschema.oval_definitions_5.Filter;
+import org.mitre.oval.xmlschema.oval_definitions_5.Set;
 import org.mitre.oval.xmlschema.oval_definitions_5.SetOperatorEnumeration;
+import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryObject;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 
 import java.util.ArrayList;
@@ -10,6 +14,9 @@ import java.util.Map;
 
 public interface OvalItemSetExtractor {
     ItemSetExtractResult extract();
+    ItemSetExtractResult extractFromChildSet();
+
+    ItemSetExtractResult extractFromObject(OvalItemExtractor extractor);
 
     default ItemSetExtractResult getNotCompleteResult(SetOperatorEnumeration enumeration, ItemSetExtractResultType type1,
                                                       ItemSetExtractResultType type2) {

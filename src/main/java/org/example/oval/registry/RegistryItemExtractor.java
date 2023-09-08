@@ -3,6 +3,7 @@ package org.example.oval.registry;
 import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.OvalSimpleValueExtractor;
 import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.ItemSetExtractResult;
 import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryObject;
@@ -27,7 +28,7 @@ public class RegistryItemExtractor implements OvalItemExtractor {
     }
 
     @Override
-    public ItemExtractResult extract(ObjectType inputObject, OvalEntityMappingContext entityMappingContext) {
+    public ItemExtractResult extract(ObjectType inputObject, OvalEntityMappingContext mappingContext) {
         if (inputObject == null)
             return new ItemExtractResult(ItemExtractResult.ItemExtractResultType.ERROR);
         if (inputObject instanceof RegistryObject == false)
@@ -38,7 +39,12 @@ public class RegistryItemExtractor implements OvalItemExtractor {
         Set<String> requiredKeys = new HashSet<>();
 
         RegistryObject registryObject = (RegistryObject) inputObject;
-        OvalSimpleValueExtractor valueExtractor = new OvalSimpleValueExtractor(entityMappingContext);
+        org.mitre.oval.xmlschema.oval_definitions_5.Set set = registryObject.getSet();
+        if (set != null) {
+            RegistryItemSetExtractor itemSetExtractor = new RegistryItemSetExtractor(set, mappingContext);
+            ItemSetExtractResult extract = itemSetExtractor.extract();
+        }
+        OvalSimpleValueExtractor valueExtractor = new OvalSimpleValueExtractor(mappingContext);
 
         try {
             List<Object> hkeys = valueExtractor.extract(registryObject.getHive());
