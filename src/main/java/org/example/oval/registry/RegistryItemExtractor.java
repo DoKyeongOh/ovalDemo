@@ -35,6 +35,7 @@ public class RegistryItemExtractor implements OvalItemExtractor {
 
         List<ItemType> itemTypes = new ArrayList<>();
         Set<String> requiredNames = new HashSet<>();
+        Set<String> requiredKeys = new HashSet<>();
 
         RegistryObject registryObject = (RegistryObject) inputObject;
         OvalSimpleValueExtractor valueExtractor = new OvalSimpleValueExtractor(entityMappingContext);
@@ -47,9 +48,12 @@ public class RegistryItemExtractor implements OvalItemExtractor {
             for (Object nameItem : names)
                 requiredNames.add((String) nameItem);
 
+            for (Object key : keys)
+                requiredKeys.add((String) key);
+
             for (Object hkey : hkeys)
-                for (Object key : keys)
-                    registryDataReader.read((String) hkey, (String) key).stream()
+                for (String key : requiredKeys)
+                    registryDataReader.read((String) hkey, key, requiredNames).stream()
                             .filter(data -> requiredNames.contains(data.getName()) && data.getValue() != null)
                             .forEach(data -> itemTypes.add(createRegistryItem(data)));
         } catch (Exception e) {
