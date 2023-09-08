@@ -12,20 +12,18 @@ import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class RegistryItemExtractorTest {
 
     @Test
-    public void test() throws Exception {
-        ItemExtractResult testExtractResult = getTestExtractResult("reg_sz", "testValue1");
-        System.out.println(testExtractResult);
-    }
-
-    private ItemExtractResult getTestExtractResult(String type, String value) throws Exception {
+    public void testExtractResult() {
         String objId = "reg-obj-1";
         String hive = "dumy_hive";
         String key = "dumy_key";
         String name = "dumy_name";
+        String type = "reg_sz";
+        String value = "testValue1";
 
         FakeRegistryObject registryObject = new FakeRegistryObject();
         registryObject.setId(objId);
@@ -38,12 +36,13 @@ public class RegistryItemExtractorTest {
 
         RegistryDataReader fakeReader = new RegistryDataReader() {
             @Override
-            public List<RegistryData> read(String hkeyValue, String keyValue) throws IOException {
+            public List<RegistryData> read(String hive, String path, Set<String> nameSet) throws IOException {
                 List<RegistryData> registryDataList = new ArrayList<>();
                 registryDataList.add(new RegistryData(hive, key, name, type, value));
                 return registryDataList;
             }
         };
+        ItemExtractResult extract = new RegistryItemExtractor(fakeReader).extract(registryObject, ovalContext);
     }
 
     private class FakeRegistryObject extends RegistryObject {
