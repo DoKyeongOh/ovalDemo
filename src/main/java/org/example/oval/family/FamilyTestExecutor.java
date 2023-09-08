@@ -1,6 +1,6 @@
 package org.example.oval.family;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestResultType;
@@ -35,8 +35,10 @@ public class FamilyTestExecutor implements OvalTestExecutor {
     }
 
     @Override
-    public OvalTestResultType execute(OvalEntityMapping ovalEntityMapping, ItemExtractResult itemExtractResult)
+    public OvalTestResultType execute(OvalEntityMappingContext entityMappingContext)
             throws Exception {
+        String objectRef = familyTest.getObject().getObjectRef();
+        ItemExtractResult itemExtractResult = entityMappingContext.getItemResult(objectRef);
         if (itemExtractResult == null)
             return OvalTestResultType.ERROR;
 
@@ -48,7 +50,7 @@ public class FamilyTestExecutor implements OvalTestExecutor {
 
         boolean success = true;
         for (StateRefType stateRefType : familyTest.getState()) {
-            StateType inputState = ovalEntityMapping.getStateType(stateRefType.getStateRef());
+            StateType inputState = entityMappingContext.getStateType(stateRefType.getStateRef());
             if (inputState == null)
                 throw new Exception("input state not found. test id : " + familyTest.getId());
             FamilyState familyState = (FamilyState) inputState;

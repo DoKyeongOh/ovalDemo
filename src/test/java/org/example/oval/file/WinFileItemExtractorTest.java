@@ -1,6 +1,6 @@
 package org.example.oval.file;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -227,11 +227,11 @@ public class WinFileItemExtractorTest {
                 filenameEntity);
         fileObject.setFilename(filenameElement);
 
-        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
-        ovalEntityMapping.addObjectType("fileObject-1", fileObject);
+        OvalEntityMappingContext ovalEntityMappingContext = new OvalEntityMappingContext();
+        ovalEntityMappingContext.putObjectType("fileObject-1", fileObject);
 
-        WinFileItemExtractor winFileItemExtractor = new WinFileItemExtractor(fileObject, ovalEntityMapping);
-        return winFileItemExtractor.extract().getExtractedItems().stream()
+        WinFileItemExtractor winFileItemExtractor = new WinFileItemExtractor();
+        return winFileItemExtractor.extract(fileObject, ovalEntityMappingContext).getExtractedItems().stream()
                 .map(item -> (FileItem) item).collect(Collectors.toList());
     }
     private List<FileItem> getItemByFilepath(String filepath, OperationEnumeration filepathOperation) throws Exception {
@@ -243,11 +243,11 @@ public class WinFileItemExtractorTest {
         filepathEntity.setOperation(filepathOperation);
         fileObject.setFilepath(filepathEntity);
 
-        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
-        ovalEntityMapping.addObjectType("fileObject-1", fileObject);
+        OvalEntityMappingContext ovalEntityMappingContext = new OvalEntityMappingContext();
+        ovalEntityMappingContext.putObjectType("fileObject-1", fileObject);
 
-        WinFileItemExtractor winFileItemExtractor = new WinFileItemExtractor(fileObject, ovalEntityMapping);
-        return winFileItemExtractor.extract().getExtractedItems().stream()
+        WinFileItemExtractor winFileItemExtractor = new WinFileItemExtractor();
+        return winFileItemExtractor.extract(fileObject, ovalEntityMappingContext).getExtractedItems().stream()
                 .map(item -> (FileItem) item).collect(Collectors.toList());
     }
 

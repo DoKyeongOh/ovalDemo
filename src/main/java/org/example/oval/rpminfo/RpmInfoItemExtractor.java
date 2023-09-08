@@ -1,36 +1,25 @@
 package org.example.oval.rpminfo;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5_linux.RpminfoObject;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
-
-import java.util.List;
 
 public class RpmInfoItemExtractor implements OvalItemExtractor {
 
-    private RpminfoObject rpminfoObject;
-    private OvalEntityMapping ovalEntityMapping;
+    public RpmInfoItemExtractor() {
 
-    public RpmInfoItemExtractor(ObjectType inputObject, OvalEntityMapping ovalEntityMapping) throws Exception {
-        if (inputObject == null)
-            throw new Exception("input rpminfo object is not null.");
-        if (!inputObject.getClass().equals(RpminfoObject.class))
-            throw new Exception("input rpminfo object is notc rpminfo_object.");
-        rpminfoObject = (RpminfoObject) inputObject;
-        this.ovalEntityMapping = ovalEntityMapping;
     }
 
     @Override
-    public ItemExtractResult extract() {
+    public ItemExtractResult extract(ObjectType inputObject, OvalEntityMappingContext ovalEntityMappingContext) {
+        if (inputObject == null)
+            return new ItemExtractResult(ItemExtractResult.ItemExtractResultType.ERROR);
+        if (!inputObject.getClass().equals(RpminfoObject.class))
+            return new ItemExtractResult(ItemExtractResult.ItemExtractResultType.ERROR);
+        RpminfoObject rpminfoObject = (RpminfoObject) inputObject;
         return null;
     }
 
-    @Override
-    public ItemExtractResult extractFromCache() {
-        ItemExtractResult itemResult = ovalEntityMapping.getItemResult(rpminfoObject.getId());
-        return itemResult;
-    }
 }

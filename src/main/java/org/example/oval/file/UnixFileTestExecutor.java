@@ -1,14 +1,11 @@
 package org.example.oval.file;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestResultType;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 import org.mitre.oval.xmlschema.oval_definitions_5_unix.FileTest;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
-
-import java.util.List;
 
 public class UnixFileTestExecutor implements OvalTestExecutor {
     private FileTest fileTest;
@@ -18,7 +15,7 @@ public class UnixFileTestExecutor implements OvalTestExecutor {
 
 
     @Override
-    public OvalTestResultType execute(OvalEntityMapping ovalEntityMapping, ItemExtractResult itemExtractResult) {
+    public OvalTestResultType execute(OvalEntityMappingContext ovalEntityMappingContext) {
         return OvalTestResultType.UNKNOWN;
     }
 }

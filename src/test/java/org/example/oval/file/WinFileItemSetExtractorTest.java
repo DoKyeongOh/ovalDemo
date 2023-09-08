@@ -1,6 +1,6 @@
 package org.example.oval.file;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemSetExtractResult;
 import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
 import org.junit.Before;
@@ -76,18 +76,18 @@ public class WinFileItemSetExtractorTest {
         FakeSet set = new FakeSet();
         set.setObjectReference(new ArrayList<>());
         set.setFilter(new ArrayList<>());
-        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
+        OvalEntityMappingContext ovalEntityMappingContext = new OvalEntityMappingContext();
 
         FileObject fileObject = new FileObject();
         fileObject.setId("object-ref-1");
         fileObject.setFilepath(new EntityObjectStringType());
         fileObject.getFilepath().setValue("target/temp/fileExtractorTest/dumy0");
-        ovalEntityMapping.addObjectType(fileObject.getId(), fileObject);
+        ovalEntityMappingContext.putObjectType(fileObject.getId(), fileObject);
         set.getObjectReference().add(fileObject.getId());
-        ovalEntityMapping.addStateType("state-ref-1", null);
+        ovalEntityMappingContext.putStateType("state-ref-1", null);
         set.getFilter().add(new Filter());
 
-        ItemSetExtractResult itemSetExtractResult = new WinFileItemSetExtractor(set, ovalEntityMapping).extract();
+        ItemSetExtractResult itemSetExtractResult = new WinFileItemSetExtractor(set, ovalEntityMappingContext).extract();
         assert itemSetExtractResult.getResultType() == ItemSetExtractResultType.ERROR;
         assert itemSetExtractResult.getExtractedItems().isEmpty();
     }
@@ -96,26 +96,26 @@ public class WinFileItemSetExtractorTest {
         FakeSet set = new FakeSet();
         set.setObjectReference(new ArrayList<>());
         set.setFilter(new ArrayList<>());
-        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
+        OvalEntityMappingContext ovalEntityMappingContext = new OvalEntityMappingContext();
 
         for (int i=0 ; i<2 ; i++) {
             FileObject fileObject = new FileObject();
             fileObject.setId("object-ref-"+i);
             fileObject.setFilepath(new EntityObjectStringType());
             fileObject.getFilepath().setValue("target/temp/fileExtractorTest/dumy0");
-            ovalEntityMapping.addObjectType(fileObject.getId(), fileObject);
+            ovalEntityMappingContext.putObjectType(fileObject.getId(), fileObject);
             set.getObjectReference().add(fileObject.getId());
         }
 
         FamilyState familyState = new FamilyState();
         familyState.setId("state-ref-1");
-        ovalEntityMapping.addStateType("state-ref-1", familyState);
+        ovalEntityMappingContext.putStateType("state-ref-1", familyState);
         Filter filter = new Filter();
         filter.setAction(FilterActionEnumeration.INCLUDE);
         filter.setValue(familyState.getId());
         set.getFilter().add(filter);
 
-        ItemSetExtractResult itemSetExtractResult = new WinFileItemSetExtractor(set, ovalEntityMapping).extract();
+        ItemSetExtractResult itemSetExtractResult = new WinFileItemSetExtractor(set, ovalEntityMappingContext).extract();
         assert itemSetExtractResult.getResultType() == ItemSetExtractResultType.ERROR;
         assert itemSetExtractResult.getExtractedItems().isEmpty();
     }
@@ -124,14 +124,14 @@ public class WinFileItemSetExtractorTest {
         FakeSet set = new FakeSet();
         set.setObjectReference(new ArrayList<>());
         set.setFilter(new ArrayList<>());
-        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
+        OvalEntityMappingContext ovalEntityMappingContext = new OvalEntityMappingContext();
 
         for (int i=0 ; i<2 ; i++) {
             FileObject fileObject = new FileObject();
             fileObject.setId("object-ref-"+i);
             fileObject.setFilepath(new EntityObjectStringType());
             fileObject.getFilepath().setValue("target/temp/fileExtractorTest/dumy0");
-            ovalEntityMapping.addObjectType(fileObject.getId(), fileObject);
+            ovalEntityMappingContext.putObjectType(fileObject.getId(), fileObject);
             set.getObjectReference().add(fileObject.getId());
         }
 
@@ -144,7 +144,7 @@ public class WinFileItemSetExtractorTest {
                 QName.valueOf("filepath"),
                 EntityStateStringType.class,
                 itemFilepath));
-        ovalEntityMapping.addStateType("state-ref-1", fileState);
+        ovalEntityMappingContext.putStateType("state-ref-1", fileState);
 
         Filter filter = new Filter();
         filter.setAction(actionEnumeration);
@@ -152,7 +152,7 @@ public class WinFileItemSetExtractorTest {
 
         set.getFilter().add(filter);
 
-        WinFileItemSetExtractor winFileItemSetExtractor = new WinFileItemSetExtractor(set, ovalEntityMapping);
+        WinFileItemSetExtractor winFileItemSetExtractor = new WinFileItemSetExtractor(set, ovalEntityMappingContext);
         return winFileItemSetExtractor.extract();
     }
 

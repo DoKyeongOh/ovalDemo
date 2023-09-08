@@ -1,12 +1,12 @@
 package org.example.oval.variable;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.variable.function.FunctionGroupExtractorFactory;
 import org.example.oval.variable.object.ObjectComponentExtractorFactory;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 
 public class LocalVariableExtractorFactory {
-    public static OvalVariableExtractor getLocalVariableExtractor(OvalEntityMapping ovalEntityMapping,
+    public static OvalVariableExtractor getLocalVariableExtractor(OvalEntityMappingContext entityMappingContext,
                                                                   LocalVariable localVariable) throws Exception {
         int presentCount = 0;
         presentCount += localVariable.getLiteralComponent() != null ? 1 : 0;
@@ -24,11 +24,11 @@ public class LocalVariableExtractorFactory {
         if (localVariable.getLiteralComponent() != null)
             return new LiteralComponentExtractor(localVariable.getLiteralComponent());
         else if (localVariable.getVariableComponent() != null)
-            return new VariableComponentExtractor(ovalEntityMapping, localVariable.getVariableComponent());
+            return new VariableComponentExtractor(entityMappingContext, localVariable.getVariableComponent());
         else if (localVariable.getObjectComponent() != null)
-            return ObjectComponentExtractorFactory.getExtractor(ovalEntityMapping, localVariable.getObjectComponent());
+            return ObjectComponentExtractorFactory.getExtractor(entityMappingContext, localVariable.getObjectComponent());
         else
-            return FunctionGroupExtractorFactory.getFromVariable(ovalEntityMapping, localVariable);
+            return FunctionGroupExtractorFactory.getFromVariable(entityMappingContext, localVariable);
     }
 
     public static class LiteralComponentExtractor implements OvalVariableExtractor {
@@ -45,18 +45,18 @@ public class LocalVariableExtractorFactory {
     }
 
     public static class VariableComponentExtractor implements OvalVariableExtractor {
-        private OvalEntityMapping ovalEntityMapping;
+        private OvalEntityMappingContext ovalEntityMappingContext;
         private VariableComponentType variableComponentType;
-        public VariableComponentExtractor(OvalEntityMapping ovalEntityMapping,
+        public VariableComponentExtractor(OvalEntityMappingContext ovalEntityMappingContext,
                                           VariableComponentType variableComponentType) {
-            this.ovalEntityMapping = ovalEntityMapping;
+            this.ovalEntityMappingContext = ovalEntityMappingContext;
             this.variableComponentType = variableComponentType;
         }
         @Override
         public VariableExtractResult extract() throws Exception {
             String varRef = variableComponentType.getVarRef();
-            VariableType variableType = ovalEntityMapping.getVariableType(varRef);
-            return OvalVariableExtractorFactory.getExtractor(ovalEntityMapping, variableType).extract();
+            VariableType variableType = ovalEntityMappingContext.getVariableType(varRef);
+            return OvalVariableExtractorFactory.getExtractor(ovalEntityMappingContext, variableType).extract();
         }
     }
 

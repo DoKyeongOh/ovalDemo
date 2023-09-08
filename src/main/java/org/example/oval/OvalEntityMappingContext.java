@@ -5,17 +5,19 @@ import org.example.oval.variable.VariableExtractResult;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
 
 import javax.xml.bind.JAXBElement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class OvalEntityMapping {
+public class OvalEntityMappingContext {
     private Map<String, ObjectType> objectTypeMap;
     private Map<String, StateType> stateTypeMap;
     private Map<String, VariableType> variableTypeMap;
     private Map<String, ItemExtractResult> itemExtractedResultMap;
     private Map<String, VariableExtractResult> variableExtractResultMap;
 
-    public OvalEntityMapping() {
+    public OvalEntityMappingContext() {
         objectTypeMap = new HashMap<>();
         stateTypeMap = new HashMap<>();
         variableTypeMap = new HashMap<>();
@@ -40,7 +42,14 @@ public class OvalEntityMapping {
                 variableTypeMap.put(variable.getValue().getId(), variable.getValue());
     }
 
-    public void addObjectType(String objectId, ObjectType objectType) {
+    public List<ObjectType> getAllObjectTypes() {
+        List<ObjectType> objectTypes = new ArrayList<>();
+        for (ObjectType objectType : objectTypeMap.values())
+            objectTypes.add(objectType);
+        return objectTypes;
+    }
+
+    public void putObjectType(String objectId, ObjectType objectType) {
         this.objectTypeMap.put(objectId, objectType);
     }
 
@@ -48,26 +57,26 @@ public class OvalEntityMapping {
         return this.objectTypeMap.get(objectId);
     }
 
-    public void addStateType(String stateId, StateType stateType) {
+    public void putStateType(String stateId, StateType stateType) {
         this.stateTypeMap.put(stateId, stateType);
     }
 
     public StateType getStateType(String stateId) {
         return this.stateTypeMap.get(stateId);
     }
-    public void addVariableType(String variableId, VariableType variableType) {
+    public void putVariableType(String variableId, VariableType variableType) {
         this.variableTypeMap.put(variableId, variableType);
     }
     public VariableType getVariableType(String variableId) {
         return this.variableTypeMap.get(variableId);
     }
-    public void addItemResult(String objectId, ItemExtractResult itemExtractResult) {
+    public void putItemResult(String objectId, ItemExtractResult itemExtractResult) {
         this.itemExtractedResultMap.put(objectId, itemExtractResult);
     }
     public ItemExtractResult getItemResult(String objectId) {
         return this.itemExtractedResultMap.get(objectId);
     }
-    public void addVariableResult(String variableId, VariableExtractResult variableExtractResult) {
+    public void putVariableResult(String variableId, VariableExtractResult variableExtractResult) {
         this.variableExtractResultMap.put(variableId, variableExtractResult);
     }
     public VariableExtractResult getVariableResult(String variableId) {

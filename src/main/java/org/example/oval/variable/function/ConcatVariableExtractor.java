@@ -1,6 +1,6 @@
 package org.example.oval.variable.function;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.variable.LocalVariableExtractorFactory.LiteralComponentExtractor;
 import org.example.oval.variable.OvalVariableExtractor;
 import org.example.oval.variable.OvalVariableExtractorFactory;
@@ -16,11 +16,11 @@ import java.util.Set;
 
 public class ConcatVariableExtractor implements OvalVariableExtractor {
 
-    private OvalEntityMapping ovalEntityMapping;
+    private OvalEntityMappingContext entityMappingContext;
     private ConcatFunctionType concatFunctionType;
 
-    public ConcatVariableExtractor(OvalEntityMapping ovalEntityMapping, ConcatFunctionType concatFunctionType) {
-        this.ovalEntityMapping = ovalEntityMapping;
+    public ConcatVariableExtractor(OvalEntityMappingContext entityMappingContext, ConcatFunctionType concatFunctionType) {
+        this.entityMappingContext = entityMappingContext;
         this.concatFunctionType = concatFunctionType;
     }
 
@@ -31,17 +31,17 @@ public class ConcatVariableExtractor implements OvalVariableExtractor {
         for (Object object : objects) {
             if (object instanceof ObjectComponentType) {
                 ObjectComponentType objectComponentType = (ObjectComponentType) object;
-                extractors.add(ObjectComponentExtractorFactory.getExtractor(ovalEntityMapping, objectComponentType));
+                extractors.add(ObjectComponentExtractorFactory.getExtractor(entityMappingContext, objectComponentType));
             } else if (object instanceof VariableComponentType) {
                 VariableComponentType variableComponentType = (VariableComponentType) object;
                 String varRef = variableComponentType.getVarRef();
-                VariableType variableType = ovalEntityMapping.getVariableType(varRef);
-                extractors.add(OvalVariableExtractorFactory.getExtractor(ovalEntityMapping, variableType));
+                VariableType variableType = entityMappingContext.getVariableType(varRef);
+                extractors.add(OvalVariableExtractorFactory.getExtractor(entityMappingContext, variableType));
             } else if (object instanceof LiteralComponentType) {
                 LiteralComponentType literalComponentType = (LiteralComponentType) object;
                 extractors.add(new LiteralComponentExtractor(literalComponentType));
             } else {
-                extractors.add(FunctionGroupExtractorFactory.getFromComponent(ovalEntityMapping, object));
+                extractors.add(FunctionGroupExtractorFactory.getFromComponent(entityMappingContext, object));
             }
         }
 

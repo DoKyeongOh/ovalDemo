@@ -1,11 +1,9 @@
 package org.example.oval.item;
 
-import org.example.oval.OvalEntityMapping;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
-
-import java.util.List;
+import org.example.oval.OvalEntityMappingContext;
+import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 
 public interface OvalItemExtractor {
-    ItemExtractResult extract() throws Exception;
-    ItemExtractResult extractFromCache();
+    ItemExtractResult extract(ObjectType inputObject, OvalEntityMappingContext ovalEntityMappingContext)
+            throws Exception;
 }

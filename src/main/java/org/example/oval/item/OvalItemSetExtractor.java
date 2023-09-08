@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface OvalItemSetExtractor {
-    ItemSetExtractResult extract() throws Exception;
+    ItemSetExtractResult extract();
 
     default ItemSetExtractResult getNotCompleteResult(SetOperatorEnumeration enumeration, ItemSetExtractResultType type1,
                                                       ItemSetExtractResultType type2) {

@@ -22,18 +22,8 @@ import java.util.Set;
 public class RegistryItemExtractor implements OvalItemExtractor {
     private RegistryDataReader registryDataReader;
 
-    private RegistryObject registryObject;
-    private OvalEntityMapping ovalEntityMapping;
-    private OvalSimpleValueExtractor simpleValueExtractor;
-
-    public RegistryItemExtractor(ObjectType inputObject, OvalEntityMapping ovalEntityMapping) throws Exception {
-        if (inputObject == null)
-            throw new Exception("input registry object is not null.");
-        if (!inputObject.getClass().equals(RegistryObject.class))
-            throw new Exception("input registry object is not registry_object.");
-        registryObject = (RegistryObject) inputObject;
-        simpleValueExtractor = new OvalSimpleValueExtractor(ovalEntityMapping);
-        this.ovalEntityMapping = ovalEntityMapping;
+    public RegistryItemExtractor(RegistryDataReader registryDataReader) {
+        this.registryDataReader = registryDataReader;
     }
 
     @Override
@@ -71,10 +61,6 @@ public class RegistryItemExtractor implements OvalItemExtractor {
         return new ItemExtractResult(itemTypes);
     }
 
-    @Override
-    public ItemExtractResult extractFromCache() {
-        ItemExtractResult itemResult = ovalEntityMapping.getItemResult(registryObject.getId());
-        return itemResult;
     public RegistryItem createRegistryItem(RegistryData registryData) {
         EntityItemRegistryHiveType entityHive = new EntityItemRegistryHiveType();
         entityHive.setStatus(StatusEnumeration.EXISTS);

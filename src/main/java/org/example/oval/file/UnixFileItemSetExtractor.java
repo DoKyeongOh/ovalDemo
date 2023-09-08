@@ -1,6 +1,6 @@
 package org.example.oval.file;
 
-import org.example.oval.OvalEntityMapping;
+import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.ItemSetExtractResult;
 import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
@@ -18,34 +18,38 @@ import java.util.Map;
 public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
 
     private Set fileItemSet;
-    private OvalEntityMapping ovalEntityMapping;
+    private OvalEntityMappingContext ovalEntityMappingContext;
 
-    public UnixFileItemSetExtractor(Set fileItemSet, OvalEntityMapping ovalEntityMapping) {
+    public UnixFileItemSetExtractor(Set fileItemSet, OvalEntityMappingContext ovalEntityMappingContext) {
         this.fileItemSet = fileItemSet;
-        this.ovalEntityMapping = ovalEntityMapping;
+        this.ovalEntityMappingContext = ovalEntityMappingContext;
     }
 
     @Override
-    public ItemSetExtractResult extract() throws Exception {
+    public ItemSetExtractResult extract() {
         if (fileItemSet == null)
-            return new ItemSetExtractResult(ItemSetExtractResultType.NOT_COLLECTED);
+            return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
         List<Set> childSets = fileItemSet.getSet();
-        if (!childSets.isEmpty())
-            return extractFromChildSet();
-        else
-            return extractFromObject();
+        try {
+            if (childSets.isEmpty())
+                return extractFromObject();
+            else
+                return extractFromChildSet();
+        } catch (Exception e) {
+            return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+        }
     }
 
     private ItemSetExtractResult extractFromChildSet() throws Exception {
         List<Set> sets = fileItemSet.getSet();
         if (sets.isEmpty())
-            return new ItemSetExtractResult(ItemSetExtractResultType.NOT_COLLECTED);
+            return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
         if (sets.size() == 1)
-            return new UnixFileItemSetExtractor(sets.get(0), ovalEntityMapping).extract();
+            return new UnixFileItemSetExtractor(sets.get(0), ovalEntityMappingContext).extract();
 
         Set set1 = sets.get(0);
         Map<String, FileItem> fileItemMap1 = new HashMap<>();
-        ItemSetExtractResult extract1 = new UnixFileItemSetExtractor(set1, ovalEntityMapping).extract();
+        ItemSetExtractResult extract1 = new UnixFileItemSetExtractor(set1, ovalEntityMappingContext).extract();
         for (ItemType itemType : extract1.getExtractedItems()) {
             FileItem fileItem = (FileItem) itemType;
             fileItemMap1.put((String) fileItem.getFilepath().getValue(), fileItem);
@@ -53,7 +57,7 @@ public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
 
         Set set2 = sets.get(1);
         Map<String, FileItem> fileItemMap2 = new HashMap<>();
-        ItemSetExtractResult extract2 = new UnixFileItemSetExtractor(set2, ovalEntityMapping).extract();
+        ItemSetExtractResult extract2 = new UnixFileItemSetExtractor(set2, ovalEntityMappingContext).extract();
         for (ItemType itemType : extract2.getExtractedItems()) {
             FileItem fileItem = (FileItem) itemType;
             fileItemMap2.put((String) fileItem.getFilepath().getValue(), fileItem);
@@ -92,8 +96,12 @@ public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
         ItemSetExtractResult itemSetExtractResult = new ItemSetExtractResult();
         Map<String, FileItem> itemTypeMap = new HashMap<>();
         for (String objectRef : fileItemSet.getObjectReference()) {
-            ObjectType objectType = ovalEntityMapping.getObjectType(objectRef);
-            ItemExtractResult itemExtractResult = new UnixFileItemExtractor(objectType, ovalEntityMapping).extract();
+            ObjectType objectType = ovalEntityMappingContext.getObjectType(objectRef);
+            ItemExtractResult itemExtractResult = ovalEntityMappingContext.getItemResult(objectRef);
+            if (itemExtractResult == null) {
+                UnixFileItemExtractor extractor = new UnixFileItemExtractor();
+                itemExtractResult = extractor.extract(objectType, ovalEntityMappingContext);
+            }
             for (ItemType itemType : itemExtractResult.getExtractedItems()) {
                 FileItem fileItem = (FileItem) itemType;
                 itemTypeMap.put((String) fileItem.getFilepath().getValue(), fileItem);
@@ -107,7 +115,7 @@ public class UnixFileItemSetExtractor implements OvalItemSetExtractor {
             boolean success = true;
             for (Filter filter : filters) {
                 String stateId = filter.getValue();
-                StateType stateType = ovalEntityMapping.getStateType(stateId);
+                StateType stateType = ovalEntityMappingContext.getStateType(stateId);
                 if (stateType == null)
                     throw new Exception("file set filter is null");
                 if (stateType instanceof FileState == false)

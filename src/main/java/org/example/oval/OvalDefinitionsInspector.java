@@ -2,12 +2,11 @@ package org.example.oval;
 
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.OvalItemExtractor;
+import org.example.oval.item.OvalItemExtractorFactory;
 import org.example.oval.test.OvalTestExecutor;
 import org.example.oval.test.OvalTestExecutorFactory;
 import org.example.oval.test.OvalTestResultType;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.CollectedObjectsType;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.OvalSystemCharacteristics;
 
 import javax.xml.bind.JAXBElement;
@@ -29,36 +28,36 @@ public class OvalDefinitionsInspector {
         init();
         DefinitionsType definitions = ovalDefinitions.getDefinitions();
         List<DefinitionType> definitionTypes = definitions.getDefinition();
-        Set<String> testIds = new HashSet<>();
-        for (DefinitionType definitionType : definitionTypes) {
+        for (DefinitionType definitionType : definitionTypes)
             definitionMap.put(definitionType.getId(), definitionType);
-            CriteriaType criteriaType = definitionType.getCriteria();
-            testIds.addAll(extractTestIds(criteriaType));
-        }
 
         TestsType testsType = ovalDefinitions.getTests();
         Map<String, TestType> testTypeMap = new HashMap<>();
         for (JAXBElement<? extends TestType> testType : testsType.getTest())
             testTypeMap.put(testType.getValue().getId(), testType.getValue());
 
-        OvalEntityMapping ovalEntityMapping = new OvalEntityMapping();
-        ovalEntityMapping.init(ovalDefinitions);
+        // system char 정보를 얻어오는 부분, variable을 참조해서 넘겨주는 부분이 선행되어야 한다.
+        // 시스템에 대한 정보를 얻어오는 부분 == characteristic
+        OvalSystemCharacteristics ovalSystemCharacteristics = new OvalSystemCharacteristics();
 
-        for (String testId : testIds) {
-            TestType testType = testTypeMap.get(testId);
-            if (testType == null)
-                throw new Exception("testType is not exist");
+        OvalEntityMappingContext mappingContext = new OvalEntityMappingContext();
+        mappingContext.init(ovalDefinitions);
+
+        for (ObjectType objectType : mappingContext.getAllObjectTypes()) {
+            String objectId = objectType.getId();
+            ItemExtractResult itemResult = mappingContext.getItemResult(objectId);
+            if (itemResult != null)
+                continue;
+
+            OvalItemExtractor extractor = OvalItemExtractorFactory.getExtractor(objectType.getClass());
+            itemResult = extractor.extract(objectType, mappingContext);
+            mappingContext.putItemResult(objectId, itemResult);
+        }
+
+        for (TestType testType : testTypeMap.values()) {
             try {
-                // system char 정보를 얻어오는 부분, variable을 참조해서 넘겨주는 부분이 선행되어야 한다.
-                // 시스템에 대한 정보를 얻어오는 부분 == charactoristic
-
-                OvalItemExtractor extractor = OvalItemExtractorFactory.getExtractor(testType, ovalEntityMapping);
-                ItemExtractResult itemExtractResult = extractor.extractFromCache();
-                if (itemExtractResult == null)
-                    itemExtractResult = extractor.extract();
-
                 OvalTestExecutor executor = OvalTestExecutorFactory.getInstance(testType);
-                testResultMap.put(testType.getId(), executor.execute(ovalEntityMapping, itemExtractResult));
+                testResultMap.put(testType.getId(), executor.execute(mappingContext));
             } catch (Exception e) {
                 testResultMap.put(testType.getId(), OvalTestResultType.ERROR);
             }
