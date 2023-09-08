@@ -11,26 +11,31 @@ import java.util.List;
 
 public class OvalSimpleValueExtractor {
 
-    private OvalEntityMappingContext ovalEntityMappingContext;
+    private OvalEntityMappingContext mappingContext;
 
-    public OvalSimpleValueExtractor(OvalEntityMappingContext ovalEntityMappingContext) {
-        this.ovalEntityMappingContext = ovalEntityMappingContext;
+    public OvalSimpleValueExtractor(OvalEntityMappingContext mappingContext) {
+        this.mappingContext = mappingContext;
     }
 
-    public List<Object> extract(EntitySimpleBaseType entitySimpleBaseType) throws Exception {
+    public List<Object> extract(EntitySimpleBaseType entitySimpleBaseType) {
+        if (entitySimpleBaseType == null)
+            return new ArrayList<>();
         String varRef = entitySimpleBaseType.getVarRef();
         if (varRef != null) {
-            VariableExtractResult variableResult = ovalEntityMappingContext.getVariableResult(varRef);
+            VariableExtractResult variableResult = mappingContext.getVariableResult(varRef);
             if (variableResult != null)
                 return variableResult.getExtractedItems();
 
-            VariableType variable = ovalEntityMappingContext.getVariableType(varRef);
+            VariableType variable = mappingContext.getVariableType(varRef);
             if (variable == null)
                 return new ArrayList<>();
 
-            OvalVariableExtractor extractor = OvalVariableExtractorFactory.getExtractor(ovalEntityMappingContext, variable);
+            OvalVariableExtractor extractor = OvalVariableExtractorFactory.getExtractor(mappingContext, variable);
+            if (extractor == null)
+                return new ArrayList<>();
+
             variableResult = extractor.extract();
-            ovalEntityMappingContext.putVariableResult(varRef, variableResult);
+            mappingContext.putVariableResult(varRef, variableResult);
             return variableResult.getExtractedItems();
         }
         List<Object> variables = new ArrayList<>();
