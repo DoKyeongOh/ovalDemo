@@ -1,6 +1,7 @@
 package org.example.oval.variable.function;
 
 import org.example.oval.OvalEntityMappingContext;
+import org.example.oval.item.ItemExtractResult;
 import org.example.oval.variable.LocalVariableExtractorFactory.LiteralComponentExtractor;
 import org.example.oval.variable.OvalVariableExtractor;
 import org.example.oval.variable.OvalVariableExtractorFactory;
@@ -15,48 +16,41 @@ import java.util.List;
 import java.util.Set;
 
 public class ConcatVariableExtractor implements OvalVariableExtractor {
-
-    private OvalEntityMappingContext entityMappingContext;
+    private OvalEntityMappingContext mappingContext;
     private ConcatFunctionType concatFunctionType;
 
-    public ConcatVariableExtractor(OvalEntityMappingContext entityMappingContext, ConcatFunctionType concatFunctionType) {
-        this.entityMappingContext = entityMappingContext;
+    public ConcatVariableExtractor(OvalEntityMappingContext mappingContext, ConcatFunctionType concatFunctionType) {
+        this.mappingContext = mappingContext;
         this.concatFunctionType = concatFunctionType;
     }
 
     @Override
     public VariableExtractResult extract() {
-        List<OvalVariableExtractor> extractors = new ArrayList<>();
+        List<VariableExtractResult> variableExtractResults = new ArrayList<>();
+        Set<VariableExtractResultType> extractedTypes = new HashSet<>();
         List<Object> objects = concatFunctionType.getObjectComponentOrVariableComponentOrLiteralComponent();
         for (Object object : objects) {
+            OvalVariableExtractor extractor = null;
             if (object instanceof ObjectComponentType) {
                 ObjectComponentType objectComponentType = (ObjectComponentType) object;
-                extractors.add(ObjectComponentExtractorFactory.getExtractor(entityMappingContext, objectComponentType));
+                extractor = ObjectComponentExtractorFactory.getExtractor(mappingContext, objectComponentType);
             } else if (object instanceof VariableComponentType) {
                 VariableComponentType variableComponentType = (VariableComponentType) object;
                 String varRef = variableComponentType.getVarRef();
-                VariableType variableType = entityMappingContext.getVariableType(varRef);
-                extractors.add(OvalVariableExtractorFactory.getExtractor(entityMappingContext, variableType));
+                VariableType variableType = mappingContext.getVariableType(varRef);
+                extractor = OvalVariableExtractorFactory.getExtractor(mappingContext, variableType);
             } else if (object instanceof LiteralComponentType) {
                 LiteralComponentType literalComponentType = (LiteralComponentType) object;
-                extractors.add(new LiteralComponentExtractor(literalComponentType));
+                extractor = new LiteralComponentExtractor(literalComponentType);
             } else {
-                extractors.add(FunctionGroupExtractorFactory.getFromComponent(entityMappingContext, object));
+                extractor = FunctionGroupExtractorFactory.getFromComponent(mappingContext, object);
             }
-        }
+            if (extractor == null)
+                return new VariableExtractResult(VariableExtractResultType.ERROR);
+            VariableExtractResult extractResult = extractor.extract();
+            variableExtractResults.add(extractResult);
+            extractedTypes.add(extractResult.getResultType());
 
-        Set<VariableExtractResultType> extractedTypes = new HashSet<>();
-        List<Object> extractedObjects = new ArrayList<>();
-        for (OvalVariableExtractor extractor : extractors) {
-            VariableExtractResult variableExtractResult = extractor.extract();
-            if (variableExtractResult == null) {
-                extractedTypes.add(VariableExtractResultType.ERROR);
-                continue;
-            }
-            extractedTypes.add(variableExtractResult.getResultType());
-            if (variableExtractResult.getResultType() != VariableExtractResultType.COMPLETE)
-                continue;
-            extractedObjects.addAll(variableExtractResult.getExtractedItems());
         }
 
         if (extractedTypes.contains(VariableExtractResultType.ERROR))
@@ -71,8 +65,9 @@ public class ConcatVariableExtractor implements OvalVariableExtractor {
             return new VariableExtractResult(VariableExtractResultType.NOT_APPLICABLE);
 
         String concat = "";
-        for (Object o : extractedObjects)
-            concat += o.toString();
+        for (VariableExtractResult variableExtractResult : variableExtractResults)
+            for (Object o : variableExtractResult.getExtractedItems())
+                concat += o.toString();
         VariableExtractResult variableExtractResult = new VariableExtractResult();
         variableExtractResult.getExtractedItems().add(concat);
         return variableExtractResult;
