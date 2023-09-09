@@ -24,7 +24,7 @@ public class OvalDefinitionsInspector {
         definitionResultMap = new HashMap<>();
     }
 
-    public OvalInspectResult inspect(OvalDefinitions ovalDefinitions) throws Exception {
+    public OvalInspectResult inspect(OvalDefinitions ovalDefinitions) {
         init();
         DefinitionsType definitions = ovalDefinitions.getDefinitions();
         List<DefinitionType> definitionTypes = definitions.getDefinition();
@@ -43,6 +43,7 @@ public class OvalDefinitionsInspector {
         OvalEntityMappingContext mappingContext = new OvalEntityMappingContext();
         mappingContext.init(ovalDefinitions);
 
+        int count = 0;
         for (ObjectType objectType : mappingContext.getAllObjectTypes()) {
             String objectId = objectType.getId();
             ItemExtractResult itemResult = mappingContext.getItemResult(objectId);
@@ -52,6 +53,9 @@ public class OvalDefinitionsInspector {
             OvalItemExtractor extractor = OvalItemExtractorFactory.getExtractor(objectType.getClass());
             itemResult = extractor.extract(objectType, mappingContext);
             mappingContext.putItemResult(objectId, itemResult);
+
+            count++;
+            System.out.println(count);
         }
 
         for (TestType testType : testTypeMap.values()) {
@@ -76,18 +80,5 @@ public class OvalDefinitionsInspector {
         }
         OvalInspectResult result = new OvalInspectResult(definitionResultMap);
         return result;
-    }
-
-    private Set<String> extractTestIds(CriteriaType criteriaType) {
-        Set<String> testIds = new HashSet<>();
-        for (Object object : criteriaType.getCriteriaOrCriterionOrExtendDefinition()) {
-            if (object instanceof CriteriaType)
-                testIds.addAll(extractTestIds((CriteriaType) object));
-            if (object instanceof CriterionType == false)
-                continue;
-            String testRefId = ((CriterionType) object).getTestRef();
-            testIds.add(testRefId);
-        }
-        return testIds;
     }
 }
