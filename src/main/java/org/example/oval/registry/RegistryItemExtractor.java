@@ -3,7 +3,6 @@ package org.example.oval.registry;
 import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.OvalSimpleValueExtractor;
 import org.example.oval.item.ItemExtractResult;
-import org.example.oval.item.ItemSetExtractResult;
 import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryObject;
@@ -40,12 +39,10 @@ public class RegistryItemExtractor implements OvalItemExtractor {
 
         RegistryObject registryObject = (RegistryObject) inputObject;
         org.mitre.oval.xmlschema.oval_definitions_5.Set set = registryObject.getSet();
-        if (set != null) {
-            RegistryItemSetExtractor itemSetExtractor = new RegistryItemSetExtractor(set, mappingContext);
-            ItemSetExtractResult extract = itemSetExtractor.extract();
-        }
-        OvalSimpleValueExtractor valueExtractor = new OvalSimpleValueExtractor(mappingContext);
+        if (set != null)
+            return new RegistryItemSetExtractor(set, mappingContext).extract();
 
+        OvalSimpleValueExtractor valueExtractor = new OvalSimpleValueExtractor(mappingContext);
         try {
             List<Object> hkeys = valueExtractor.extract(registryObject.getHive());
             List<Object> keys = valueExtractor.extract(registryObject.getKey().getValue());
@@ -106,7 +103,7 @@ public class RegistryItemExtractor implements OvalItemExtractor {
             EntityItemAnySimpleType entityValue = new EntityItemAnySimpleType();
             entityValue.setStatus(StatusEnumeration.EXISTS);
             entityValue.setValue(value);
-            switch (registryData.getType()) {
+            switch (registryData.getType().toLowerCase()) {
                 case "reg_binary":
                     entityValue.setDatatype("binary");
                     break;
@@ -142,7 +139,7 @@ public class RegistryItemExtractor implements OvalItemExtractor {
         EntityItemWindowsViewType entityWindowsView = new EntityItemWindowsViewType();
         entityWindowsView.setStatus(StatusEnumeration.EXISTS);
         entityWindowsView.setDatatype("string");
-        entityWindowsView.setValue("64-bit"); // system charactoristic에 있음
+        entityWindowsView.setValue("64-bit");
 
         RegistryItem registryItem = new RegistryItem();
         registryItem.setHive(entityHive);

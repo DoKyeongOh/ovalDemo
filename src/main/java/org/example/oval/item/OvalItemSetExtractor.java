@@ -1,11 +1,7 @@
 package org.example.oval.item;
 
-import org.example.oval.OvalEntityMappingContext;
-import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
-import org.mitre.oval.xmlschema.oval_definitions_5.Filter;
-import org.mitre.oval.xmlschema.oval_definitions_5.Set;
+import org.example.oval.item.ItemExtractResult.ItemExtractResultType;
 import org.mitre.oval.xmlschema.oval_definitions_5.SetOperatorEnumeration;
-import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryObject;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 
 import java.util.ArrayList;
@@ -13,69 +9,69 @@ import java.util.List;
 import java.util.Map;
 
 public interface OvalItemSetExtractor {
-    ItemSetExtractResult extract();
-    ItemSetExtractResult extractFromChildSet();
+    ItemExtractResult extract();
+    ItemExtractResult extractFromChildSet();
 
-    ItemSetExtractResult extractFromObject(OvalItemExtractor extractor);
+    ItemExtractResult extractFromObject(OvalItemExtractor extractor);
 
-    default ItemSetExtractResult getNotCompleteResult(SetOperatorEnumeration enumeration, ItemSetExtractResultType type1,
-                                                      ItemSetExtractResultType type2) {
+    default ItemExtractResult getNotCompleteResult(SetOperatorEnumeration enumeration, ItemExtractResultType type1,
+                                                      ItemExtractResultType type2) {
         switch (enumeration) {
             case UNION:
-                if (type1 == ItemSetExtractResultType.ERROR ||
-                        type2 == ItemSetExtractResultType.ERROR)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
-                if (type1 == ItemSetExtractResultType.INCOMPLETE ||
-                        type2 == ItemSetExtractResultType.INCOMPLETE)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.INCOMPLETE);
-                if (type1 == ItemSetExtractResultType.DOES_NOT_EXIST ||
-                        type2 == ItemSetExtractResultType.DOES_NOT_EXIST)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.DOES_NOT_EXIST);
-                if (type1 == ItemSetExtractResultType.NOT_COLLECTED ||
-                        type2 == ItemSetExtractResultType.NOT_COLLECTED)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.NOT_COLLECTED);
-                if (type1 == ItemSetExtractResultType.NOT_APPLICABLE ||
-                        type2 == ItemSetExtractResultType.NOT_APPLICABLE)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.NOT_APPLICABLE);
+                if (type1 == ItemExtractResultType.ERROR ||
+                        type2 == ItemExtractResultType.ERROR)
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
+                if (type1 == ItemExtractResultType.INCOMPLETE ||
+                        type2 == ItemExtractResultType.INCOMPLETE)
+                    return new ItemExtractResult(ItemExtractResultType.INCOMPLETE);
+                if (type1 == ItemExtractResultType.DOES_NOT_EXIST ||
+                        type2 == ItemExtractResultType.DOES_NOT_EXIST)
+                    return new ItemExtractResult(ItemExtractResultType.DOES_NOT_EXIST);
+                if (type1 == ItemExtractResultType.NOT_COLLECTED ||
+                        type2 == ItemExtractResultType.NOT_COLLECTED)
+                    return new ItemExtractResult(ItemExtractResultType.NOT_COLLECTED);
+                if (type1 == ItemExtractResultType.NOT_APPLICABLE ||
+                        type2 == ItemExtractResultType.NOT_APPLICABLE)
+                    return new ItemExtractResult(ItemExtractResultType.NOT_APPLICABLE);
                 break;
             case INTERSECTION:
-                if (type1 == ItemSetExtractResultType.DOES_NOT_EXIST ||
-                        type2 == ItemSetExtractResultType.DOES_NOT_EXIST)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.DOES_NOT_EXIST);
-                if (type1 == ItemSetExtractResultType.ERROR ||
-                        type2 == ItemSetExtractResultType.ERROR)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
-                if (type1 == ItemSetExtractResultType.NOT_COLLECTED ||
-                        type2 == ItemSetExtractResultType.NOT_COLLECTED)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.NOT_COLLECTED);
-                if (type1 == ItemSetExtractResultType.INCOMPLETE ||
-                        type2 == ItemSetExtractResultType.INCOMPLETE)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.INCOMPLETE);
-                if (type1 == ItemSetExtractResultType.NOT_APPLICABLE ||
-                        type2 == ItemSetExtractResultType.NOT_APPLICABLE)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.NOT_APPLICABLE);
+                if (type1 == ItemExtractResultType.DOES_NOT_EXIST ||
+                        type2 == ItemExtractResultType.DOES_NOT_EXIST)
+                    return new ItemExtractResult(ItemExtractResultType.DOES_NOT_EXIST);
+                if (type1 == ItemExtractResultType.ERROR ||
+                        type2 == ItemExtractResultType.ERROR)
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
+                if (type1 == ItemExtractResultType.NOT_COLLECTED ||
+                        type2 == ItemExtractResultType.NOT_COLLECTED)
+                    return new ItemExtractResult(ItemExtractResultType.NOT_COLLECTED);
+                if (type1 == ItemExtractResultType.INCOMPLETE ||
+                        type2 == ItemExtractResultType.INCOMPLETE)
+                    return new ItemExtractResult(ItemExtractResultType.INCOMPLETE);
+                if (type1 == ItemExtractResultType.NOT_APPLICABLE ||
+                        type2 == ItemExtractResultType.NOT_APPLICABLE)
+                    return new ItemExtractResult(ItemExtractResultType.NOT_APPLICABLE);
                 break;
             case COMPLEMENT:
-                if (type1 == ItemSetExtractResultType.ERROR)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
-                if (type2 == ItemSetExtractResultType.NOT_APPLICABLE)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
-                if (type1 == ItemSetExtractResultType.DOES_NOT_EXIST)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.DOES_NOT_EXIST);
-                if (type2 == ItemSetExtractResultType.ERROR)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
-                if (type1 == ItemSetExtractResultType.NOT_COLLECTED || type2 == ItemSetExtractResultType.NOT_COLLECTED)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.NOT_COLLECTED);
-                if (type2 == ItemSetExtractResultType.INCOMPLETE)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
-                if (type1 == ItemSetExtractResultType.INCOMPLETE)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.INCOMPLETE);
+                if (type1 == ItemExtractResultType.ERROR)
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
+                if (type2 == ItemExtractResultType.NOT_APPLICABLE)
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
+                if (type1 == ItemExtractResultType.DOES_NOT_EXIST)
+                    return new ItemExtractResult(ItemExtractResultType.DOES_NOT_EXIST);
+                if (type2 == ItemExtractResultType.ERROR)
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
+                if (type1 == ItemExtractResultType.NOT_COLLECTED || type2 == ItemExtractResultType.NOT_COLLECTED)
+                    return new ItemExtractResult(ItemExtractResultType.NOT_COLLECTED);
+                if (type2 == ItemExtractResultType.INCOMPLETE)
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
+                if (type1 == ItemExtractResultType.INCOMPLETE)
+                    return new ItemExtractResult(ItemExtractResultType.INCOMPLETE);
                 break;
         }
-        return new ItemSetExtractResult(ItemSetExtractResultType.COMPLETE);
+        return new ItemExtractResult(ItemExtractResultType.COMPLETE);
     }
 
-    default ItemSetExtractResult getCompleteResult(Map<String, ItemType> map1, Map<String, ItemType> map2,
+    default ItemExtractResult getCompleteResult(Map<String, ItemType> map1, Map<String, ItemType> map2,
                                                    SetOperatorEnumeration enumeration) {
         List<ItemType> itemTypes = new ArrayList<>();
         switch (enumeration) {
@@ -98,7 +94,7 @@ public interface OvalItemSetExtractor {
                         .forEach(key -> itemTypes.add(map1.get(key)));
                 break;
         }
-        return new ItemSetExtractResult(itemTypes);
+        return new ItemExtractResult(itemTypes);
     }
 
 }

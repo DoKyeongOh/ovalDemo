@@ -4,7 +4,6 @@ import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.OvalSimpleValueExtractor;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.ItemExtractResult.ItemExtractResultType;
-import org.example.oval.item.ItemSetExtractResult;
 import org.example.oval.item.OvalItemExtractor;
 import org.mitre.oval.xmlschema.oval_common_5.OperationEnumeration;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
@@ -49,13 +48,12 @@ public class WinFileItemExtractor implements OvalItemExtractor {
             return new ItemExtractResult(ItemExtractResultType.ERROR);
         OvalSimpleValueExtractor valueExtractor = new OvalSimpleValueExtractor(entityMappingContext);
         try {
-            List<ItemType> itemTypes = null;
             if (fileObject.getSet() != null) {
-                itemTypes = findFilesBySet(fileObject.getSet(), entityMappingContext);
+                return findFilesBySet(fileObject.getSet(), entityMappingContext);
             } else if (fileObject.getFilepath() != null) {
                 List<String> filePaths = valueExtractor.extract(fileObject.getFilepath()).stream()
                         .map(item -> item.toString()).collect(Collectors.toList());
-                itemTypes = findFilesByFilepath(filePaths, fileObject.getFilepath().getOperation());
+                return findFilesByFilepath(filePaths, fileObject.getFilepath().getOperation());
             } else {
                 List<String> paths = valueExtractor.extract(fileObject.getPath()).stream()
                         .map(item -> item.toString()).collect(Collectors.toList());
@@ -63,19 +61,14 @@ public class WinFileItemExtractor implements OvalItemExtractor {
                         .map(item -> item.toString()).collect(Collectors.toList());
                 OperationEnumeration pathEnum = fileObject.getPath().getOperation();
                 OperationEnumeration filenameEnum = fileObject.getFilename().getValue().getOperation();
-                itemTypes = findFilesByPath(paths, pathEnum, filenames, filenameEnum);
+                return findFilesByPath(paths, pathEnum, filenames, filenameEnum);
             }
-            ItemExtractResult result = new ItemExtractResult(itemTypes);
-            if (itemTypes.isEmpty())
-                result.setResultType(ItemExtractResultType.DOES_NOT_EXIST);
-            entityMappingContext.putItemResult(fileObject.getId(), result);
-            return result;
         } catch (Exception e) {
             return new ItemExtractResult(ItemExtractResultType.ERROR);
         }
     }
 
-    private List<ItemType> findFilesByPath(List<String> paths, OperationEnumeration pathEnum, List<String> filenames,
+    private ItemExtractResult findFilesByPath(List<String> paths, OperationEnumeration pathEnum, List<String> filenames,
                                            OperationEnumeration filepathEnum) throws Exception {
         List<File> dirs = new ArrayList<>();
         switch (pathEnum) {
@@ -138,10 +131,10 @@ public class WinFileItemExtractor implements OvalItemExtractor {
                 }
             }
         }
-        return fileItems;
+        return new ItemExtractResult(fileItems);
     }
 
-    private List<ItemType> findFilesByFilepath(List<String> filePaths, OperationEnumeration enumeration)
+    private ItemExtractResult findFilesByFilepath(List<String> filePaths, OperationEnumeration enumeration)
             throws Exception {
         List<File> files = new ArrayList<>();
         switch (enumeration) {
@@ -182,12 +175,12 @@ public class WinFileItemExtractor implements OvalItemExtractor {
         List<ItemType> fileItems = new ArrayList<>();
         for (File file : files)
             fileItems.add(toFileItem(file));
-        return fileItems;
+        return new ItemExtractResult(fileItems);
     }
 
-    private List<ItemType> findFilesBySet(Set set, OvalEntityMappingContext entityMappingContext) {
-        ItemSetExtractResult itemSetExtractResult = new WinFileItemSetExtractor(set, entityMappingContext).extract();
-        return itemSetExtractResult.getExtractedItems();
+    private ItemExtractResult findFilesBySet(Set set, OvalEntityMappingContext entityMappingContext) {
+        WinFileItemSetExtractor extractor = new WinFileItemSetExtractor(set, entityMappingContext);
+        return extractor.extract();
     }
 
     private static FileItem toFileItem(File file) throws IOException {
@@ -197,25 +190,32 @@ public class WinFileItemExtractor implements OvalItemExtractor {
         EntityItemIntType itemCreateTime = new EntityItemIntType();
         itemCreateTime.setStatus(StatusEnumeration.EXISTS);
         itemCreateTime.setValue("" + attributes.creationTime().toMillis() * 100 + 116615024815702500L);
+        itemCreateTime.setDatatype("int");
 
         EntityItemIntType itemAccessTime = new EntityItemIntType();
         itemAccessTime.setStatus(StatusEnumeration.EXISTS);
         itemAccessTime.setValue("" + attributes.lastAccessTime().toMillis() * 100 + 116615024815702500L);
+        itemAccessTime.setDatatype("int");
 
         EntityItemIntType itemModifyTime = new EntityItemIntType();
         itemModifyTime.setStatus(StatusEnumeration.EXISTS);
         itemModifyTime.setValue("" + attributes.lastModifiedTime().toMillis() * 100 + 116615024815702500L);
+        itemModifyTime.setDatatype("int");
 
         EntityItemStringType itemFilepath = new EntityItemStringType();
         itemFilepath.setValue(file.getAbsolutePath());
         itemFilepath.setStatus(StatusEnumeration.EXISTS);
+        itemFilepath.setDatatype("string");
 
         EntityItemStringType itemDirPath = new EntityItemStringType();
         itemDirPath.setValue(file.getParentFile().getAbsolutePath());
         itemDirPath.setStatus(StatusEnumeration.EXISTS);
+        itemDirPath.setDatatype("string");
 
         EntityItemStringType filename = new EntityItemStringType();
+        filename.setStatus(StatusEnumeration.EXISTS);
         filename.setValue(file.getName());
+        filename.setDatatype("string");
         JAXBElement<EntityItemStringType> filenameElement = new JAXBElement<>(
                 new QName("filename"),
                 EntityItemStringType.class,
@@ -223,13 +223,17 @@ public class WinFileItemExtractor implements OvalItemExtractor {
         );
 
         EntityItemStringType itemOwner = new EntityItemStringType();
+        itemOwner.setStatus(StatusEnumeration.EXISTS);
+        itemOwner.setDatatype("string");
         itemOwner.setValue(Files.getOwner(file.toPath()).getName());
 
         EntityItemIntType itemSize = new EntityItemIntType();
+        itemSize.setStatus(StatusEnumeration.EXISTS);
         itemSize.setDatatype("int");
         itemSize.setValue("" + Files.size(file.toPath()));
 
         EntityItemWindowsViewType itemWindowsView = new EntityItemWindowsViewType();
+        itemWindowsView.setStatus(StatusEnumeration.EXISTS);
         itemWindowsView.setValue(System.getProperty("os.arch"));
         itemWindowsView.setDatatype("string");
 

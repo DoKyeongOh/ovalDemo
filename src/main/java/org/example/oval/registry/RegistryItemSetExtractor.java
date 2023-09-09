@@ -7,8 +7,8 @@ import org.example.oval.compare.OvalSimpleIntComparator;
 import org.example.oval.compare.OvalSimpleStringComparator;
 import org.example.oval.compare.OvalSimpleValueComparator.OvalSimpleValueCompareResult;
 import org.example.oval.item.ItemExtractResult;
-import org.example.oval.item.ItemSetExtractResult;
-import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.ItemExtractResult.ItemExtractResultType;
 import org.example.oval.item.OvalItemExtractor;
 import org.example.oval.item.OvalItemSetExtractor;
 import org.mitre.oval.xmlschema.oval_common_5.OperationEnumeration;
@@ -34,9 +34,9 @@ public class RegistryItemSetExtractor implements OvalItemSetExtractor {
     }
 
     @Override
-    public ItemSetExtractResult extract() {
+    public ItemExtractResult extract() {
         if (registryItemSet == null)
-            return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+            return new ItemExtractResult(ItemExtractResultType.ERROR);
         List<Set> childSets = registryItemSet.getSet();
         try {
             if (childSets.isEmpty())
@@ -44,37 +44,37 @@ public class RegistryItemSetExtractor implements OvalItemSetExtractor {
             else
                 return extractFromChildSet();
         } catch (Exception e) {
-            return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+            return new ItemExtractResult(ItemExtractResultType.ERROR);
         }
     }
 
     @Override
-    public ItemSetExtractResult extractFromChildSet() {
+    public ItemExtractResult extractFromChildSet() {
         List<Set> childSets = registryItemSet.getSet();
         if (childSets.size() == 1)
             return new RegistryItemSetExtractor(childSets.get(0), mappingContext).extract();
 
         Set set1 = childSets.get(0);
         Map<String, ItemType> map1 = new HashMap<>();
-        ItemSetExtractResult extractedResult1 = new RegistryItemSetExtractor(set1, mappingContext).extract();
+        ItemExtractResult extractedResult1 = new RegistryItemSetExtractor(set1, mappingContext).extract();
         for (ItemType itemType : extractedResult1.getExtractedItems())
             map1.put(itemType.getId().toString(), itemType);
 
         Set set2 = childSets.get(1);
         Map<String, ItemType> map2 = new HashMap<>();
-        ItemSetExtractResult extractedResult2 = new RegistryItemSetExtractor(set2, mappingContext).extract();
+        ItemExtractResult extractedResult2 = new RegistryItemSetExtractor(set2, mappingContext).extract();
         for (ItemType itemType : extractedResult2.getExtractedItems())
             map2.put(itemType.getId().toString(), itemType);
 
-        ItemSetExtractResultType resultType1 = extractedResult1.getResultType();
-        ItemSetExtractResultType resultType2 = extractedResult2.getResultType();
-        if (resultType1 != ItemSetExtractResultType.COMPLETE || resultType2 == ItemSetExtractResultType.COMPLETE)
+        ItemExtractResultType resultType1 = extractedResult1.getResultType();
+        ItemExtractResultType resultType2 = extractedResult2.getResultType();
+        if (resultType1 != ItemExtractResultType.COMPLETE || resultType2 == ItemExtractResultType.COMPLETE)
             return getNotCompleteResult(registryItemSet.getSetOperator(), resultType1, resultType2);
         return getCompleteResult(map1, map2, registryItemSet.getSetOperator());
     }
 
     @Override
-    public ItemSetExtractResult extractFromObject(OvalItemExtractor extractor) {
+    public ItemExtractResult extractFromObject(OvalItemExtractor extractor) {
         Map<String, RegistryItem> registryItemMap = new HashMap<>();
         for (String objectRef : registryItemSet.getObjectReference()) {
             ItemExtractResult itemResult = mappingContext.getItemResult(objectRef);
@@ -94,9 +94,9 @@ public class RegistryItemSetExtractor implements OvalItemSetExtractor {
                 String stateId = filter.getValue();
                 StateType stateType = mappingContext.getStateType(stateId);
                 if (stateType == null)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
                 if (stateType instanceof RegistryState == false)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
                 RegistryState registryState = (RegistryState) stateType;
                 boolean filterInclude = filter.getAction() == FilterActionEnumeration.INCLUDE;
                 success = filterInclude == filterRegistryItem(registryItem, registryState);
@@ -106,10 +106,10 @@ public class RegistryItemSetExtractor implements OvalItemSetExtractor {
             if (success)
                 extractedItems.add(registryItem);
         }
-        ItemSetExtractResult itemSetExtractResult = new ItemSetExtractResult(extractedItems);
+        ItemExtractResult ItemExtractResult = new ItemExtractResult(extractedItems);
         if (extractedItems.isEmpty())
-            itemSetExtractResult.setResultType(ItemSetExtractResultType.DOES_NOT_EXIST);
-        return itemSetExtractResult;
+            ItemExtractResult.setResultType(ItemExtractResultType.DOES_NOT_EXIST);
+        return ItemExtractResult;
     }
 
     private boolean filterRegistryItem(RegistryItem registryItem, RegistryState registryState) {

@@ -1,14 +1,13 @@
 package org.example.oval.file;
 
 import org.example.oval.OvalEntityMappingContext;
-import org.example.oval.item.ItemExtractResult;
-import org.example.oval.item.ItemSetExtractResult;
-import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
-import org.example.oval.item.OvalItemExtractor;
-import org.example.oval.item.OvalItemSetExtractor;
 import org.example.oval.compare.OvalSimpleValueComparator;
 import org.example.oval.compare.OvalSimpleValueComparator.OvalSimpleValueCompareResult;
 import org.example.oval.compare.OvalSimpleValueComparatorFactory;
+import org.example.oval.item.ItemExtractResult;
+import org.example.oval.item.ItemExtractResult.ItemExtractResultType;
+import org.example.oval.item.OvalItemExtractor;
+import org.example.oval.item.OvalItemSetExtractor;
 import org.mitre.oval.xmlschema.oval_common_5.OperationEnumeration;
 import org.mitre.oval.xmlschema.oval_common_5.SimpleDatatypeEnumeration;
 import org.mitre.oval.xmlschema.oval_definitions_5.*;
@@ -35,9 +34,9 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
     }
 
     @Override
-    public ItemSetExtractResult extract() {
+    public ItemExtractResult extract() {
         if (fileItemSet == null)
-            return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+            return new ItemExtractResult(ItemExtractResultType.ERROR);
         List<Set> childSets = fileItemSet.getSet();
         try {
             if (childSets.isEmpty())
@@ -45,37 +44,37 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
             else
                 return extractFromChildSet();
         } catch (Exception e) {
-            return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+            return new ItemExtractResult(ItemExtractResultType.ERROR);
         }
     }
 
     @Override
-    public ItemSetExtractResult extractFromChildSet() {
+    public ItemExtractResult extractFromChildSet() {
         List<Set> sets = fileItemSet.getSet();
         if (sets.size() == 1)
             return new WinFileItemSetExtractor(sets.get(0), mappingContext).extract();
 
         Set set1 = sets.get(0);
         Map<String, ItemType> map1 = new HashMap<>();
-        ItemSetExtractResult extract1 = new WinFileItemSetExtractor(set1, mappingContext).extract();
+        ItemExtractResult extract1 = new WinFileItemSetExtractor(set1, mappingContext).extract();
         for (ItemType itemType : extract1.getExtractedItems())
             map1.put(itemType.getId().toString(), itemType);
 
         Set set2 = sets.get(1);
         Map<String, ItemType> map2 = new HashMap<>();
-        ItemSetExtractResult extract2 = new WinFileItemSetExtractor(set2, mappingContext).extract();
+        ItemExtractResult extract2 = new WinFileItemSetExtractor(set2, mappingContext).extract();
         for (ItemType itemType : extract2.getExtractedItems())
             map2.put(itemType.getId().toString(), itemType);
 
-        ItemSetExtractResultType resultType1 = extract1.getResultType();
-        ItemSetExtractResultType resultType2 = extract2.getResultType();
-        if (resultType1 != ItemSetExtractResultType.COMPLETE || resultType2 == ItemSetExtractResultType.COMPLETE)
+        ItemExtractResultType resultType1 = extract1.getResultType();
+        ItemExtractResultType resultType2 = extract2.getResultType();
+        if (resultType1 != ItemExtractResultType.COMPLETE || resultType2 == ItemExtractResultType.COMPLETE)
             return getNotCompleteResult(fileItemSet.getSetOperator(), resultType1, resultType2);
         return getCompleteResult(map1, map2, fileItemSet.getSetOperator());
     }
 
     @Override
-    public ItemSetExtractResult extractFromObject(OvalItemExtractor extractor) {
+    public ItemExtractResult extractFromObject(OvalItemExtractor extractor) {
         Map<String, FileItem> fileItemMap = new HashMap<>();
         for (String objectRef : fileItemSet.getObjectReference()) {
             ItemExtractResult itemExtractResult = mappingContext.getItemResult(objectRef);
@@ -94,9 +93,9 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
                 String stateId = filter.getValue();
                 StateType stateType = mappingContext.getStateType(stateId);
                 if (stateType == null)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
                 if (stateType instanceof FileState == false)
-                    return new ItemSetExtractResult(ItemSetExtractResultType.ERROR);
+                    return new ItemExtractResult(ItemExtractResultType.ERROR);
                 FileState fileState = (FileState) stateType;
                 boolean filterInclude = filter.getAction() == FilterActionEnumeration.INCLUDE;
                 success = filterInclude == filterFileItem(fileItem, fileState);
@@ -106,10 +105,10 @@ public class WinFileItemSetExtractor implements OvalItemSetExtractor {
             if (success)
                 extractedItems.add(fileItem);
         }
-        ItemSetExtractResult itemSetExtractResult = new ItemSetExtractResult(extractedItems);
+        ItemExtractResult ItemExtractResult = new ItemExtractResult(extractedItems);
         if (extractedItems.isEmpty())
-            itemSetExtractResult.setResultType(ItemSetExtractResultType.DOES_NOT_EXIST);
-        return itemSetExtractResult;
+            ItemExtractResult.setResultType(ItemExtractResultType.DOES_NOT_EXIST);
+        return ItemExtractResult;
     }
 
     private boolean filterFileItem(FileItem fileItem, FileState fileState) {

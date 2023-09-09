@@ -2,15 +2,10 @@ package org.example.oval.registry;
 
 import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemExtractResult;
-import org.example.oval.item.ItemSetExtractResult;
-import org.example.oval.item.OvalItemExtractor;
 import org.junit.Test;
-import org.mitre.oval.xmlschema.oval_definitions_5.ObjectType;
 import org.mitre.oval.xmlschema.oval_definitions_5.Set;
-import org.mitre.oval.xmlschema.oval_definitions_5_windows.RegistryObject;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemAnySimpleType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.EntityItemStringType;
-import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_windows.EntityItemRegistryHiveType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_windows.EntityItemRegistryTypeType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5_windows.RegistryItem;
@@ -35,13 +30,13 @@ public class RegistryItemSetExtractorTest {
         }
     }
 
-    private ItemSetExtractResult getResult(String hive, String key, String name, String type, List<EntityItemAnySimpleType> values, String expandedValue) {
+    private ItemExtractResult getResult(String hive, String key, String name, String type, List<EntityItemAnySimpleType> values, String expandedValue) {
         OvalEntityMappingContext mappingContext = new OvalEntityMappingContext();
         Set set = new Set();
         set.getObjectReference().add("obj-1");
 
         RegistryItemSetExtractor itemSetExtractor = new RegistryItemSetExtractor(set, new OvalEntityMappingContext());
-        ItemSetExtractResult itemSetExtractResult = itemSetExtractor
+        ItemExtractResult itemExtractResult = itemSetExtractor
                 .extractFromObject((inputObject, ovalEntityMappingContext) -> {
             FakeRegistryItem registryItem = new FakeRegistryItem();
             registryItem.setId(new BigInteger("1"));
@@ -55,7 +50,7 @@ public class RegistryItemSetExtractorTest {
             result.getExtractedItems().add(registryItem);
             return result;
         });
-        return itemSetExtractResult;
+        return itemExtractResult;
     }
 
     private class FakeRegistryItem extends RegistryItem {

@@ -4,7 +4,7 @@ import org.example.oval.file.WinFileItemSetExtractor;
 import org.junit.Test;
 import org.mitre.oval.xmlschema.oval_definitions_5.SetOperatorEnumeration;
 
-import org.example.oval.item.ItemSetExtractResult.ItemSetExtractResultType;
+import org.example.oval.item.ItemExtractResult.ItemExtractResultType;
 import org.mitre.oval.xmlschema.oval_system_characteristics_5.ItemType;
 
 import java.math.BigInteger;
@@ -18,50 +18,50 @@ public class OvalItemSetExtractorTest {
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.UNION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.COMPLETE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.COMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.COMPLETE;
+            ItemExtractResultType type1 = ItemExtractResultType.COMPLETE;
+            ItemExtractResultType type2 = ItemExtractResultType.COMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.COMPLETE;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.UNION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.ERROR;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.ERROR;
+            ItemExtractResultType type1 = ItemExtractResultType.ERROR;
+            ItemExtractResultType type2 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.ERROR;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.UNION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.DOES_NOT_EXIST;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.INCOMPLETE;
+            ItemExtractResultType type1 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResultType type2 = ItemExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.INCOMPLETE;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.UNION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.DOES_NOT_EXIST;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type1 = ItemExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type2 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.DOES_NOT_EXIST;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.UNION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.NOT_APPLICABLE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.NOT_COLLECTED;
+            ItemExtractResultType type1 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResultType type2 = ItemExtractResultType.NOT_APPLICABLE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.NOT_COLLECTED;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.UNION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.NOT_APPLICABLE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.COMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.NOT_APPLICABLE;
+            ItemExtractResultType type1 = ItemExtractResultType.NOT_APPLICABLE;
+            ItemExtractResultType type2 = ItemExtractResultType.COMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.NOT_APPLICABLE;
         }
     }
 
@@ -70,50 +70,50 @@ public class OvalItemSetExtractorTest {
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.INTERSECTION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.COMPLETE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.COMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.COMPLETE;
+            ItemExtractResultType type1 = ItemExtractResultType.COMPLETE;
+            ItemExtractResultType type2 = ItemExtractResultType.COMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.COMPLETE;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.INTERSECTION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.DOES_NOT_EXIST;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.ERROR;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type1 = ItemExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type2 = ItemExtractResultType.ERROR;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.DOES_NOT_EXIST;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.INTERSECTION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.ERROR;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.ERROR;
+            ItemExtractResultType type1 = ItemExtractResultType.ERROR;
+            ItemExtractResultType type2 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.ERROR;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.INTERSECTION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.NOT_COLLECTED;
+            ItemExtractResultType type1 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResultType type2 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.NOT_COLLECTED;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.INTERSECTION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.NOT_APPLICABLE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.INCOMPLETE;
+            ItemExtractResultType type1 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResultType type2 = ItemExtractResultType.NOT_APPLICABLE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.INCOMPLETE;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.INTERSECTION;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.NOT_APPLICABLE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.COMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.NOT_APPLICABLE;
+            ItemExtractResultType type1 = ItemExtractResultType.NOT_APPLICABLE;
+            ItemExtractResultType type2 = ItemExtractResultType.COMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.NOT_APPLICABLE;
         }
     }
 
@@ -122,82 +122,82 @@ public class OvalItemSetExtractorTest {
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.COMPLETE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.COMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.COMPLETE;
+            ItemExtractResultType type1 = ItemExtractResultType.COMPLETE;
+            ItemExtractResultType type2 = ItemExtractResultType.COMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.COMPLETE;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.ERROR;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.ERROR;
+            ItemExtractResultType type1 = ItemExtractResultType.ERROR;
+            ItemExtractResultType type2 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.ERROR;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.DOES_NOT_EXIST;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.NOT_APPLICABLE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.ERROR;
+            ItemExtractResultType type1 = ItemExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type2 = ItemExtractResultType.NOT_APPLICABLE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.ERROR;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.DOES_NOT_EXIST;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.ERROR;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type1 = ItemExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type2 = ItemExtractResultType.ERROR;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.DOES_NOT_EXIST;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.ERROR;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.ERROR;
+            ItemExtractResultType type1 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResultType type2 = ItemExtractResultType.ERROR;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.ERROR;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.DOES_NOT_EXIST;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type1 = ItemExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResultType type2 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.DOES_NOT_EXIST;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.NOT_COLLECTED;
+            ItemExtractResultType type1 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResultType type2 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.NOT_COLLECTED;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.NOT_COLLECTED;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.NOT_COLLECTED;
+            ItemExtractResultType type1 = ItemExtractResultType.NOT_COLLECTED;
+            ItemExtractResultType type2 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.NOT_COLLECTED;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.DOES_NOT_EXIST;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.INCOMPLETE;
+            ItemExtractResultType type1 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResultType type2 = ItemExtractResultType.DOES_NOT_EXIST;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.INCOMPLETE;
         }
         {
             OvalItemSetExtractor ovalItemSetExtractor = new WinFileItemSetExtractor(null, null);
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResultType type1 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResultType type2 = ItemSetExtractResultType.INCOMPLETE;
-            ItemSetExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
-            assert result.getResultType() == ItemSetExtractResultType.ERROR;
+            ItemExtractResultType type1 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResultType type2 = ItemExtractResultType.INCOMPLETE;
+            ItemExtractResult result = ovalItemSetExtractor.getNotCompleteResult(enumeration, type1, type2);
+            assert result.getResultType() == ItemExtractResultType.ERROR;
         }
     }
 
@@ -223,13 +223,13 @@ public class OvalItemSetExtractorTest {
 
         {
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.UNION;
-            ItemSetExtractResult completeResult = ovalItemSetExtractor.getCompleteResult(map1, map2, enumeration);
+            ItemExtractResult completeResult = ovalItemSetExtractor.getCompleteResult(map1, map2, enumeration);
             assert completeResult.getExtractedItems().size() == 1;
             assert completeResult.getExtractedItems().get(0).getId().equals(new BigInteger("1"));
         }
         {
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.INTERSECTION;
-            ItemSetExtractResult completeResult = ovalItemSetExtractor.getCompleteResult(map1, map2, enumeration);
+            ItemExtractResult completeResult = ovalItemSetExtractor.getCompleteResult(map1, map2, enumeration);
             assert completeResult.getExtractedItems().size() == 2;
 
             Map<String, ItemType> itemTypeMap = new HashMap<>();
@@ -241,7 +241,7 @@ public class OvalItemSetExtractorTest {
         }
         {
             SetOperatorEnumeration enumeration = SetOperatorEnumeration.COMPLEMENT;
-            ItemSetExtractResult completeResult = ovalItemSetExtractor.getCompleteResult(map1, map2, enumeration);
+            ItemExtractResult completeResult = ovalItemSetExtractor.getCompleteResult(map1, map2, enumeration);
             assert completeResult.getExtractedItems().size() == 1;
             assert completeResult.getExtractedItems().get(0).getId().equals(new BigInteger("0"));
         }

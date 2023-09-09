@@ -3,7 +3,6 @@ package org.example.oval.file;
 import org.example.oval.OvalEntityMappingContext;
 import org.example.oval.item.ItemExtractResult;
 import org.example.oval.item.ItemExtractResult.ItemExtractResultType;
-import org.example.oval.item.ItemSetExtractResult;
 import org.example.oval.item.OvalItemExtractor;
 import org.example.oval.OvalSimpleValueExtractor;
 import org.mitre.oval.xmlschema.oval_common_5.OperationEnumeration;
@@ -52,13 +51,12 @@ public class UnixFileItemExtractor implements OvalItemExtractor {
             return new ItemExtractResult(ItemExtractResultType.ERROR);
         OvalSimpleValueExtractor valueExtractor = new OvalSimpleValueExtractor(entityMappingContext);
         try {
-            List<ItemType> itemTypes = null;
             if (fileObject.getSet() != null) {
-                itemTypes = findFilesBySet(fileObject.getSet(), entityMappingContext);
+                return findFilesBySet(fileObject.getSet(), entityMappingContext);
             } else if (fileObject.getFilepath() != null) {
                 List<String> filePaths = valueExtractor.extract(fileObject.getFilepath()).stream()
                         .map(item -> item.toString()).collect(Collectors.toList());
-                itemTypes = findFilesByFilepath(filePaths, fileObject.getFilepath().getOperation());
+                return findFilesByFilepath(filePaths, fileObject.getFilepath().getOperation());
             } else {
                 List<String> paths = valueExtractor.extract(fileObject.getPath()).stream()
                         .map(item -> item.toString()).collect(Collectors.toList());
@@ -66,19 +64,14 @@ public class UnixFileItemExtractor implements OvalItemExtractor {
                         .map(item -> item.toString()).collect(Collectors.toList());
                 OperationEnumeration pathEnum = fileObject.getPath().getOperation();
                 OperationEnumeration filenameEnum = fileObject.getFilename().getValue().getOperation();
-                itemTypes = findFilesByPath(paths, pathEnum, filenames, filenameEnum);
+                return findFilesByPath(paths, pathEnum, filenames, filenameEnum);
             }
-            ItemExtractResult result = new ItemExtractResult(itemTypes);
-            if (itemTypes.isEmpty())
-                result.setResultType(ItemExtractResultType.DOES_NOT_EXIST);
-            entityMappingContext.putItemResult(fileObject.getId(), result);
-            return result;
         } catch (Exception e) {
             return new ItemExtractResult(ItemExtractResultType.ERROR);
         }
     }
 
-    private List<ItemType> findFilesByPath(List<String> paths, OperationEnumeration pathEnum, List<String> filenames,
+    private ItemExtractResult findFilesByPath(List<String> paths, OperationEnumeration pathEnum, List<String> filenames,
                                            OperationEnumeration filepathEnum) throws Exception {
         List<File> dirs = new ArrayList<>();
         switch (pathEnum) {
@@ -138,10 +131,10 @@ public class UnixFileItemExtractor implements OvalItemExtractor {
                 }
             }
         }
-        return fileItems;
+        return new ItemExtractResult(fileItems);
     }
 
-    private List<ItemType> findFilesByFilepath(List<String> filePaths, OperationEnumeration enumeration)
+    private ItemExtractResult findFilesByFilepath(List<String> filePaths, OperationEnumeration enumeration)
             throws Exception {
         List<File> files = new ArrayList<>();
         switch (enumeration) {
@@ -180,12 +173,12 @@ public class UnixFileItemExtractor implements OvalItemExtractor {
         List<ItemType> fileItems = new ArrayList<>();
         for (File file : files)
             fileItems.add(toFileItem(file));
-        return fileItems;
+        return new ItemExtractResult(fileItems);
     }
 
-    private List<ItemType> findFilesBySet(Set set, OvalEntityMappingContext entityMappingContext) throws Exception {
-        ItemSetExtractResult itemSetExtractResult = new UnixFileItemSetExtractor(set, entityMappingContext).extract();
-        return itemSetExtractResult.getExtractedItems();
+    private ItemExtractResult findFilesBySet(Set set, OvalEntityMappingContext entityMappingContext) {
+        UnixFileItemSetExtractor extractor = new UnixFileItemSetExtractor(set, entityMappingContext);
+        return extractor.extract();
     }
 
     private static FileItem toFileItem(File file) throws IOException {

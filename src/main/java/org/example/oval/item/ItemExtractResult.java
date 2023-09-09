@@ -20,9 +20,11 @@ public class ItemExtractResult {
         extractedItems = new ArrayList<>();
     }
 
-    public ItemExtractResult(List<ItemType> extractedItems) {
-        this.extractedItems = extractedItems;
+    public ItemExtractResult(List<ItemType> itemTypes) {
+        extractedItems = itemTypes;
         resultType = ItemExtractResultType.COMPLETE;
+        if (itemTypes.isEmpty())
+            resultType = ItemExtractResultType.DOES_NOT_EXIST;
     }
 
     public List<ItemType> getExtractedItems() {
