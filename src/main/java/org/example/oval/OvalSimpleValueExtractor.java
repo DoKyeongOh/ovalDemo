@@ -3,6 +3,7 @@ package org.example.oval;
 import org.example.oval.variable.OvalVariableExtractor;
 import org.example.oval.variable.OvalVariableExtractorFactory;
 import org.example.oval.variable.VariableExtractResult;
+import org.example.oval.variable.VariableExtractResult.VariableExtractResultType;
 import org.mitre.oval.xmlschema.oval_definitions_5.EntitySimpleBaseType;
 import org.mitre.oval.xmlschema.oval_definitions_5.VariableType;
 
@@ -35,6 +36,20 @@ public class OvalSimpleValueExtractor {
                 return new ArrayList<>();
 
             variableResult = extractor.extract();
+            switch (entitySimpleBaseType.getVarCheck()) {
+                case ALL:
+                case AT_LEAST_ONE:
+                    if (variableResult.getResultType() == VariableExtractResultType.DOES_NOT_EXIST)
+                        variableResult = new VariableExtractResult(VariableExtractResultType.DOES_NOT_EXIST);
+                    break;
+                case NONE_EXIST:
+                    variableResult = new VariableExtractResult(VariableExtractResultType.DOES_NOT_EXIST);
+                    break;
+                case ONLY_ONE:
+                    if (variableResult.getExtractedItems().size() != 1)
+                        variableResult = new VariableExtractResult(VariableExtractResultType.DOES_NOT_EXIST);
+                    break;
+            }
             mappingContext.putVariableResult(varRef, variableResult);
             return variableResult.getExtractedItems();
         }
