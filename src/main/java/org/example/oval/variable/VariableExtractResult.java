@@ -17,6 +17,8 @@ public class VariableExtractResult {
     public VariableExtractResult(List<Object> extractedItems) {
         this.extractedItems = extractedItems;
         resultType = VariableExtractResultType.COMPLETE;
+        if (extractedItems.isEmpty())
+            resultType = VariableExtractResultType.DOES_NOT_EXIST;
     }
 
     public VariableExtractResult(VariableExtractResultType resultType) {
